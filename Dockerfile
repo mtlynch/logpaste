@@ -13,7 +13,7 @@ RUN go build \
   -o /app/server \
   ./main.go
 
-FROM debian:buster-slim
+FROM debian:stable-20210208-slim
 RUN set -x && \
     apt-get update && \
     DEBIAN_FRONTEND=noninteractive apt-get install -y \
