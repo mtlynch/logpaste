@@ -1,0 +1,44 @@
+version: 2.1
+jobs:
+  deploy:
+    docker:
+      - image: google/cloud-sdk:326.0.0
+    environment:
+      GCLOUD_PROJECT: tinypilotkvm
+      SERVICE_NAME: logpaste
+      GCLOUD_REGION: us-east1
+    steps:
+      - checkout
+      - attach_workspace:
+          at: ./
+      - run:
+          name: Retrieve client secret from CircleCI
+          command: |
+            echo "$CLIENT_SECRET" | \
+              base64 --decode > "${HOME}/client-secret.json"
+      - run:
+          name: Authenticate gcloud
+          command: |
+            gcloud auth activate-service-account \
+              --key-file "${HOME}/client-secret.json"
+      - run:
+          name: Configure gcloud project
+          command: gcloud config set project "${GCLOUD_PROJECT}"
+      - run:
+          name: Submit to Google Cloud build
+          command: gcloud builds submit --tag "gcr.io/${GCLOUD_PROJECT}/"${SERVICE_NAME}"
+      - run:
+          name: Deploy to Cloud Run
+          command: |
+            gcloud run deploy "${SERVICE_NAME}" \
+              --image "gcr.io/${GCLOUD_PROJECT}/"${SERVICE_NAME}" \
+              --platform managed \
+              --region "${GCLOUD_REGION}"
+workflows:
+  version: 2
+  test-deploy:
+    jobs:
+      - deploy:
+          filters:
+            branches:
+              only: master
