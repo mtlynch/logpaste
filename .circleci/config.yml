@@ -26,12 +26,12 @@ jobs:
           command: gcloud config set project "${GCLOUD_PROJECT}"
       - run:
           name: Submit to Google Cloud build
-          command: gcloud builds submit --tag "gcr.io/${GCLOUD_PROJECT}/"${SERVICE_NAME}"
+          command: gcloud builds submit --tag "gcr.io/${GCLOUD_PROJECT}/${SERVICE_NAME}"
       - run:
           name: Deploy to Cloud Run
           command: |
             gcloud run deploy "${SERVICE_NAME}" \
-              --image "gcr.io/${GCLOUD_PROJECT}/"${SERVICE_NAME}" \
+              --image "gcr.io/${GCLOUD_PROJECT}/${SERVICE_NAME}" \
               --platform managed \
               --region "${GCLOUD_REGION}"
 workflows:
