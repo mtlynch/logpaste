@@ -8,6 +8,7 @@ import (
 	"net/http"
 
 	"github.com/gorilla/mux"
+
 	"github.com/mtlynch/logpaste/random"
 )
 
@@ -21,6 +22,14 @@ func (s defaultServer) pasteGet() http.HandlerFunc {
 	}
 }
 
+func (s defaultServer) pasteOptions() http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Access-Control-Allow-Origin", "*")
+		w.Header().Set("Access-Control-Allow-Methods", "GET, PUT")
+		w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+	}
+}
+
 func (s defaultServer) pastePut() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		id := random.String(8)
@@ -30,6 +39,8 @@ func (s defaultServer) pastePut() http.HandlerFunc {
 			http.Error(w, "can't read request body", http.StatusBadRequest)
 			return
 		}
+		w.Header().Set("Access-Control-Allow-Origin", "*")
+		w.Header().Set("Content-Type", "application/json")
 		store[id] = string(body)
 		type response struct {
 			Id string `json:"id"`
