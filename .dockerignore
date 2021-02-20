@@ -1,0 +1,9 @@
+vendor/
+
+.dockerignore
+.gcloudignore
+
+.gitignore
+
+README.md
+LICENSE
