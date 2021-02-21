@@ -12,13 +12,16 @@ import (
 	"github.com/mtlynch/logpaste/random"
 )
 
-var store = make(map[string]string)
-
 func (s defaultServer) pasteGet() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		id := mux.Vars(r)["id"]
 		w.Header().Set("Content-Type", "text/plain; charset=UTF-8")
-		io.WriteString(w, store[id])
+		contents, err := s.store.GetEntry(id)
+		if err != nil {
+			log.Printf("Error retrieving entry: %v", err)
+			http.Error(w, "can't retrieve entry", http.StatusBadRequest)
+		}
+		io.WriteString(w, contents)
 	}
 }
 
@@ -41,7 +44,12 @@ func (s defaultServer) pastePut() http.HandlerFunc {
 		}
 		w.Header().Set("Access-Control-Allow-Origin", "*")
 		w.Header().Set("Content-Type", "application/json")
-		store[id] = string(body)
+		err = s.store.InsertEntry(id, string(body))
+		if err != nil {
+			log.Printf("failed to save entry: %v", err)
+			http.Error(w, "can't save entry", http.StatusInternalServerError)
+			return
+		}
 		type response struct {
 			Id string `json:"id"`
 		}

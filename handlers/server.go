@@ -4,6 +4,9 @@ import (
 	"net/http"
 
 	"github.com/gorilla/mux"
+
+	"github.com/mtlynch/logpaste/store"
+	"github.com/mtlynch/logpaste/store/sqlite"
 )
 
 type Server interface {
@@ -13,6 +16,7 @@ type Server interface {
 func New() Server {
 	s := defaultServer{
 		router: mux.NewRouter(),
+		store:  sqlite.New(),
 	}
 	s.routes()
 	return s
@@ -22,6 +26,7 @@ type httpMiddlewareHandler func(http.Handler) http.Handler
 
 type defaultServer struct {
 	router *mux.Router
+	store  store.Store
 }
 
 // Router returns the underlying router interface for the server.
