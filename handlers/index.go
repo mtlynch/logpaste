@@ -12,12 +12,12 @@ const viewsRootDir = "./views"
 func (s defaultServer) serveIndexPage() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		type page struct {
-			BackendBaseURL string
+			Title string
 		}
 		indexTemplate := template.Must(template.New(indexFilename).
 			ParseFiles(path.Join(viewsRootDir, indexFilename)))
 		if err := indexTemplate.ExecuteTemplate(w, indexFilename, page{
-			BackendBaseURL: "https://logs.tinypilotkvm.com",
+			Title: "Log Paster",
 		}); err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 		}

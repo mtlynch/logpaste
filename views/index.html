@@ -2,10 +2,10 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <title>LogTester</title>
+    <title>{{.Title}}</title>
   </head>
   <body>
-    <h1>LogPaste</h1>
+    <h1>{{.Title}}</h1>
 
     <textarea id="input"></textarea>
 
@@ -14,9 +14,8 @@
     <div id="result"></div>
 
     <script>
-      const baseUrl = "{{.BackendBaseURL}}";
       function getShareableURL(text) {
-        return fetch(`${baseUrl}/`, {
+        return fetch("/", {
           method: "PUT",
           headers: {
             "Content-Type": "application/json",
@@ -38,10 +37,10 @@
 
       document.getElementById("upload").addEventListener("click", (evt) => {
         getShareableURL(document.getElementById("input").value).then((id) => {
-          const resultUrl = `${baseUrl}/${id}`;
+          const resultUrl = `${document.location}${id}`;
 
           const paragraph = document.createElement("p");
-          paragraph.innerText = `${baseUrl}/${id}`;
+          paragraph.innerText = resultUrl;
 
           const anchor = document.createElement("a");
           anchor.href = resultUrl;
