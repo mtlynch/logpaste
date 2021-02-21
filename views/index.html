@@ -1,8 +1,59 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
   <head>
-  <title>{{ .Title }}</title>
-</head>
-<body>
-  <h1>{{ .Title }}</h1>
-</body>
+    <meta charset="utf-8" />
+    <title>LogTester</title>
+  </head>
+  <body>
+    <h1>LogPaste</h1>
+
+    <textarea id="input"></textarea>
+
+    <input type="submit" id="upload" value="Upload" />
+
+    <div id="result"></div>
+
+    <script>
+      const baseUrl = "{{.BackendBaseURL}}";
+      function getShareableURL(text) {
+        return fetch(`${baseUrl}/`, {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          redirect: "error",
+          body: text,
+        })
+          .then((response) => {
+            const contentType = response.headers.get("content-type");
+            const isJson =
+              contentType && contentType.indexOf("application/json") !== -1;
+            // Success case is an HTTP 200 response and a JSON body.
+            if (response.status === 200 && isJson) {
+              return Promise.resolve(response.json());
+            }
+          })
+          .then((data) => data.id);
+      }
+
+      document.getElementById("upload").addEventListener("click", (evt) => {
+        getShareableURL(document.getElementById("input").value).then((id) => {
+          const resultUrl = `${baseUrl}/${id}`;
+
+          const paragraph = document.createElement("p");
+          paragraph.innerText = `${baseUrl}/${id}`;
+
+          const anchor = document.createElement("a");
+          anchor.href = resultUrl;
+          anchor.appendChild(paragraph);
+
+          const resultDiv = document.getElementById("result");
+          while (resultDiv.firstChild) {
+            resultDiv.removeChild(resultDiv.lastChild);
+          }
+          resultDiv.appendChild(anchor);
+        });
+      });
+    </script>
+  </body>
 </html>
