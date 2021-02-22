@@ -24,7 +24,7 @@ EOF
 set -x
 
 # Restore database from S3
-litestream restore "${DB_PATH}"
+litestream restore -v "${DB_PATH}"
 
 # Begin replication to S3 in the background
 # Note: It would be nicer to use the systemd service, but systemd
