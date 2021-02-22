@@ -7,6 +7,8 @@ jobs:
       GCLOUD_PROJECT: tinypilotkvm
       SERVICE_NAME: logpaste
       GCLOUD_REGION: us-east1
+      AWS_REGION: us-east-2
+      DB_REPLICA_URL: s3://logs.tinypilotkvm.com/db
     steps:
       - checkout
       - attach_workspace:
@@ -33,7 +35,11 @@ jobs:
             gcloud run deploy "${SERVICE_NAME}" \
               --image "gcr.io/${GCLOUD_PROJECT}/${SERVICE_NAME}" \
               --platform managed \
-              --region "${GCLOUD_REGION}"
+              --region "${GCLOUD_REGION}" \
+              --set-env-vars "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" \
+              --set-env-vars "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" \
+              --set-env-vars "AWS_REGION=${AWS_REGION}" \
+              --set-env-vars "DB_REPLICA_URL=${DB_REPLICA_URL}"
 workflows:
   version: 2
   test-deploy:
