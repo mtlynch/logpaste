@@ -1,0 +1,17 @@
+version: 2.1
+jobs:
+  build:
+    machine:
+      # Choose an explicit machine image so that we get the latest version of
+      # docker-compose.
+      image: ubuntu-2004:202010-01
+    steps:
+      - checkout
+      - run:
+          name: Build docker image
+          command: docker build -t logpaste .
+workflows:
+  version: 2
+  test:
+    jobs:
+      - build
