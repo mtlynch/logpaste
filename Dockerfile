@@ -17,7 +17,9 @@ FROM debian:stable-20210208-slim
 RUN set -x && \
     apt-get update && \
     DEBIAN_FRONTEND=noninteractive apt-get install -y \
-    ca-certificates && \
+      ca-certificates \
+      wget \
+      && \
     rm -rf /var/lib/apt/lists/*
 
 ARG litestream_version="0.3.2"
