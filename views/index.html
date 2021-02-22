@@ -20,13 +20,9 @@
     <a href="https://github.com/mtlynch/logpaste">github.com/mtlynch/logpaste</a>
 
     <script>
-      function getShareableURL(text) {
+      function uploadText(text) {
         return fetch("/", {
           method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          redirect: "error",
           body: text,
         })
           .then((response) => {
@@ -42,7 +38,7 @@
       }
 
       document.getElementById("upload").addEventListener("click", (evt) => {
-        getShareableURL(document.getElementById("input").value).then((id) => {
+        uploadText(document.getElementById("input").value).then((id) => {
           const resultUrl = `${document.location}${id}`;
 
           const paragraph = document.createElement("p");
