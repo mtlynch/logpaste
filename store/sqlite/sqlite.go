@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"log"
 	"os"
+	"time"
 
 	_ "github.com/mattn/go-sqlite3"
 
@@ -64,7 +65,7 @@ func (d db) InsertEntry(id string, contents string) error {
 	}
 	defer stmt.Close()
 
-	t := time.Now().Format(time.RFC3339))
+	t := time.Now().Format(time.RFC3339)
 
 	_, err = stmt.Exec(id, t, contents)
 	if err != nil {
