@@ -20,6 +20,9 @@ dbs:
       - url: "${DB_REPLICA_URL}"
 EOF
 
+# Echo commands to stdout.
+set -x
+
 # Restore database from S3
 litestream restore "${DB_PATH}"
 
