@@ -3,9 +3,6 @@
 # Exit build script on first failure.
 set -e
 
-# Echo commands to stdout.
-set -x
-
 # Exit on unset variable.
 set -u
 
@@ -20,7 +17,7 @@ region: "${AWS_REGION}"
 dbs:
   - path: "${DB_PATH}"
     replicas:
-      - url: "${REPLICA_URL}"
+      - url: "${DB_REPLICA_URL}"
 EOF
 
 # Restore database from S3
