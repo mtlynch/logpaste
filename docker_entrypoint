@@ -9,7 +9,7 @@ set -u
 readonly DB_PATH="/app/data/store.db"
 
 # Set litestream configuration
-sudo cat > /etc/litestream.yml <<EOF
+cat > /etc/litestream.yml <<EOF
 access-key-id:     "${AWS_ACCESS_KEY_ID}"
 secret-access-key: "${AWS_SECRET_ACCESS_KEY}"
 region: "${AWS_REGION}"
@@ -23,7 +23,10 @@ EOF
 # Restore database from S3
 litestream restore "${DB_PATH}"
 
-sudo systemctl restart litestream
+# Begin replication to S3 in the background
+# Note: It would be nicer to use the systemd service, but systemd
+# is trickier within Docker.
+litestream replicate "${DB_PATH}" "${DB_REPLICA_URL}" &
 
 # Start server
 /app/server
