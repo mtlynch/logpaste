@@ -23,9 +23,6 @@ EOF
 # Echo commands to stdout.
 set -x
 
-# Ensure parent directory exists for database file.
-mkdir -p "$(dirname "${DB_PATH}")"
-
 # Restore database from S3.
 litestream restore -v "${DB_PATH}"
 
