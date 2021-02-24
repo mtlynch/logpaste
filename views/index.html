@@ -19,26 +19,11 @@
 
     <a href="https://github.com/mtlynch/logpaste">github.com/mtlynch/logpaste</a>
 
+    <script src="/js/controllers.js"></script>
     <script>
-      function uploadText(text) {
-        return fetch("/", {
-          method: "PUT",
-          body: text,
-        })
-          .then((response) => {
-            const contentType = response.headers.get("content-type");
-            const isJson =
-              contentType && contentType.indexOf("application/json") !== -1;
-            // Success case is an HTTP 200 response and a JSON body.
-            if (response.status === 200 && isJson) {
-              return Promise.resolve(response.json());
-            }
-          })
-          .then((data) => data.id);
-      }
-
       document.getElementById("upload").addEventListener("click", (evt) => {
-        uploadText(document.getElementById("input").value).then((id) => {
+        const textToUpload = document.getElementById("input").value;
+        controllers.uploadText(textToUpload).then((id) => {
           const resultUrl = `${document.location}${id}`;
 
           const paragraph = document.createElement("p");
