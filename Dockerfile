@@ -29,6 +29,7 @@ RUN dpkg -i "${lisestram_deb_filename}"
 
 COPY --from=builder /app/server /app/server
 COPY --from=builder /app/views /app/views
+COPY --from=builder /app/static /app/static
 COPY ./docker_entrypoint /app/docker_entrypoint
 
 WORKDIR /app
