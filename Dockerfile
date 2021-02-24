@@ -37,4 +37,7 @@ COPY ./docker_entrypoint /app/docker_entrypoint
 
 WORKDIR /app
 
+# Frequency that database snapshots are replicated.
+ENV DB_SYNC_INTERVAL="10s"
+
 ENTRYPOINT ["/app/docker_entrypoint"]

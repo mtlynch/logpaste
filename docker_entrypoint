@@ -18,6 +18,7 @@ dbs:
   - path: "${DB_PATH}"
     replicas:
       - url: "${DB_REPLICA_URL}"
+        sync-interval: "${DB_SYNC_INTERVAL}"
 EOF
 
 # Echo commands to stdout.
