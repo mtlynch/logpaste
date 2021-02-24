@@ -1,0 +1,20 @@
+* {
+  font-family: 'Courier New', Courier, monospace;
+  text-align: center;
+}
+
+textarea {
+  width: 800px;
+  height: 400px;
+  border: 1px solid #cccccc;
+  padding: 1rem;
+  margin: 1rem auto;
+  display: block;
+  text-align: left;
+}
+
+#upload {
+  margin: 2rem;
+  padding: 1rem;
+  font-size: 1.1em;
+}
