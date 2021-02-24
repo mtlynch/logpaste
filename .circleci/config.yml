@@ -10,6 +10,9 @@ jobs:
       - run:
           name: Test go packages
           command: go test -v ./...
+      - run:
+          name: Verify golang formatting
+          command: dev-scripts/check-go-formatting
   build:
     machine:
       # Choose an explicit machine image so that we get the latest version of
