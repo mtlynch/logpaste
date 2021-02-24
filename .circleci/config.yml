@@ -1,5 +1,15 @@
 version: 2.1
 jobs:
+  test:
+    docker:
+      - image: cimg/go:1.13
+    steps:
+      - checkout
+      - attach_workspace:
+          at: ./
+      - run:
+          name: Test go packages
+          command: go test -v ./...
   build:
     machine:
       # Choose an explicit machine image so that we get the latest version of
@@ -14,4 +24,5 @@ workflows:
   version: 2
   test:
     jobs:
+      - test
       - build

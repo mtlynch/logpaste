@@ -18,8 +18,8 @@ func (s defaultServer) pasteGet() http.HandlerFunc {
 		w.Header().Set("Content-Type", "text/plain; charset=UTF-8")
 		contents, err := s.store.GetEntry(id)
 		if err != nil {
-			log.Printf("Error retrieving entry: %v", err)
-			http.Error(w, "can't retrieve entry", http.StatusBadRequest)
+			log.Printf("Error retrieving entry with id %s: %v", id, err)
+			http.Error(w, "entry not found", http.StatusNotFound)
 		}
 		io.WriteString(w, contents)
 	}
