@@ -3,6 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <title>{{.Title}}</title>
+    <link rel="stylesheet" type="text/css" href="/css/style.css" />
   </head>
   <body>
     <h1>{{.Title}}</h1>
@@ -11,13 +12,17 @@
 
     <p>Better documentation coming soon.</p>
 
+    <p>
+      More info:
+      <a href="https://github.com/mtlynch/logpaste">github.com/mtlynch/logpaste</a>
+    </p>
+
     <textarea id="input"></textarea>
 
     <input type="submit" id="upload" value="Upload" />
 
     <div id="result"></div>
 
-    <a href="https://github.com/mtlynch/logpaste">github.com/mtlynch/logpaste</a>
 
     <script src="/js/controllers.js"></script>
     <script>
