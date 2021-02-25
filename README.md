@@ -26,5 +26,7 @@ docker run \
   -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" \
   -e "AWS_REGION=${AWS_REGION}" \
   -e "DB_REPLICA_URL=${DB_REPLICA_URL}" \
+  -e "CREATE_NEW_DB='true'" \ `# change to false after first run`
+  --name logpaste \
   logpaste
 ```

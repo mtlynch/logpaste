@@ -25,7 +25,9 @@ EOF
 set -x
 
 # Restore database from S3.
-litestream restore -v "${DB_PATH}"
+if [[ "${CREATE_NEW_DB}" != 'true' ]]; then
+  litestream restore -v "${DB_PATH}"
+fi
 
 # Begin replication to S3 in the background.
 # Note: It would be nicer to use the systemd service, but systemd
