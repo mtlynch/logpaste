@@ -40,4 +40,8 @@ WORKDIR /app
 # Frequency that database snapshots are replicated.
 ENV DB_SYNC_INTERVAL="10s"
 
+# Should logpaste create a fresh database or pull down the latest replicated
+# version?
+ENV CREATE_NEW_DB="false"
+
 ENTRYPOINT ["/app/docker_entrypoint"]
