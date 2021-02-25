@@ -1,6 +1,6 @@
 # logpaste
 
-[![CircleCI](https://circleci.com/gh/mtlynch/logpaste.svg?style=svg)](https://circleci.com/gh/mtlynch/logpaste)
+[![CircleCI](https://circleci.com/gh/mtlynch/logpaste.svg?style=svg)](https://circleci.com/gh/mtlynch/logpaste) [![Docker Pulls](https://img.shields.io/docker/pulls/mtlynch/logpaste.svg?maxAge=604800)](https://hub.docker.com/r/mtlynch/logpaste/) [![License](http://img.shields.io/:license-mit-blue.svg?style=flat-square)](LICENSE)
 
 A minimalist web service for uploading and sharing log files.
 
@@ -20,13 +20,12 @@ AWS_SECRET_ACCESS_KEY=YOUR-SECRET-ACCESS-KEY
 AWS_REGION=YOUR-REGION
 DB_REPLICA_URL=s3://your-bucket-name/db
 
-docker build -t logpaste . && \
 docker run \
   -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" \
   -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" \
   -e "AWS_REGION=${AWS_REGION}" \
   -e "DB_REPLICA_URL=${DB_REPLICA_URL}" \
-  -e "CREATE_NEW_DB='true'" \ `# change to false after first run`
+  -e "CREATE_NEW_DB='true'" `# change to false after first run` \
   --name logpaste \
-  logpaste
+  mtlynch/logpaste
 ```
