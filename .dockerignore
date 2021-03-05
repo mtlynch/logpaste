@@ -8,4 +8,6 @@ vendor/
 README.md
 LICENSE
 
+client-secret.json
+
 .*.env
