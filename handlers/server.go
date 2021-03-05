@@ -13,10 +13,11 @@ type Server interface {
 	Router() *mux.Router
 }
 
-func New() Server {
+func New(sp SiteProperties) Server {
 	s := defaultServer{
-		router: mux.NewRouter(),
-		store:  sqlite.New(),
+		router:    mux.NewRouter(),
+		store:     sqlite.New(),
+		siteProps: sp,
 	}
 	s.routes()
 	return s
@@ -24,9 +25,14 @@ func New() Server {
 
 type httpMiddlewareHandler func(http.Handler) http.Handler
 
+type SiteProperties struct {
+	Title string
+}
+
 type defaultServer struct {
-	router *mux.Router
-	store  store.Store
+	router    *mux.Router
+	store     store.Store
+	siteProps SiteProperties
 }
 
 // Router returns the underlying router interface for the server.

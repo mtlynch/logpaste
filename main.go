@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"log"
 	"net/http"
@@ -14,7 +15,13 @@ import (
 func main() {
 	log.Print("Starting logpaste server")
 
-	s := handlers.New()
+	title := flag.String("title", "Log Paster", "title for the site")
+
+	flag.Parse()
+
+	s := handlers.New(handlers.SiteProperties{
+		Title: *title,
+	})
 	http.Handle("/", muxHandlers.LoggingHandler(os.Stdout, s.Router()))
 
 	port := os.Getenv("PORT")
