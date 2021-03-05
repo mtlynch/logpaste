@@ -1,3 +1,3 @@
 client-secret.json
-.dev.env
+.*.env
 data/

@@ -7,3 +7,5 @@ vendor/
 
 README.md
 LICENSE
+
+.*.env
