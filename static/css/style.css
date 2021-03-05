@@ -18,3 +18,8 @@ textarea {
   padding: 1rem;
   font-size: 1.1em;
 }
+
+h2 {
+  font-size: 1.2em;
+  font-weight: 100;
+}

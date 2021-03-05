@@ -16,11 +16,15 @@ func main() {
 	log.Print("Starting logpaste server")
 
 	title := flag.String("title", "Log Paster", "title for the site")
+	subtitle := flag.String("subtitle",
+		"A minimalist, open-source debug log upload service",
+		"subtitle for the site")
 
 	flag.Parse()
 
 	s := handlers.New(handlers.SiteProperties{
-		Title: *title,
+		Title:    *title,
+		Subtitle: *subtitle,
 	})
 	http.Handle("/", muxHandlers.LoggingHandler(os.Stdout, s.Router()))
 
