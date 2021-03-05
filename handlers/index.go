@@ -11,14 +11,9 @@ const viewsRootDir = "./views"
 
 func (s defaultServer) serveIndexPage() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		type page struct {
-			Title string
-		}
 		indexTemplate := template.Must(template.New(indexFilename).
 			ParseFiles(path.Join(viewsRootDir, indexFilename)))
-		if err := indexTemplate.ExecuteTemplate(w, indexFilename, page{
-			Title: s.siteProps.Title,
-		}); err != nil {
+		if err := indexTemplate.ExecuteTemplate(w, indexFilename, s.siteProps); err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 		}
 	}

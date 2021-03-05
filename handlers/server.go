@@ -26,7 +26,8 @@ func New(sp SiteProperties) Server {
 type httpMiddlewareHandler func(http.Handler) http.Handler
 
 type SiteProperties struct {
-	Title string
+	Title    string
+	Subtitle string
 }
 
 type defaultServer struct {

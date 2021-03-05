@@ -36,4 +36,5 @@ litestream replicate "${DB_PATH}" "${DB_REPLICA_URL}" &
 
 # Start server.
 /app/server \
-  --title "${SITE_TITLE}"
+  --title "${SITE_TITLE}" \
+  --subtitle "${SITE_SUBTITLE}"
