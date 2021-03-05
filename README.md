@@ -29,3 +29,24 @@ docker run \
   --name logpaste \
   mtlynch/logpaste
 ```
+
+## Run with custom site settings
+
+```bash
+SITE_TITLE="My Cool Log Pasting Service"
+
+AWS_ACCESS_KEY_ID=YOUR-ACCESS-ID
+AWS_SECRET_ACCESS_KEY=YOUR-SECRET-ACCESS-KEY
+AWS_REGION=YOUR-REGION
+DB_REPLICA_URL=s3://your-bucket-name/db
+
+docker run \
+  -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" \
+  -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" \
+  -e "AWS_REGION=${AWS_REGION}" \
+  -e "DB_REPLICA_URL=${DB_REPLICA_URL}" \
+  -e "SITE_TITLE=${SITE_TITLE}" \
+  -e "CREATE_NEW_DB='true'" `# change to false after first run` \
+  --name logpaste \
+  mtlynch/logpaste
+```

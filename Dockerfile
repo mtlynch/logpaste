@@ -44,4 +44,7 @@ ENV DB_SYNC_INTERVAL="10s"
 # version?
 ENV CREATE_NEW_DB="false"
 
+# Properties that control the site UI.
+ENV SITE_TITLE="Log Paster"
+
 ENTRYPOINT ["/app/docker_entrypoint"]
