@@ -34,6 +34,7 @@ docker run \
 
 ```bash
 SITE_TITLE="My Cool Log Pasting Service"
+SITE_SUBTITLE="Upload all your logs for FooBar here"
 
 AWS_ACCESS_KEY_ID=YOUR-ACCESS-ID
 AWS_SECRET_ACCESS_KEY=YOUR-SECRET-ACCESS-KEY
@@ -46,6 +47,7 @@ docker run \
   -e "AWS_REGION=${AWS_REGION}" \
   -e "DB_REPLICA_URL=${DB_REPLICA_URL}" \
   -e "SITE_TITLE=${SITE_TITLE}" \
+  -e "SITE_SUBTITLE="${SITE_SUBTITLE}" \
   -e "CREATE_NEW_DB='true'" `# change to false after first run` \
   --name logpaste \
   mtlynch/logpaste
