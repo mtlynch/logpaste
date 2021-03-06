@@ -8,6 +8,24 @@ set -u
 
 readonly DB_PATH="/app/data/store.db"
 
+env_vars_to_flags() {
+  set +u
+
+  local flags=""
+
+  if [[ ! -z "${SITE_TITLE}" ]]; then
+    flags+=" --title ${SITE_TITLE}"
+  fi
+
+  if [[ ! -z "${SITE_SUBTITLE}" ]]; then
+    flags+=" --subtitle ${SITE_SUBTITLE}"
+  fi
+
+  set -u
+
+  echo "${flags}"
+}
+
 # Set litestream configuration
 cat > /etc/litestream.yml <<EOF
 access-key-id:     "${AWS_ACCESS_KEY_ID}"
@@ -35,6 +53,4 @@ fi
 litestream replicate "${DB_PATH}" "${DB_REPLICA_URL}" &
 
 # Start server.
-/app/server \
-  --title "${SITE_TITLE}" \
-  --subtitle "${SITE_SUBTITLE}"
+/app/server $(env_vars_to_flags)
