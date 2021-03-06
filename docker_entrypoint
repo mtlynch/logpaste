@@ -14,11 +14,15 @@ env_vars_to_flags() {
   local flags=""
 
   if [[ ! -z "${SITE_TITLE}" ]]; then
-    flags+=" --title ${SITE_TITLE}"
+    flags+=" -title ${SITE_TITLE}"
   fi
 
   if [[ ! -z "${SITE_SUBTITLE}" ]]; then
-    flags+=" --subtitle ${SITE_SUBTITLE}"
+    flags+=" -subtitle ${SITE_SUBTITLE}"
+  fi
+
+  if [[ "${SITE_SHOW_DOCUMENTATION}" == "false" ]]; then
+    flags+=" -showdocs=false"
   fi
 
   set -u

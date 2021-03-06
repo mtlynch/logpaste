@@ -19,12 +19,15 @@ func main() {
 	subtitle := flag.String("subtitle",
 		"A minimalist, open-source debug log upload service",
 		"subtitle for the site")
+	showDocs := flag.Bool("showdocs",
+		true, "whether to display usage information on homepage")
 
 	flag.Parse()
 
 	s := handlers.New(handlers.SiteProperties{
 		Title:    *title,
 		Subtitle: *subtitle,
+		ShowDocs: *showDocs,
 	})
 	http.Handle("/", muxHandlers.LoggingHandler(os.Stdout, s.Router()))
 
