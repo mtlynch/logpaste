@@ -47,7 +47,7 @@ docker run \
   -e "AWS_REGION=${AWS_REGION}" \
   -e "DB_REPLICA_URL=${DB_REPLICA_URL}" \
   -e "SITE_TITLE=${SITE_TITLE}" \
-  -e "SITE_SUBTITLE="${SITE_SUBTITLE}" \
+  -e "SITE_SUBTITLE=${SITE_SUBTITLE}" \
   -e "CREATE_NEW_DB='true'" `# change to false after first run` \
   --name logpaste \
   mtlynch/logpaste
