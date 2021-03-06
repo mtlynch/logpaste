@@ -12,6 +12,8 @@ import (
 	"github.com/mtlynch/logpaste/random"
 )
 
+const MaxPasteBytes = 2 * 1000 * 1000
+
 func (s defaultServer) pasteGet() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		id := mux.Vars(r)["id"]
@@ -35,6 +37,8 @@ func (s defaultServer) pasteOptions() http.HandlerFunc {
 
 func (s defaultServer) pastePut() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Access-Control-Allow-Origin", "*")
+
 		id := random.String(8)
 		body, err := ioutil.ReadAll(r.Body)
 		if err != nil {
@@ -42,14 +46,21 @@ func (s defaultServer) pastePut() http.HandlerFunc {
 			http.Error(w, "can't read request body", http.StatusBadRequest)
 			return
 		}
-		w.Header().Set("Access-Control-Allow-Origin", "*")
-		w.Header().Set("Content-Type", "application/json")
+
+		if len(body) > MaxPasteBytes {
+			log.Printf("Paste body was too long: %d bytes", len(body))
+			http.Error(w, "body too long", http.StatusBadRequest)
+			return
+		}
+
 		err = s.store.InsertEntry(id, string(body))
 		if err != nil {
 			log.Printf("failed to save entry: %v", err)
 			http.Error(w, "can't save entry", http.StatusInternalServerError)
 			return
 		}
+
+		w.Header().Set("Content-Type", "application/json")
 		type response struct {
 			Id string `json:"id"`
 		}
