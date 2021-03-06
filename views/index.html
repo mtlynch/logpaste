@@ -10,12 +10,16 @@
 
     <h2>{{.Subtitle}}</h2>
 
-    <p>Better documentation coming soon.</p>
+    {{ if .ShowDocs }}
+    <div class="documentation">
+      <p>Better documentation coming soon.</p>
 
-    <p>
-      More info:
-      <a href="https://github.com/mtlynch/logpaste">github.com/mtlynch/logpaste</a>
-    </p>
+        <p>
+          More info:
+          <a href="https://github.com/mtlynch/logpaste">github.com/mtlynch/logpaste</a>
+        </p>
+    </div>
+    {{ end }}
 
     <textarea id="input"></textarea>
 
