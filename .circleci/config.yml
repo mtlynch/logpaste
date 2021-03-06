@@ -23,7 +23,7 @@ jobs:
           command: npm install prettier@2.0.5
       - run:
           name:
-          command: ./node_modules/.bin/prettier --check app
+          command: ./node_modules/.bin/prettier --check .
 
   build:
     machine:
