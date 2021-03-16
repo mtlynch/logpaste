@@ -39,7 +39,6 @@ func (s defaultServer) pastePut() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Access-Control-Allow-Origin", "*")
 
-		id := random.String(8)
 		body, err := ioutil.ReadAll(r.Body)
 		if err != nil {
 			log.Printf("Error reading body: %v", err)
@@ -57,6 +56,7 @@ func (s defaultServer) pastePut() http.HandlerFunc {
 			return
 		}
 
+		id := random.String(8)
 		err = s.store.InsertEntry(id, string(body))
 		if err != nil {
 			log.Printf("failed to save entry: %v", err)
