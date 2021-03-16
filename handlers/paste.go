@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"encoding/json"
+	"fmt"
 	"io"
 	"io/ioutil"
 	"log"
@@ -75,5 +76,40 @@ func (s defaultServer) pastePut() http.HandlerFunc {
 		if err := json.NewEncoder(w).Encode(resp); err != nil {
 			panic(err)
 		}
+	}
+}
+
+func (s defaultServer) pastePost() http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		err := r.ParseMultipartForm(MaxPasteBytes + 1024)
+		if err != nil {
+			log.Printf("failed to parse form: %v", err)
+			http.Error(w, "can't save entry", http.StatusInternalServerError)
+			return
+		}
+
+		w.Header().Set("Access-Control-Allow-Origin", "*")
+
+		body := r.MultipartForm.Value["logpaste"][0]
+		if len(body) == 0 {
+			log.Print("Paste body was empty")
+			http.Error(w, "empty body", http.StatusBadRequest)
+			return
+		} else if len(body) > MaxPasteBytes {
+			log.Printf("Paste body was too long: %d bytes", len(body))
+			http.Error(w, "body too long", http.StatusBadRequest)
+			return
+		}
+
+		id := random.String(8)
+		err = s.store.InsertEntry(id, body)
+		if err != nil {
+			log.Printf("failed to save entry: %v", err)
+			http.Error(w, "can't save entry", http.StatusInternalServerError)
+			return
+		}
+
+		w.Header().Set("Content-Type", "text/plain")
+		w.Write([]byte(fmt.Sprintf("http://%s/%s\n", r.Host, id)))
 	}
 }
