@@ -57,7 +57,7 @@ func (s defaultServer) pastePut() http.HandlerFunc {
 			return
 		}
 
-		id := random.String(8)
+		id := generateEntryId()
 		err = s.store.InsertEntry(id, string(body))
 		if err != nil {
 			log.Printf("failed to save entry: %v", err)
@@ -90,7 +90,17 @@ func (s defaultServer) pastePost() http.HandlerFunc {
 
 		w.Header().Set("Access-Control-Allow-Origin", "*")
 
-		body := r.MultipartForm.Value["logpaste"][0]
+		formValues, ok := r.MultipartForm.Value["logpaste"]
+		if !ok {
+			log.Print("Form did not contain expected field: logpaste")
+			http.Error(w, "logpaste form data is required", http.StatusBadRequest)
+		}
+		if len(formValues) < 1 {
+			log.Print("logpaste form data contains no values")
+			http.Error(w, "logpaste form data in unexpected format", http.StatusBadRequest)
+		}
+
+		body := formValues[0]
 		if len(body) == 0 {
 			log.Print("Paste body was empty")
 			http.Error(w, "empty body", http.StatusBadRequest)
@@ -101,15 +111,20 @@ func (s defaultServer) pastePost() http.HandlerFunc {
 			return
 		}
 
-		id := random.String(8)
+		id := generateEntryId()
 		err = s.store.InsertEntry(id, body)
 		if err != nil {
 			log.Printf("failed to save entry: %v", err)
 			http.Error(w, "can't save entry", http.StatusInternalServerError)
 			return
 		}
+		log.Printf("saved entry of %d bytes", len(body))
 
 		w.Header().Set("Content-Type", "text/plain")
 		w.Write([]byte(fmt.Sprintf("http://%s/%s\n", r.Host, id)))
 	}
+}
+
+func generateEntryId() string {
+	return random.String(8)
 }
