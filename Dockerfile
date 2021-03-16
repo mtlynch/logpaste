@@ -15,7 +15,7 @@ RUN go build \
 
 FROM debian:stable-20210208-slim
 
-ARG litestream_version="0.3.2"
+ARG litestream_version="0.3.3"
 ARG litestream_deb_filename="litestream-v${litestream_version}-linux-amd64.deb"
 
 RUN set -x && \
