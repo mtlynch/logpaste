@@ -63,6 +63,7 @@ func (s defaultServer) pastePut() http.HandlerFunc {
 			http.Error(w, "can't save entry", http.StatusInternalServerError)
 			return
 		}
+		log.Printf("saved entry of %d bytes", len(body))
 
 		w.Header().Set("Content-Type", "application/json")
 		type response struct {
