@@ -47,7 +47,11 @@ func (s defaultServer) pastePut() http.HandlerFunc {
 			return
 		}
 
-		if len(body) > MaxPasteBytes {
+		if len(body) == 0 {
+			log.Print("Paste body was empty")
+			http.Error(w, "empty body", http.StatusBadRequest)
+			return
+		} else if len(body) > MaxPasteBytes {
 			log.Printf("Paste body was too long: %d bytes", len(body))
 			http.Error(w, "body too long", http.StatusBadRequest)
 			return
