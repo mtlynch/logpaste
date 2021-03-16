@@ -99,6 +99,11 @@ func TestPastePut(t *testing.T) {
 			strings.Repeat("A", MaxPasteBytes+1),
 			http.StatusBadRequest,
 		},
+		// Empty content
+		{
+			"",
+			http.StatusBadRequest,
+		},
 	}
 
 	ds := mockStore{}
