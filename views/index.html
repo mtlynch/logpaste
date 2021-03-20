@@ -3,6 +3,13 @@
   <head>
     <meta charset="utf-8" />
     <title>{{.Title}}</title>
+    {{ if .ShowDocs }}
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="/third-party/prism/prism.css"
+    />
+    {{ end }}
     <link rel="stylesheet" type="text/css" href="/css/style.css" />
   </head>
   <body>
@@ -14,13 +21,14 @@
       {{ if .ShowDocs }}
       <div class="documentation">
         <h2>Upload from the command line</h2>
-        <pre><code id="curl-cmd"></code></pre>
+        <pre><code id="curl-cmd" class="language-bash"></code></pre>
       </div>
-      {{ end }}
 
       <h2>Upload via JavaScript</h2>
 
-      <pre><code id="js-example"></code></pre>
+      <pre><code id="js-example" class="language-javascript"></code></pre>
+
+      {{ end }}
 
       <div class="web-ui-upload">
         <h2>Upload via web UI</h2>
@@ -46,6 +54,9 @@
       </div>
     </div>
 
+    {{ if .ShowDocs }}
+    <script src="/third-party/prism/prism.js" data-manual></script>
+    {{ end }}
     <script src="/js/logpaste.js"></script>
     <script src="/js/app.js"></script>
   </body>
