@@ -6,33 +6,57 @@
     <link rel="stylesheet" type="text/css" href="/css/style.css" />
   </head>
   <body>
-    <h1>{{.Title}}</h1>
+    <div class="container">
+      <h1>{{.Title}}</h1>
 
-    <h2>{{.Subtitle}}</h2>
+      <p class="subtitle">{{.Subtitle}}</p>
 
-    {{ if .ShowDocs }}
-    <div class="documentation">
-      <p>Better documentation coming soon.</p>
+      {{ if .ShowDocs }}
+      <div class="documentation">
+        <h2>Upload from the command line</h2>
+        <pre id="curl-cmd"></pre>
+      </div>
+      {{ end }}
 
-      <p>
-        More info:
-        <a href="https://github.com/mtlynch/logpaste"
-          >github.com/mtlynch/logpaste</a
-        >
-      </p>
+      <h2>Upload via JavaScript</h2>
+
+      <p>Instructions coming soon.</p>
+
+      <div class="web-ui-upload">
+        <h2>Upload via web UI</h2>
+
+        <div class="upload-form">
+          <textarea id="upload-textarea"></textarea>
+
+          <div class="upload-wrapper">
+            <input type="submit" id="upload" value="Upload" />
+          </div>
+        </div>
+
+        <p id="result">&nbsp;</p>
+      </div>
+
+      <div id="more-info">
+        <h2>More info</h2>
+        <p>
+          <a href="https://github.com/mtlynch/logpaste"
+            >github.com/mtlynch/logpaste</a
+          >
+        </p>
+      </div>
     </div>
-    {{ end }}
-
-    <textarea id="input"></textarea>
-
-    <input type="submit" id="upload" value="Upload" />
-
-    <div id="result"></div>
 
     <script src="/js/controllers.js"></script>
     <script>
+      document.getElementById("curl-cmd").innerText = `
+echo "some data I want to upload" | \\
+  curl \\
+    --silent \\
+    --show-error \\
+    --form 'logpaste=<-' \\
+     ${document.location}`.trim();
       document.getElementById("upload").addEventListener("click", (evt) => {
-        const textToUpload = document.getElementById("input").value;
+        const textToUpload = document.getElementById("upload-textarea").value;
         controllers.uploadText(textToUpload).then((id) => {
           const resultUrl = `${document.location}${id}`;
 

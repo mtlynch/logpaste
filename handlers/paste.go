@@ -2,17 +2,23 @@ package handlers
 
 import (
 	"encoding/json"
+	"fmt"
 	"io"
 	"io/ioutil"
 	"log"
 	"net/http"
+	"strings"
 
 	"github.com/gorilla/mux"
 
 	"github.com/mtlynch/logpaste/random"
 )
 
-const MaxPasteBytes = 2 * 1000 * 1000
+const MaxPasteCharacters = 2 * 1000 * 1000
+
+type PastePutResponse struct {
+	Id string `json:"id"`
+}
 
 func (s defaultServer) pasteGet() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
@@ -39,41 +45,90 @@ func (s defaultServer) pastePut() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Access-Control-Allow-Origin", "*")
 
-		body, err := ioutil.ReadAll(r.Body)
+		bodyRaw, err := ioutil.ReadAll(r.Body)
 		if err != nil {
 			log.Printf("Error reading body: %v", err)
 			http.Error(w, "can't read request body", http.StatusBadRequest)
 			return
 		}
 
-		if len(body) == 0 {
-			log.Print("Paste body was empty")
-			http.Error(w, "empty body", http.StatusBadRequest)
-			return
-		} else if len(body) > MaxPasteBytes {
-			log.Printf("Paste body was too long: %d bytes", len(body))
-			http.Error(w, "body too long", http.StatusBadRequest)
+		body := string(bodyRaw)
+		if !validatePaste(body, w) {
 			return
 		}
 
-		id := random.String(8)
-		err = s.store.InsertEntry(id, string(body))
+		id := generateEntryId()
+		err = s.store.InsertEntry(id, body)
 		if err != nil {
 			log.Printf("failed to save entry: %v", err)
 			http.Error(w, "can't save entry", http.StatusInternalServerError)
 			return
 		}
-		log.Printf("saved entry of %d bytes", len(body))
+		log.Printf("saved entry of %d characters", len(body))
 
 		w.Header().Set("Content-Type", "application/json")
-		type response struct {
-			Id string `json:"id"`
-		}
-		resp := response{
+		resp := PastePutResponse{
 			Id: id,
 		}
 		if err := json.NewEncoder(w).Encode(resp); err != nil {
 			panic(err)
 		}
 	}
+}
+
+func (s defaultServer) pastePost() http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		err := r.ParseMultipartForm(MaxPasteCharacters + 1024)
+		if err != nil {
+			log.Printf("failed to parse form: %v", err)
+			http.Error(w, "no valid multipart/form-data found", http.StatusBadRequest)
+			return
+		}
+
+		w.Header().Set("Access-Control-Allow-Origin", "*")
+
+		formValues, ok := r.MultipartForm.Value["logpaste"]
+		if !ok {
+			log.Print("Form did not contain expected field: logpaste")
+			http.Error(w, "logpaste form data is required", http.StatusBadRequest)
+		}
+		if len(formValues) < 1 {
+			log.Print("logpaste form data contains no values")
+			http.Error(w, "logpaste form data in unexpected format", http.StatusBadRequest)
+		}
+
+		body := formValues[0]
+		if !validatePaste(body, w) {
+			return
+		}
+
+		id := generateEntryId()
+		err = s.store.InsertEntry(id, body)
+		if err != nil {
+			log.Printf("failed to save entry: %v", err)
+			http.Error(w, "can't save entry", http.StatusInternalServerError)
+			return
+		}
+		log.Printf("saved entry of %d characters", len(body))
+
+		w.Header().Set("Content-Type", "text/plain")
+		w.Write([]byte(fmt.Sprintf("http://%s/%s\n", r.Host, id)))
+	}
+}
+
+func generateEntryId() string {
+	return random.String(8)
+}
+
+func validatePaste(p string, w http.ResponseWriter) bool {
+	if len(strings.TrimSpace(p)) == 0 {
+		log.Print("Paste body was empty")
+		http.Error(w, "empty body", http.StatusBadRequest)
+		return false
+	} else if len(p) > MaxPasteCharacters {
+		log.Printf("Paste body was too long: %d characters", len(p))
+		http.Error(w, "body too long", http.StatusBadRequest)
+		return false
+	}
+	return true
 }

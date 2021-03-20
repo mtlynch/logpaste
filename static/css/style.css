@@ -1,25 +1,50 @@
-* {
+body {
   font-family: "Courier New", Courier, monospace;
-  text-align: center;
 }
 
-textarea {
-  width: 800px;
-  height: 400px;
+pre {
+  background-color: #dbdbdb;
+  border: 1px solid black;
+  padding: 0.7rem 1rem;
+  display: inline-block;
+  margin: 1rem auto;
+  text-align: left;
+  font-size: 12pt;
+}
+
+.container {
+  max-width: 70ch;
+  margin: 0 auto;
+}
+
+.subtitle {
+  font-size: 1.2em;
+  font-weight: 100;
+  margin-bottom: 3rem;
+}
+
+.upload-form {
+  max-width: 600px;
+}
+
+#upload-textarea {
+  width: 600px;
+  max-width: 600px;
+  height: 250px;
   border: 1px solid #cccccc;
   padding: 1rem;
-  margin: 1rem auto;
+  margin: 1rem 0;
   display: block;
-  text-align: left;
+}
+
+.upload-wrapper {
+  display: flex;
+  flex-direction: row;
+  align-content: flex-end;
+  justify-content: flex-end;
 }
 
 #upload {
-  margin: 2rem;
-  padding: 1rem;
+  padding: 0.7rem;
   font-size: 1.1em;
-}
-
-h2 {
-  font-size: 1.2em;
-  font-weight: 100;
 }
