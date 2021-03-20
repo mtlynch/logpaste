@@ -2,15 +2,25 @@
 
 const baseUrl = document.location.toString().replace(/\/$/, "");
 
-document.getElementById("curl-cmd").innerText = `
+const curlCmd = document.getElementById("curl-cmd");
+if (curlCmd) {
+  curlCmd.innerHTML = Prism.highlight(
+    `
 echo "some text I want to upload" | \\
   curl \\
     --silent \\
     --show-error \\
     --form 'logpaste=<-' \\
-    ${baseUrl}`.trim();
+    ${baseUrl}`.trim(),
+    Prism.languages.bash,
+    "bash"
+  );
+}
 
-document.getElementById("js-example").innerText = `
+const jsExample = document.getElementById("js-example");
+if (jsExample) {
+  jsExample.innerHTML = Prism.highlight(
+    `
 <script src="${baseUrl}/js/logpaste.js"></script>
 <script>
 const text = "some text I want to upload";
@@ -19,7 +29,11 @@ logpaste.uploadText(text).then((id) => {
   console.log(\`uploaded to \${baseUrl}/\${id}\`);
 });
 </script>
-`.trim();
+    `.trim(),
+    Prism.languages.javascript,
+    "javascript"
+  );
+}
 
 document.getElementById("upload").addEventListener("click", (evt) => {
   const textToUpload = document.getElementById("upload-textarea").value;
