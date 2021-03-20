@@ -6,6 +6,7 @@ import (
 	"io"
 	"io/ioutil"
 	"log"
+	"mime/multipart"
 	"net/http"
 	"strings"
 
@@ -87,17 +88,13 @@ func (s defaultServer) pastePost() http.HandlerFunc {
 
 		w.Header().Set("Access-Control-Allow-Origin", "*")
 
-		formValues, ok := r.MultipartForm.Value["logpaste"]
+		body, ok := parsePasteFromMultipartForm(r.MultipartForm)
 		if !ok {
 			log.Print("Form did not contain expected field: logpaste")
 			http.Error(w, "logpaste form data is required", http.StatusBadRequest)
-		}
-		if len(formValues) < 1 {
-			log.Print("logpaste form data contains no values")
-			http.Error(w, "logpaste form data in unexpected format", http.StatusBadRequest)
+			return
 		}
 
-		body := formValues[0]
 		if !validatePaste(body, w) {
 			return
 		}
@@ -131,4 +128,54 @@ func validatePaste(p string, w http.ResponseWriter) bool {
 		return false
 	}
 	return true
+}
+
+func parsePasteFromMultipartForm(f *multipart.Form) (string, bool) {
+	if content, ok := parsePasteFromMultipartFormValue(f); ok {
+		return content, true
+	}
+	if content, ok := parsePasteFromMultipartFormFile(f); ok {
+		return content, true
+	}
+	return "", false
+}
+
+func parsePasteFromMultipartFormValue(f *multipart.Form) (string, bool) {
+	formValues, ok := f.Value["logpaste"]
+	if !ok {
+		return "", false
+	}
+
+	if len(formValues) != 1 {
+		log.Printf("unexpected number of form values: %d", len(formValues))
+			return "", false
+	}
+
+	return formValues[0], true
+}
+
+func parsePasteFromMultipartFormFile(f *multipart.Form) (string, bool) {
+	formFiles, ok := f.File["logpaste"]
+	if !ok {
+		return "", false
+	}
+
+	if len(formFiles) != 1 {
+		log.Printf("unexpected number of form files: %d", len(formFiles))
+			return "", false
+	}
+
+	file, err := formFiles[0].Open()
+	if err != nil {
+		log.Printf("failed to open form file: %v", err)
+		return "", false
+	}
+
+	body, err := ioutil.ReadAll(file)
+	if err != nil {
+		log.Printf("failed to read form file: %v", err)
+		return "", false
+	}
+
+	return string(body), true
 }

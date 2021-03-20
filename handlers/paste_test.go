@@ -29,6 +29,10 @@ func (ds *mockStore) InsertEntry(id string, contents string) error {
 	return nil
 }
 
+func (ds *mockStore) Reset() {
+	ds.entries = make(map[string]string)
+}
+
 func TestPasteGet(t *testing.T) {
 	var pasteTests = []struct {
 		id                 string
@@ -130,6 +134,8 @@ func TestPastePut(t *testing.T) {
 	s.routes()
 
 	for _, tt := range pasteTests {
+		ds.Reset()
+
 		req, err := http.NewRequest("PUT", "/", strings.NewReader(tt.body))
 		if err != nil {
 			t.Fatal(err)
@@ -198,6 +204,18 @@ some data I want to upload
 			http.StatusOK,
 			"some data I want to upload",
 		},
+		{
+			"multipart/form-data; boundary=------------------------ff01448fc0d75457",
+			`
+--------------------------ff01448fc0d75457
+Content-Disposition: form-data; name="logpaste"; filename="text.txt"
+Content-Type: text/plain
+
+some data in a file
+--------------------------ff01448fc0d75457--`,
+			http.StatusOK,
+			"some data in a file",
+		},
 	}
 
 	ds := mockStore{
@@ -211,6 +229,8 @@ some data I want to upload
 	s.routes()
 
 	for _, tt := range pasteTests {
+		ds.Reset()
+
 		req, err := http.NewRequest("POST", "/",
 			strings.NewReader(strings.ReplaceAll(tt.body, "\n", "\r\n")))
 		if err != nil {
