@@ -46,7 +46,8 @@ is_litestream_enabled() {
   return "${IS_ENABLED}"
 }
 
-if [[ is_litestream_enabled() == 'true']]; then
+if [[ is_litestream_enabled == 'true' ]]; then
+
   # Set litestream configuration
   cat > /etc/litestream.yml <<EOF
   access-key-id:     "${AWS_ACCESS_KEY_ID}"
@@ -58,13 +59,14 @@ if [[ is_litestream_enabled() == 'true']]; then
       replicas:
         - url: "${DB_REPLICA_URL}"
           sync-interval: "${DB_SYNC_INTERVAL}"
-  EOF
+EOF
+
 fi
 
 # Echo commands to stdout.
 set -x
 
-if [[ is_litestream_enabled() == 'true' ]]; then
+if [[ is_litestream_enabled == 'true' ]]; then
 
   # Restore database from S3.
   if [[ "${CREATE_NEW_DB}" != 'true' ]]; then

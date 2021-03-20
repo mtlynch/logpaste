@@ -13,7 +13,7 @@ services:
     depends_on:
       - logpaste
     environment:
-      - CYPRESS_baseUrl=http://logpaste:3123
+      - CYPRESS_baseUrl=http://logpaste:3333
     working_dir: /e2e
     volumes:
       - ./:/e2e

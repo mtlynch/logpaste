@@ -44,7 +44,7 @@ document.getElementById("upload").addEventListener("click", (evt) => {
     paragraph.innerText = resultUrl;
 
     const anchor = document.createElement("a");
-    anchor.href = resultUrl;
+    anchor.href = `/${id}`;
     anchor.appendChild(paragraph);
 
     const resultDiv = document.getElementById("result");

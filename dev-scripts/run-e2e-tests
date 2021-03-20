@@ -6,5 +6,15 @@ set -e
 # Echo commands to stdout.
 set -x
 
+if [ "$1" = "--skip-build" ]; then
+  EXTRA_FLAGS=""
+else
+  EXTRA_FLAGS="--build"
+fi
+readonly EXTRA_FLAGS
+
+# Exit on unset variable.
+set -u
+
 cd e2e
-docker-compose up --exit-code-from cypress --abort-on-container-exit
+docker-compose up --exit-code-from cypress --abort-on-container-exit ${EXTRA_FLAGS}
