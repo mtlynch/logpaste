@@ -10,7 +10,7 @@ echo "some text I want to upload" | \\
   curl \\
     --silent \\
     --show-error \\
-    --form 'logpaste=<-' \\
+    --form '_=<-' \\
     ${baseUrl}`.trim(),
     Prism.languages.bash,
     "bash"
@@ -21,7 +21,7 @@ const curlFileCmd = document.getElementById("curl-file-cmd");
 if (curlFileCmd) {
   curlFileCmd.innerHTML = Prism.highlight(
     `
-curl -F "logpaste=@/path/to/file.txt" ${baseUrl}`.trim(),
+curl -F "_=@/path/to/file.txt" ${baseUrl}`.trim(),
     Prism.languages.bash,
     "bash"
   );

@@ -90,8 +90,8 @@ func (s defaultServer) pastePost() http.HandlerFunc {
 
 		body, ok := parsePasteFromMultipartForm(r.MultipartForm)
 		if !ok {
-			log.Print("Form did not contain expected field: logpaste")
-			http.Error(w, "logpaste form data is required", http.StatusBadRequest)
+			log.Print("form did not contain any recognizable data")
+			http.Error(w, "form data or file is required", http.StatusBadRequest)
 			return
 		}
 
@@ -141,33 +141,24 @@ func parsePasteFromMultipartForm(f *multipart.Form) (string, bool) {
 }
 
 func parsePasteFromMultipartFormValue(f *multipart.Form) (string, bool) {
-	formValues, ok := f.Value["logpaste"]
-	if !ok {
-		return "", false
-	}
+	return anyValueInForm(f)
+}
 
-	if len(formValues) != 1 {
-		log.Printf("unexpected number of form values: %d", len(formValues))
-		return "", false
+func anyValueInForm(f *multipart.Form) (string, bool) {
+	for _, values := range f.Value {
+		log.Printf("values=%v", values)
+		if len(values) < 1 {
+			log.Printf("form values are empty")
+			continue
+		}
+		return values[0], true
 	}
-
-	return formValues[0], true
+	return "", false
 }
 
 func parsePasteFromMultipartFormFile(f *multipart.Form) (string, bool) {
-	formFiles, ok := f.File["logpaste"]
+	file, ok := anyFileInForm(f.File)
 	if !ok {
-		return "", false
-	}
-
-	if len(formFiles) != 1 {
-		log.Printf("unexpected number of form files: %d", len(formFiles))
-		return "", false
-	}
-
-	file, err := formFiles[0].Open()
-	if err != nil {
-		log.Printf("failed to open form file: %v", err)
 		return "", false
 	}
 
@@ -178,4 +169,20 @@ func parsePasteFromMultipartFormFile(f *multipart.Form) (string, bool) {
 	}
 
 	return string(body), true
+}
+
+func anyFileInForm(formFiles map[string][]*multipart.FileHeader) (multipart.File, bool) {
+	for _, fileHeaders := range formFiles {
+		if len(fileHeaders) < 1 {
+			log.Printf("form files are empty")
+			continue
+		}
+		file, err := fileHeaders[0].Open()
+		if err != nil {
+			log.Printf("failed to open form file: %v", err)
+			return nil, false
+		}
+		return file, true
+	}
+	return nil, false
 }
