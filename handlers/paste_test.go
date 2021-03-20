@@ -184,7 +184,7 @@ func TestPastePost(t *testing.T) {
 			"multipart/form-data; boundary=------------------------aea33768a2527972",
 			`
 --------------------------aea33768a2527972
-Content-Disposition: form-data; name="logpaste"
+Content-Disposition: form-data; name="dummyname1"
 
 
 
@@ -197,7 +197,7 @@ Content-Disposition: form-data; name="logpaste"
 			"multipart/form-data; boundary=------------------------aea33768a2527972",
 			`
 --------------------------aea33768a2527972
-Content-Disposition: form-data; name="logpaste"
+Content-Disposition: form-data; name="dummyname2"
 
 some data I want to upload
 --------------------------aea33768a2527972--`,
@@ -208,7 +208,7 @@ some data I want to upload
 			"multipart/form-data; boundary=------------------------ff01448fc0d75457",
 			`
 --------------------------ff01448fc0d75457
-Content-Disposition: form-data; name="logpaste"; filename="text.txt"
+Content-Disposition: form-data; name="dummyname3"; filename="text.txt"
 Content-Type: text/plain
 
 some data in a file
