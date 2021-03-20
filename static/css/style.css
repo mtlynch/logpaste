@@ -1,9 +1,28 @@
-* {
+body {
   font-family: "Courier New", Courier, monospace;
-  text-align: center;
 }
 
-textarea {
+pre {
+  background-color: #dbdbdb;
+  border: 1px solid black;
+  padding: 0.7rem 1rem;
+  display: inline-block;
+  margin: 1rem auto;
+  text-align: left;
+  font-size: 12pt;
+}
+
+.container {
+  max-width: 70ch;
+  margin: 0 auto;
+}
+
+.subtitle {
+  font-size: 1.2em;
+  font-weight: 100;
+}
+
+#upload-textarea {
   width: 800px;
   height: 400px;
   border: 1px solid #cccccc;
@@ -14,12 +33,6 @@ textarea {
 }
 
 #upload {
-  margin: 2rem;
   padding: 1rem;
   font-size: 1.1em;
-}
-
-h2 {
-  font-size: 1.2em;
-  font-weight: 100;
 }
