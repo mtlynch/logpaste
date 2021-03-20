@@ -18,18 +18,6 @@
 
       <p class="subtitle">{{.Subtitle}}</p>
 
-      {{ if .ShowDocs }}
-      <div class="documentation">
-        <h2>Upload from the command line</h2>
-        <pre><code id="curl-cmd" class="language-bash"></code></pre>
-      </div>
-
-      <h2>Upload via JavaScript</h2>
-
-      <pre><code id="js-example" class="language-javascript"></code></pre>
-
-      {{ end }}
-
       <div class="web-ui-upload">
         <h2>Upload via web UI</h2>
 
@@ -43,6 +31,21 @@
 
         <p id="result">&nbsp;</p>
       </div>
+
+      {{ if .ShowDocs }}
+      <div class="documentation">
+        <div class="bash-example">
+          <h2>Upload from the command line</h2>
+          <pre><code id="curl-cmd" class="language-bash"></code></pre>
+        </div>
+
+        <div class="js-example">
+          <h2>Upload via JavaScript</h2>
+
+          <pre><code id="js-example" class="language-javascript"></code></pre>
+        </div>
+      </div>
+      {{ end }}
 
       <div id="more-info">
         <h2>More info</h2>
