@@ -148,7 +148,7 @@ func parsePasteFromMultipartFormValue(f *multipart.Form) (string, bool) {
 
 	if len(formValues) != 1 {
 		log.Printf("unexpected number of form values: %d", len(formValues))
-			return "", false
+		return "", false
 	}
 
 	return formValues[0], true
@@ -162,7 +162,7 @@ func parsePasteFromMultipartFormFile(f *multipart.Form) (string, bool) {
 
 	if len(formFiles) != 1 {
 		log.Printf("unexpected number of form files: %d", len(formFiles))
-			return "", false
+		return "", false
 	}
 
 	file, err := formFiles[0].Open()
