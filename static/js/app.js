@@ -1,12 +1,25 @@
 "use strict";
 
+const baseUrl = document.location.toString().replace(/\/$/, "");
+
 document.getElementById("curl-cmd").innerText = `
-      echo "some data I want to upload" | \\
-        curl \\
-          --silent \\
-          --show-error \\
-          --form 'logpaste=<-' \\
-           ${document.location}`.trim();
+echo "some text I want to upload" | \\
+  curl \\
+    --silent \\
+    --show-error \\
+    --form 'logpaste=<-' \\
+    ${baseUrl}`.trim();
+
+document.getElementById("js-example").innerText = `
+<script src="${baseUrl}/js/logpaste.js"></script>
+<script>
+const text = "some text I want to upload";
+
+logpaste.uploadText(text).then((id) => {
+  console.log(\`uploaded to \${baseUrl}/\${id}\`);
+});
+</script>
+`.trim();
 
 document.getElementById("upload").addEventListener("click", (evt) => {
   const textToUpload = document.getElementById("upload-textarea").value;
