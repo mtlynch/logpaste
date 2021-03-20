@@ -26,7 +26,7 @@ if (jsExample) {
 const text = "some text I want to upload";
 
 logpaste.uploadText(text).then((id) => {
-  console.log(\`uploaded to \${baseUrl}/\${id}\`);
+  console.log(\`uploaded to ${baseUrl}/\${id}\`);
 });
 </script>
     `.trim(),
