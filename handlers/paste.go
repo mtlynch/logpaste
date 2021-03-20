@@ -51,15 +51,9 @@ func (s defaultServer) pastePut() http.HandlerFunc {
 			http.Error(w, "can't read request body", http.StatusBadRequest)
 			return
 		}
-		body := string(bodyRaw)
 
-		if len(strings.TrimSpace(body)) == 0 {
-			log.Print("Paste body was empty")
-			http.Error(w, "empty body", http.StatusBadRequest)
-			return
-		} else if len(body) > MaxPasteCharacters {
-			log.Printf("Paste body was too long: %d characters", len(body))
-			http.Error(w, "body too long", http.StatusBadRequest)
+		body := string(bodyRaw)
+		if !validatePaste(body, w) {
 			return
 		}
 
@@ -104,13 +98,7 @@ func (s defaultServer) pastePost() http.HandlerFunc {
 		}
 
 		body := formValues[0]
-		if len(strings.TrimSpace(body)) == 0 {
-			log.Print("Paste body was empty")
-			http.Error(w, "empty body", http.StatusBadRequest)
-			return
-		} else if len(body) > MaxPasteCharacters {
-			log.Printf("Paste body was too long: %d characters", len(body))
-			http.Error(w, "body too long", http.StatusBadRequest)
+		if !validatePaste(body, w) {
 			return
 		}
 
@@ -130,4 +118,17 @@ func (s defaultServer) pastePost() http.HandlerFunc {
 
 func generateEntryId() string {
 	return random.String(8)
+}
+
+func validatePaste(p string, w http.ResponseWriter) bool {
+	if len(strings.TrimSpace(p)) == 0 {
+		log.Print("Paste body was empty")
+		http.Error(w, "empty body", http.StatusBadRequest)
+		return false
+	} else if len(p) > MaxPasteCharacters {
+		log.Printf("Paste body was too long: %d characters", len(p))
+		http.Error(w, "body too long", http.StatusBadRequest)
+		return false
+	}
+	return true
 }
