@@ -15,7 +15,7 @@ import (
 func main() {
 	log.Print("Starting logpaste server")
 
-	title := flag.String("title", "Log Paster", "title for the site")
+	title := flag.String("title", "LogPaste", "title for the site")
 	subtitle := flag.String("subtitle",
 		"A minimalist, open-source debug log upload service",
 		"subtitle for the site")
