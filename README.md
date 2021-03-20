@@ -19,13 +19,15 @@ A minimalist web service for uploading and sharing log files.
 
 * <http://logpaste.com>
 
-## Run from source
+## Run LogPaste
+
+### From source
 
 ```bash
 go run main.go
 ```
 
-## Run local Docker container
+### From Docker
 
 This is the simplest way to run LogPaste, but you will lose all data when you shut down the container.
 
@@ -36,7 +38,7 @@ docker run \
   mtlynch/logpaste
 ```
 
-## Run local Docker container with persistent data
+### From Docker + persistent data
 
 To run LogPaste with persistent data, mount a volume from your local system to store the LogPaste sqlite database.
 
@@ -48,7 +50,7 @@ docker run \
   mtlynch/logpaste
 ```
 
-## Run with cloud data replication
+### From Docker + cloud data replication
 
 If you specify settings for an S3 bucket, LogPaste will use [Litestream](https://litestream.io/) to automatically replicate your data to S3.
 
@@ -73,10 +75,11 @@ docker run \
 
 Some notes:
 
-* After you initialize your datastore, remove the `CREATE_NEW_DB` line.
-* Only run one Docker container for each S3 location, as LogPaste can't sync writes across multiple instances.
+* After you run your container for the first time, remove the `CREATE_NEW_DB` line.
+* Only run one Docker container for each S3 location
+  * LogPaste can't sync writes across multiple instances.
 
-## Run with custom site settings
+### With custom site settings
 
 LogPaste offers some options to customize the text for your site. Here's an example that uses a custom title and subtitle:
 
@@ -93,3 +96,10 @@ docker run \
   --name logpaste \
   mtlynch/logpaste
 ```
+
+## Deployment
+
+LogPaste is easy to deploy to cloud services. Here are some places it works well:
+
+* [Heroku](docs/deployment/heroku.md) (recommended)
+* [Amazon LightSail](docs/deployment/lightsail.md)
