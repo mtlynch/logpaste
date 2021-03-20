@@ -46,7 +46,7 @@
       </div>
     </div>
 
-    <script src="/js/controllers.js"></script>
+    <script src="/js/logpaste.js"></script>
     <script>
       document.getElementById("curl-cmd").innerText = `
 echo "some data I want to upload" | \\
@@ -57,7 +57,7 @@ echo "some data I want to upload" | \\
      ${document.location}`.trim();
       document.getElementById("upload").addEventListener("click", (evt) => {
         const textToUpload = document.getElementById("upload-textarea").value;
-        controllers.uploadText(textToUpload).then((id) => {
+        logpaste.uploadText(textToUpload).then((id) => {
           const resultUrl = `${document.location}${id}`;
 
           const paragraph = document.createElement("p");

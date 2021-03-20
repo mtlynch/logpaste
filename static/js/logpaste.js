@@ -1,8 +1,8 @@
 "use strict";
 
 (function (windows) {
-  function uploadText(text) {
-    return fetch("/", {
+  function uploadText(text, baseUrl = "") {
+    return fetch(baseUrl + "/", {
       method: "PUT",
       body: text,
     })
@@ -14,11 +14,19 @@
         if (response.status === 200 && isJson) {
           return Promise.resolve(response.json());
         }
+        // Treat any other response as an error.
+        return response.text().then((text) => {
+          if (text) {
+            return Promise.reject(new Error(text));
+          } else {
+            return Promise.reject(new Error(response.statusText));
+          }
+        });
       })
       .then((data) => data.id);
   }
-  if (!window.hasOwnProperty("controllers")) {
-    window.controllers = {};
+  if (!window.hasOwnProperty("logpaste")) {
+    window.logpaste = {};
   }
-  window.controllers.uploadText = uploadText;
+  window.logpaste.uploadText = uploadText;
 })(window);
