@@ -1,0 +1,5 @@
+{
+  "pluginsFile": false,
+  "defaultCommandTimeout": 10000,
+  "videoCompression": false
+}

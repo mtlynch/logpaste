@@ -30,31 +30,52 @@ env_vars_to_flags() {
   echo "${flags}"
 }
 
-# Set litestream configuration
-cat > /etc/litestream.yml <<EOF
-access-key-id:     "${AWS_ACCESS_KEY_ID}"
-secret-access-key: "${AWS_SECRET_ACCESS_KEY}"
-region: "${AWS_REGION}"
+is_litestream_enabled() {
+  set +u
 
-dbs:
-  - path: "${DB_PATH}"
-    replicas:
-      - url: "${DB_REPLICA_URL}"
-        sync-interval: "${DB_SYNC_INTERVAL}"
-EOF
+  local IS_ENABLED='false'
+
+  if [[ ! -z "${AWS_ACCESS_KEY_ID}" ]] && \
+      [[ ! -z "${AWS_SECRET_ACCESS_KEY}" ]] && \
+      [[ ! -z "${AWS_REGION}" ]]; then
+    IS_ENABLED='true';
+  fi
+
+  set -u
+
+  return "${IS_ENABLED}"
+}
+
+if [[ is_litestream_enabled() == 'true']]; then
+  # Set litestream configuration
+  cat > /etc/litestream.yml <<EOF
+  access-key-id:     "${AWS_ACCESS_KEY_ID}"
+  secret-access-key: "${AWS_SECRET_ACCESS_KEY}"
+  region: "${AWS_REGION}"
+
+  dbs:
+    - path: "${DB_PATH}"
+      replicas:
+        - url: "${DB_REPLICA_URL}"
+          sync-interval: "${DB_SYNC_INTERVAL}"
+  EOF
+fi
 
 # Echo commands to stdout.
 set -x
 
-# Restore database from S3.
-if [[ "${CREATE_NEW_DB}" != 'true' ]]; then
-  litestream restore -v "${DB_PATH}"
-fi
+if [[ is_litestream_enabled() == 'true' ]]; then
 
-# Begin replication to S3 in the background.
-# Note: It would be nicer to use the systemd service, but systemd
-# is trickier within Docker.
-litestream replicate "${DB_PATH}" "${DB_REPLICA_URL}" &
+  # Restore database from S3.
+  if [[ "${CREATE_NEW_DB}" != 'true' ]]; then
+    litestream restore -v "${DB_PATH}"
+  fi
+
+  # Begin replication to S3 in the background.
+  # Note: It would be nicer to use the systemd service, but systemd
+  # is trickier within Docker.
+  litestream replicate "${DB_PATH}" "${DB_REPLICA_URL}" &
+fi
 
 # Start server.
 eval "/app/server $(env_vars_to_flags)"
