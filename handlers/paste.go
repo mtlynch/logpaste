@@ -84,7 +84,7 @@ func (s defaultServer) pastePost() http.HandlerFunc {
 		err := r.ParseMultipartForm(MaxPasteBytes + 1024)
 		if err != nil {
 			log.Printf("failed to parse form: %v", err)
-			http.Error(w, "can't save entry", http.StatusInternalServerError)
+			http.Error(w, "no valid multipart/form-data found", http.StatusBadRequest)
 			return
 		}
 

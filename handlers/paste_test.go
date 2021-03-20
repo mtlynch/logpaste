@@ -132,3 +132,51 @@ func TestPastePut(t *testing.T) {
 		}
 	}
 }
+
+
+func TestPastePost(t *testing.T) {
+	var pasteTests = []struct {
+		contentType				string
+		body               string
+		httpStatusExpected int
+	}{
+		{
+			"text/plain",
+			"hello, world!",
+			http.StatusBadRequest,
+		},
+		// Valid input
+		{
+			"multipart/form-data",
+			strings.Repeat("A", MaxPasteBytes),
+			http.StatusOK,
+		},
+	}
+
+	ds := mockStore{}
+	router := mux.NewRouter()
+	s := defaultServer{
+		store:  &ds,
+		router: router,
+	}
+	s.routes()
+
+	for _, tt := range pasteTests {
+		req, err := http.NewRequest("POST", "/", strings.NewReader(tt.body))
+		if err != nil {
+			t.Fatal(err)
+		}
+		req.Header.Add("Content-Type", tt.contentType)
+
+		w := httptest.NewRecorder()
+		s.router.ServeHTTP(w, req)
+
+		if status := w.Code; status != tt.httpStatusExpected {
+			t.Fatalf("handler returned wrong status code: got %v want %v",
+				status, tt.httpStatusExpected)
+		}
+		if tt.httpStatusExpected != http.StatusOK {
+			continue
+		}
+	}
+}
