@@ -22,17 +22,28 @@ pre {
   font-weight: 100;
 }
 
+.upload-form {
+  max-width: 600px;
+}
+
 #upload-textarea {
-  width: 800px;
-  height: 400px;
+  width: 600px;
+  max-width: 600px;
+  height: 250px;
   border: 1px solid #cccccc;
   padding: 1rem;
-  margin: 1rem auto;
+  margin: 1rem 0;
   display: block;
-  text-align: left;
+}
+
+.upload-wrapper {
+  display: flex;
+  flex-direction: row;
+  align-content: flex-end;
+  justify-content: flex-end;
 }
 
 #upload {
-  padding: 1rem;
+  padding: 0.7rem;
   font-size: 1.1em;
 }
