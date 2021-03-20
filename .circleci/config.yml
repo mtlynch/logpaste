@@ -24,8 +24,7 @@ jobs:
       - run:
           name:
           command: ./node_modules/.bin/prettier --check .
-
-  build:
+  e2e:
     machine:
       # Choose an explicit machine image so that we get the latest version of
       # docker-compose.
@@ -33,12 +32,17 @@ jobs:
     steps:
       - checkout
       - run:
-          name: Build docker image
-          command: docker build -t logpaste .
+          name: Perform e2e tests.
+          command: dev-scripts/run-e2e-tests
+          no_output_timeout: 1m
+      - store_artifacts:
+          path: e2e/cypress/videos
+      - store_artifacts:
+          path: e2e/cypress/screenshots
 workflows:
   version: 2
   test:
     jobs:
       - test
-      - build
+      - e2e
       - check_frontend_formatting

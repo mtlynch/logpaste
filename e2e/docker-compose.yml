@@ -1,0 +1,19 @@
+version: "3.2"
+services:
+  logpaste:
+    build:
+      context: ../
+    environment:
+      - PORT=3333
+    volumes:
+      - ./:/app/e2e
+  cypress:
+    image: "cypress/included:6.8.0"
+    command: ["--browser", "chrome"]
+    depends_on:
+      - logpaste
+    environment:
+      - CYPRESS_baseUrl=http://logpaste:3333
+    working_dir: /e2e
+    volumes:
+      - ./:/e2e
