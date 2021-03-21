@@ -8,6 +8,7 @@ A minimalist web service for uploading and sharing log files.
 
 ## Features
 
+* Accept text uploads from command-line, JavaScript, and web UI
 * Simple to deploy
   * Runs in a single Docker container
   * Fits in the free tier of Heroku
