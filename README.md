@@ -104,3 +104,35 @@ LogPaste is easy to deploy to cloud services. Here are some places it works well
 
 * [Heroku](docs/deployment/heroku.md) (recommended)
 * [Amazon LightSail](docs/deployment/lightsail.md)
+
+## Parameters
+
+### Command-line flags
+
+| Flag | Meaning | Default Value |
+|------|---------|---------------|
+| `-title` | Title to display on homepage | `"LogPaste"` |
+| `-subtitle` | Subtitle to display on homepage | `"A minimalist, open-source debug log upload service"` |
+| `-showDocs` | Whether to display usage documentation on homepage | `true` |
+
+### Docker environment variables
+
+You can adjust behavior of the Docker container by passing these parameters with `docker run -e`:
+
+| Environment Variable | Meaning | Default Value |
+|----------------------|---------|---------------|
+| `SITE_TITLE`         | Value to set the `-title` command-line flag | |
+| `SITE_SUBTITLE`      | Value to set the `-subtitle`  command-line flag | |
+| `SITE_SHOW_DOCUMENTATION` | Value to set the `-showDocs` command-line flag | |
+| `DB_REPLICA_URL`     | S3 URL where you want to replicate the LogPaste datastore (e.g., `s3://mybucket.mydomain.com/db`) | |
+| `AWS_REGION`         | AWS region where your S3 bucket is located | |
+| `AWS_ACCESS_KEY_ID`  | AWS access key ID for an IAM role with access to the bucket where you want to replicate data. |  |
+| `AWS_SECRET_ACCESS_KEY` | AWS secret access key for an IAM role with access to the bucket where you want to replicate data. | |
+
+### Docker build args
+
+If you rebuild the Docker image from source, you can adjust the build behavior with `docker build --build-arg`:
+
+| Build Arg | Meaning | Default Value |
+| --------- | ------- | ------------- |
+| `litestream_version` | Version of [Litestream](https://litestream.io/) to use for data replication | `0.3.3` |
