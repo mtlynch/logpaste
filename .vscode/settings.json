@@ -3,5 +3,8 @@
   "editor.formatOnSave": true,
   "[markdown]": {
     "editor.formatOnSave": false
+  },
+  "[go]": {
+    "editor.defaultFormatter": "golang.go"
   }
 }
