@@ -113,7 +113,8 @@ LogPaste is easy to deploy to cloud services. Here are some places it works well
 |------|---------|---------------|
 | `-title` | Title to display on homepage | `"LogPaste"` |
 | `-subtitle` | Subtitle to display on homepage | `"A minimalist, open-source debug log upload service"` |
-| `-showDocs` | Whether to display usage documentation on homepage | `true` |
+| `-showdocs` | Whether to display usage documentation on homepage | `true` |
+| `-perminutelimit` | Number of pastes to allow per IP per minute | `0` (no limit) |
 
 ### Docker environment variables
 
@@ -123,7 +124,8 @@ You can adjust behavior of the Docker container by passing these parameters with
 |----------------------|---------|
 | `SITE_TITLE`         | Value to set the `-title` command-line flag |
 | `SITE_SUBTITLE`      | Value to set the `-subtitle`  command-line flag |
-| `SITE_SHOW_DOCUMENTATION` | Value to set the `-showDocs` command-line flag |
+| `SITE_SHOW_DOCUMENTATION` | Value to set the `-showdocs` command-line flag |
+| `PER_MINUTE_LIMIT`   | Value to set the `-perminutelimit` command-line flag |
 | `DB_REPLICA_URL`     | S3 URL where you want to replicate the LogPaste datastore (e.g., `s3://mybucket.mydomain.com/db`) |
 | `AWS_REGION`         | AWS region where your S3 bucket is located |
 | `AWS_ACCESS_KEY_ID`  | AWS access key ID for an IAM role with access to the bucket where you want to replicate data. |

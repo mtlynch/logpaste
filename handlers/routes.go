@@ -17,7 +17,7 @@ func (s *defaultServer) routes() {
 	s.router.PathPrefix("/third-party/").HandlerFunc(s.serveStaticResource()).Methods(http.MethodGet)
 	s.router.PathPrefix("/{id}").HandlerFunc(s.pasteGet()).Methods(http.MethodGet)
 	s.router.PathPrefix("/").HandlerFunc(s.pasteOptions()).Methods(http.MethodOptions)
-	s.router.PathPrefix("/").HandlerFunc(s.pastePut()).Methods(http.MethodPut)
-	s.router.PathPrefix("/").HandlerFunc(s.pastePost()).Methods(http.MethodPost)
+	s.router.PathPrefix("/").Handler(s.ipRateLimiter.Limit(s.pastePut())).Methods(http.MethodPut)
+	s.router.PathPrefix("/").Handler(s.ipRateLimiter.Limit(s.pastePost())).Methods(http.MethodPost)
 	s.router.PathPrefix("/").HandlerFunc(s.serveIndexPage()).Methods(http.MethodGet)
 }

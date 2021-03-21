@@ -21,6 +21,8 @@ func main() {
 		"subtitle for the site")
 	showDocs := flag.Bool("showdocs",
 		true, "whether to display usage information on homepage")
+	perMinuteLimit := flag.Int("perminutelimit",
+			0, "number of pastes to allow per IP per minute (set to 0 to disable rate limiting)")
 
 	flag.Parse()
 
@@ -28,7 +30,7 @@ func main() {
 		Title:    *title,
 		Subtitle: *subtitle,
 		ShowDocs: *showDocs,
-	})
+	}, *perMinuteLimit)
 	http.Handle("/", muxHandlers.LoggingHandler(os.Stdout, s.Router()))
 
 	port := os.Getenv("PORT")
