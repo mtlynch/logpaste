@@ -19,6 +19,7 @@ func main() {
 	subtitle := flag.String("subtitle",
 		"A minimalist, open-source debug log upload service",
 		"subtitle for the site")
+	footer := flag.String("footer", "", "custom page footer (can contain HTML)")
 	showDocs := flag.Bool("showdocs",
 		true, "whether to display usage information on homepage")
 	perMinuteLimit := flag.Int("perminutelimit",
@@ -29,6 +30,7 @@ func main() {
 	s := handlers.New(handlers.SiteProperties{
 		Title:    *title,
 		Subtitle: *subtitle,
+		FooterHTML: *footer,
 		ShowDocs: *showDocs,
 	}, *perMinuteLimit)
 	http.Handle("/", muxHandlers.LoggingHandler(os.Stdout, s.Router()))

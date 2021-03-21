@@ -30,6 +30,7 @@ type httpMiddlewareHandler func(http.Handler) http.Handler
 type SiteProperties struct {
 	Title    string
 	Subtitle string
+	FooterHTML string
 	ShowDocs bool
 }
 
