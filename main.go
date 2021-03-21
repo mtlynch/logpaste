@@ -28,10 +28,10 @@ func main() {
 	flag.Parse()
 
 	s := handlers.New(handlers.SiteProperties{
-		Title:    *title,
-		Subtitle: *subtitle,
+		Title:      *title,
+		Subtitle:   *subtitle,
 		FooterHTML: *footer,
-		ShowDocs: *showDocs,
+		ShowDocs:   *showDocs,
 	}, *perMinuteLimit)
 	http.Handle("/", muxHandlers.LoggingHandler(os.Stdout, s.Router()))
 
