@@ -28,10 +28,10 @@ func New(sp SiteProperties, perMinuteLimit int) Server {
 type httpMiddlewareHandler func(http.Handler) http.Handler
 
 type SiteProperties struct {
-	Title    string
-	Subtitle string
+	Title      string
+	Subtitle   string
 	FooterHTML string
-	ShowDocs bool
+	ShowDocs   bool
 }
 
 type defaultServer struct {
