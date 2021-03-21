@@ -25,6 +25,10 @@ env_vars_to_flags() {
     flags+=" -showdocs=false"
   fi
 
+  if [[ ! -z "${PER_MINUTE_LIMIT}" ]]; then
+    flags+=" -perminutelimit \"${PER_MINUTE_LIMIT}\""
+  fi
+
   set -u
 
   echo "${flags}"
