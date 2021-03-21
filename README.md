@@ -119,15 +119,16 @@ LogPaste is easy to deploy to cloud services. Here are some places it works well
 
 You can adjust behavior of the Docker container by passing these parameters with `docker run -e`:
 
-| Environment Variable | Meaning | Default Value |
-|----------------------|---------|---------------|
-| `SITE_TITLE`         | Value to set the `-title` command-line flag | |
-| `SITE_SUBTITLE`      | Value to set the `-subtitle`  command-line flag | |
-| `SITE_SHOW_DOCUMENTATION` | Value to set the `-showDocs` command-line flag | |
-| `DB_REPLICA_URL`     | S3 URL where you want to replicate the LogPaste datastore (e.g., `s3://mybucket.mydomain.com/db`) | |
-| `AWS_REGION`         | AWS region where your S3 bucket is located | |
-| `AWS_ACCESS_KEY_ID`  | AWS access key ID for an IAM role with access to the bucket where you want to replicate data. |  |
-| `AWS_SECRET_ACCESS_KEY` | AWS secret access key for an IAM role with access to the bucket where you want to replicate data. | |
+| Environment Variable | Meaning |
+|----------------------|---------|
+| `SITE_TITLE`         | Value to set the `-title` command-line flag |
+| `SITE_SUBTITLE`      | Value to set the `-subtitle`  command-line flag |
+| `SITE_SHOW_DOCUMENTATION` | Value to set the `-showDocs` command-line flag |
+| `DB_REPLICA_URL`     | S3 URL where you want to replicate the LogPaste datastore (e.g., `s3://mybucket.mydomain.com/db`) |
+| `AWS_REGION`         | AWS region where your S3 bucket is located |
+| `AWS_ACCESS_KEY_ID`  | AWS access key ID for an IAM role with access to the bucket where you want to replicate data. |
+| `AWS_SECRET_ACCESS_KEY` | AWS secret access key for an IAM role with access to the bucket where you want to replicate data. |
+| `CREATE_NEW_DB`      | When replicating to S3, set to `"true"` the first time you run LogPaste against a particular S3 replica URL to initialize a new SQLite database. Exclude this variable or set it to `"false"` on future runs so that LogPaste restores the database from S3 instead of initializing a new one. |
 
 ### Docker build args
 
