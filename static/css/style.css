@@ -9,11 +9,20 @@ pre {
   margin: 1rem auto;
   text-align: left;
   font-size: 12pt;
+  overflow-x: auto;
+  max-width: 90%;
 }
 
 .container {
-  max-width: 70ch;
+  max-width: 90%;
   margin: 0 auto;
+}
+
+@media screen and (min-width: 768px) {
+  .container {
+    max-width: 600px;
+    margin: 0 auto;
+  }
 }
 
 .subtitle {
@@ -21,30 +30,80 @@ pre {
   margin-bottom: 3rem;
 }
 
+.web-ui-upload {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
 .upload-form {
-  max-width: 600px;
+  max-width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+@media screen and (min-width: 768px) {
+  .upload-form {
+    width: 400px;
+    max-width: 400px;
+  }
+}
+
+button {
+  cursor: pointer;
+  display: inline-block;
+  padding: 0.35em 1.2em;
+  margin: 0 0.3em 0.3em 0;
+  border-radius: 0.2em;
+  box-sizing: border-box;
+  color: white;
+  background-color: #0078e7;
+  border: 0.1em solid #082375;
+  text-align: center;
+  transition: all 0.2s;
+  font-size: 1.05em;
+}
+
+button:hover {
+  background-color: #009ee7;
+}
+
+.upload-form {
+  max-width: 100%;
+  width: 100%;
+}
+
+@media screen and (min-width: 600px) {
+  .upload-form {
+    width: 500px;
+  }
 }
 
 #upload-textarea {
-  width: 600px;
-  max-width: 600px;
+  width: 100%;
+  max-width: 100%;
   height: 100px;
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
   border: 1px solid #cccccc;
-  padding: 1rem;
   margin: 1rem 0;
-  display: block;
 }
 
-.upload-wrapper {
-  display: flex;
-  flex-direction: row;
-  align-content: flex-end;
-  justify-content: flex-end;
+.button-row {
+  margin-left: auto;
 }
 
-#upload {
-  padding: 0.7rem;
-  font-size: 1.1em;
+#result {
+  visibility: hidden;
+  background-color: #d6ffd9;
+  padding: 1.5rem 1.75rem;
+  border: 1px solid green;
+}
+
+#result h3 {
+  margin: 0 auto 1rem auto;
+  text-align: center;
 }
 
 #form-upload-error {
