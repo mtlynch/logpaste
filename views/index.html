@@ -2,6 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{{.Title}}</title>
     {{ if .ShowDocs }}
     <link
@@ -24,12 +25,12 @@
         <div class="upload-form">
           <textarea id="upload-textarea"></textarea>
 
-          <div class="upload-wrapper">
-            <input type="submit" id="upload" value="Upload" />
+          <div class="button-row">
+            <button class="button" id="upload">Upload</button>
           </div>
         </div>
 
-        <p id="result">&nbsp;</p>
+        <div id="result"></div>
 
         <p id="form-upload-error">&nbsp;</p>
       </div>

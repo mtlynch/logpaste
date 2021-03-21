@@ -48,16 +48,21 @@ logpaste.uploadText(text).then((id) => {
 function displayResult(resultId) {
   clearError();
   clearResult();
+
+  const resultDiv = document.getElementById("result");
+
   const resultUrl = `${document.location}${resultId}`;
 
-  const paragraph = document.createElement("p");
-  paragraph.innerText = resultUrl;
+  const header = document.createElement("h3");
+  header.innerText = "Shareable link";
+  resultDiv.appendChild(header);
 
   const anchor = document.createElement("a");
   anchor.href = `/${resultId}`;
-  anchor.appendChild(paragraph);
+  anchor.innerText = resultUrl;
+  resultDiv.appendChild(anchor);
 
-  document.getElementById("result").appendChild(anchor);
+  resultDiv.style.visibility = "visible";
 }
 
 function clearResult() {
@@ -65,6 +70,7 @@ function clearResult() {
   while (resultDiv.firstChild) {
     resultDiv.removeChild(resultDiv.lastChild);
   }
+  resultDiv.style.visibility = "hidden";
 }
 
 function clearError() {
