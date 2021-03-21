@@ -16,9 +16,9 @@ type Server interface {
 
 func New(sp SiteProperties, perMinuteLimit int) Server {
 	s := defaultServer{
-		router:    mux.NewRouter(),
-		store:     sqlite.New(),
-		siteProps: sp,
+		router:        mux.NewRouter(),
+		store:         sqlite.New(),
+		siteProps:     sp,
 		ipRateLimiter: limit.New(perMinuteLimit),
 	}
 	s.routes()
@@ -34,9 +34,9 @@ type SiteProperties struct {
 }
 
 type defaultServer struct {
-	router    *mux.Router
-	store     store.Store
-	siteProps SiteProperties
+	router        *mux.Router
+	store         store.Store
+	siteProps     SiteProperties
 	ipRateLimiter limit.IPRateLimiter
 }
 
