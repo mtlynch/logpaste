@@ -67,6 +67,15 @@
           </li>
         </ul>
       </div>
+
+      <!-- prettier-ignore-start -->
+      {{ if .FooterHTML }}
+      <div class="footer">
+        <!-- prettier-ignore -->
+        {{ .FooterHTML }}
+      </div>
+      {{ end }}
+      <!-- prettier-ignore-end -->
     </div>
 
     {{ if .ShowDocs }}

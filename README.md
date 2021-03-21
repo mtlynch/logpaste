@@ -82,16 +82,18 @@ Some notes:
 
 ### With custom site settings
 
-LogPaste offers some options to customize the text for your site. Here's an example that uses a custom title and subtitle:
+LogPaste offers some options to customize the text for your site. Here's an example that uses a custom title, subtitle, and footer:
 
 ```bash
 SITE_TITLE="My Cool Log Pasting Service"
 SITE_SUBTITLE="Upload all your logs for FooBar here"
+SITE_FOOTER="<h2>Notice</h2>\n<p>Only cool users can share logs here.</p>"
 SITE_SHOW_DOCUMENTATION="false" # Hide usage information from homepage
 
 docker run \
   -e "SITE_TITLE=${SITE_TITLE}" \
   -e "SITE_SUBTITLE=${SITE_SUBTITLE}" \
+  -e "SITE_FOOTER=${SITE_FOOTER}" \
   -e "SITE_SHOW_DOCUMENTATION=${SITE_SHOW_DOCUMENTATION}" \
   -p 3001:3001/tcp \
   --name logpaste \
@@ -113,6 +115,7 @@ LogPaste is easy to deploy to cloud services. Here are some places it works well
 |------|---------|---------------|
 | `-title` | Title to display on homepage | `"LogPaste"` |
 | `-subtitle` | Subtitle to display on homepage | `"A minimalist, open-source debug log upload service"` |
+| `-footer` | Footer to display on homepage (may include HTML) | |
 | `-showdocs` | Whether to display usage documentation on homepage | `true` |
 | `-perminutelimit` | Number of pastes to allow per IP per minute | `0` (no limit) |
 
@@ -124,6 +127,7 @@ You can adjust behavior of the Docker container by passing these parameters with
 |----------------------|---------|
 | `SITE_TITLE`         | Value to set the `-title` command-line flag |
 | `SITE_SUBTITLE`      | Value to set the `-subtitle`  command-line flag |
+| `SITE_FOOTER`       | Value to set the `-footer`  command-line flag |
 | `SITE_SHOW_DOCUMENTATION` | Value to set the `-showdocs` command-line flag |
 | `PER_MINUTE_LIMIT`   | Value to set the `-perminutelimit` command-line flag |
 | `DB_REPLICA_URL`     | S3 URL where you want to replicate the LogPaste datastore (e.g., `s3://mybucket.mydomain.com/db`) |

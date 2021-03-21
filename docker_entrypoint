@@ -21,6 +21,10 @@ env_vars_to_flags() {
     flags+=" -subtitle \"${SITE_SUBTITLE}\""
   fi
 
+  if [[ ! -z "${SITE_FOOTER}" ]]; then
+    flags+=" -footer \"${SITE_FOOTER}\""
+  fi
+
   if [[ "${SITE_SHOW_DOCUMENTATION}" == "false" ]]; then
     flags+=" -showdocs=false"
   fi
