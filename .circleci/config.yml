@@ -9,7 +9,7 @@ jobs:
           at: ./
       - run:
           name: Test go packages
-          command: go test -v ./...
+          command: dev-scripts/run-go-tests
       - run:
           name: Verify golang formatting
           command: dev-scripts/check-go-formatting
