@@ -45,22 +45,49 @@ logpaste.uploadText(text).then((id) => {
   );
 }
 
+function displayResult(resultId) {
+  clearError();
+  clearResult();
+  const resultUrl = `${document.location}${resultId}`;
+
+  const paragraph = document.createElement("p");
+  paragraph.innerText = resultUrl;
+
+  const anchor = document.createElement("a");
+  anchor.href = `/${resultId}`;
+  anchor.appendChild(paragraph);
+
+  document.getElementById("result").appendChild(anchor);
+}
+
+function clearResult() {
+  const resultDiv = document.getElementById("result");
+  while (resultDiv.firstChild) {
+    resultDiv.removeChild(resultDiv.lastChild);
+  }
+}
+
+function clearError() {
+  const uploadError = document.getElementById("form-upload-error");
+  uploadError.innerText = " ";
+  uploadError.style.visibility = "hidden";
+}
+
+function displayError(error) {
+  const uploadError = document.getElementById("form-upload-error");
+  uploadError.innerText = error;
+  uploadError.style.visibility = "visible";
+}
+
 document.getElementById("upload").addEventListener("click", (evt) => {
   const textToUpload = document.getElementById("upload-textarea").value;
-  logpaste.uploadText(textToUpload).then((id) => {
-    const resultUrl = `${document.location}${id}`;
-
-    const paragraph = document.createElement("p");
-    paragraph.innerText = resultUrl;
-
-    const anchor = document.createElement("a");
-    anchor.href = `/${id}`;
-    anchor.appendChild(paragraph);
-
-    const resultDiv = document.getElementById("result");
-    while (resultDiv.firstChild) {
-      resultDiv.removeChild(resultDiv.lastChild);
-    }
-    resultDiv.appendChild(anchor);
-  });
+  logpaste
+    .uploadText(textToUpload)
+    .then((id) => {
+      displayResult(id);
+    })
+    .catch((error) => {
+      clearResult();
+      displayError(error);
+    });
 });
