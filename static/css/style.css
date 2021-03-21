@@ -47,6 +47,13 @@ pre {
   font-size: 1.1em;
 }
 
+#form-upload-error {
+  visibility: hidden;
+  background-color: #ffa6a6;
+  padding: 1rem 0.75rem;
+  border: 1px solid red;
+}
+
 #more-info {
   margin-bottom: 5rem;
 }
