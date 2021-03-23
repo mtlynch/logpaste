@@ -39,7 +39,7 @@ env_vars_to_flags() {
 }
 
 is_litestream_enabled() {
-  set +u
+  set +ux
 
   local IS_ENABLED='false'
 
@@ -49,12 +49,13 @@ is_litestream_enabled() {
     IS_ENABLED='true';
   fi
 
-  set -u
+  set -ux
 
-  return "${IS_ENABLED}"
+  echo "${IS_ENABLED}"
 }
 
-if [[ is_litestream_enabled == 'true' ]]; then
+readonly IS_LITESTREAM_ENABLED="$(is_litestream_enabled)"
+if [[ "${IS_LITESTREAM_ENABLED}" == 'true' ]]; then
 
   # Set litestream configuration
   cat > /etc/litestream.yml <<EOF
@@ -74,7 +75,7 @@ fi
 # Echo commands to stdout.
 set -x
 
-if [[ is_litestream_enabled == 'true' ]]; then
+if [[ "${IS_LITESTREAM_ENABLED}" == 'true' ]]; then
 
   # Restore database from S3.
   if [[ "${CREATE_NEW_DB}" != 'true' ]]; then
