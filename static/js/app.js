@@ -7,11 +7,7 @@ if (curlCmd) {
   curlCmd.innerHTML = Prism.highlight(
     `
 echo "some text I want to upload" | \\
-  curl \\
-    --silent \\
-    --show-error \\
-    --form '_=<-' \\
-    ${baseUrl}`.trim(),
+  curl -F '_=<-' ${baseUrl}`.trim(),
     Prism.languages.bash,
     "bash"
   );
