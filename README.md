@@ -25,7 +25,7 @@ A minimalist web service for uploading and sharing log files.
 ### From source
 
 ```bash
-go run main.go
+PORT=3001 go run main.go
 ```
 
 ### From Docker
@@ -34,6 +34,7 @@ This is the simplest way to run LogPaste, but you will lose all data when you sh
 
 ```bash
 docker run \
+  -e "PORT=3001" \
   -p 3001:3001/tcp \
   --name logpaste \
   mtlynch/logpaste
@@ -45,6 +46,7 @@ To run LogPaste with persistent data, mount a volume from your local system to s
 
 ```bash
 docker run \
+  -e "PORT=3001" \
   -p 3001:3001/tcp \
   --volume "${PWD}/data:/app/data" \
   --name logpaste \
@@ -64,6 +66,7 @@ AWS_REGION=YOUR-REGION
 DB_REPLICA_URL=s3://your-bucket-name/db
 
 docker run \
+  -e "PORT=3001" \
   -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" \
   -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" \
   -e "AWS_REGION=${AWS_REGION}" \
@@ -92,6 +95,7 @@ SITE_SHOW_DOCUMENTATION="false" # Hide usage information from homepage
 PER_MINUTE_LIMIT="5" # Allow only 5 pastes per minute per IP
 
 docker run \
+  -e "PORT=3001" \
   -e "SITE_TITLE=${SITE_TITLE}" \
   -e "SITE_SUBTITLE=${SITE_SUBTITLE}" \
   -e "SITE_FOOTER=${SITE_FOOTER}" \
@@ -127,6 +131,7 @@ You can adjust behavior of the Docker container by passing these parameters with
 
 | Environment Variable | Meaning |
 |----------------------|---------|
+| `PORT`               | TCP port on which to listen for HTTP connections (defaults to 3001) |
 | `SITE_TITLE`         | Value to set the `-title` command-line flag |
 | `SITE_SUBTITLE`      | Value to set the `-subtitle`  command-line flag |
 | `SITE_FOOTER`       | Value to set the `-footer`  command-line flag |
