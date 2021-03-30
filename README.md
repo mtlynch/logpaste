@@ -30,19 +30,7 @@ PORT=3001 go run main.go
 
 ### From Docker
 
-This is the simplest way to run LogPaste, but you will lose all data when you shut down the container.
-
-```bash
-docker run \
-  -e "PORT=3001" \
-  -p 3001:3001/tcp \
-  --name logpaste \
-  mtlynch/logpaste
-```
-
-### From Docker + persistent data
-
-To run LogPaste with persistent data, mount a volume from your local system to store the LogPaste sqlite database.
+To run LogPaste within a Docker container, mount a volume from your local system to store the LogPaste sqlite database.
 
 ```bash
 docker run \
