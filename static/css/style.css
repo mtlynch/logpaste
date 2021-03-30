@@ -53,7 +53,6 @@ button {
   cursor: pointer;
   display: inline-block;
   padding: 0.35em 1.2em;
-  margin: 0 0.3em 0.3em 0;
   border-radius: 0.2em;
   box-sizing: border-box;
   color: white;
@@ -88,6 +87,7 @@ button:hover {
   -webkit-box-sizing: border-box;
   border: 1px solid #cccccc;
   margin: 1rem 0;
+  padding: 0.5rem;
 }
 
 .button-row {
