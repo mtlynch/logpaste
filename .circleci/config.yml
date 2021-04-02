@@ -39,6 +39,24 @@ jobs:
           path: e2e/cypress/videos
       - store_artifacts:
           path: e2e/cypress/screenshots
+  deploy:
+    docker:
+      - image: cimg/base:2020.01
+    environment:
+      APP_NAME: logpaste-com
+    steps:
+      - checkout
+      - run:
+          name: Install flyctl
+          command: curl -L https://fly.io/install.sh | FLYCTL_INSTALL=/usr/local sh
+      - run:
+          name: Create fly.io config file
+          command: |
+            echo "app = \"${APP_NAME}\"" > fly.toml && \
+              tail +5 fly.toml.tmpl >> fly.toml
+      - run:
+          name: Deploy logpaste to fly.io
+          command: flyctl deploy --app "${APP_NAME}"
 workflows:
   version: 2
   test:
@@ -46,3 +64,11 @@ workflows:
       - test
       - e2e
       - check_frontend_formatting
+      - deploy:
+          requires:
+            - test
+            - e2e
+            - check_frontend_formatting
+          filters:
+            branches:
+              only: master
