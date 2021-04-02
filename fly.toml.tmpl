@@ -1,0 +1,36 @@
+# Deployment template for fly.io
+
+# Uncomment the following line and replace with your app name.
+# app = "your-app-name"
+
+kill_signal = "SIGINT"
+kill_timeout = 5
+
+[env]
+  PORT = 3001
+
+[build]
+  image = "mtlynch/logpaste"
+
+[[services]]
+  internal_port = 3001
+  protocol = "tcp"
+
+  [services.concurrency]
+    hard_limit = 25
+    soft_limit = 20
+
+  [[services.ports]]
+    handlers = ["http"]
+    port = "80"
+
+  [[services.ports]]
+    handlers = ["tls", "http"]
+    port = "443"
+
+  [[services.tcp_checks]]
+    grace_period = "1s"
+    interval = "15s"
+    port = "3001"
+    restart_limit = 6
+    timeout = "2s"
