@@ -48,7 +48,7 @@ jobs:
       - checkout
       - run:
           name: Install flyctl
-          command: curl -L https://fly.io/install.sh | sudo FLYCTL_INSTALL=/usr/local sh
+          command: curl -L https://fly.io/install.sh | sh
       - run:
           name: Create fly.io config file
           command: |
@@ -56,7 +56,7 @@ jobs:
               tail +5 fly.toml.tmpl >> fly.toml
       - run:
           name: Deploy logpaste to fly.io
-          command: flyctl deploy --app "${APP_NAME}"
+          command: "${HOME}/.fly/bin/flyctl" deploy --app "${APP_NAME}"
 workflows:
   version: 2
   test:
