@@ -136,5 +136,6 @@ If you rebuild the Docker image from source, you can adjust the build behavior w
 
 LogPaste is easy to deploy to cloud services. Here are some places it works well:
 
-* [Heroku](docs/deployment/heroku.md) (recommended)
+* [fly.io](docs/deployment/fly.io.md) (recommended)
+* [Heroku](docs/deployment/heroku.md)
 * [Amazon LightSail](docs/deployment/lightsail.md)
