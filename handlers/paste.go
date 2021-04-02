@@ -146,7 +146,6 @@ func parsePasteFromMultipartFormValue(f *multipart.Form) (string, bool) {
 
 func anyValueInForm(f *multipart.Form) (string, bool) {
 	for _, values := range f.Value {
-		log.Printf("values=%v", values)
 		if len(values) < 1 {
 			log.Printf("form values are empty")
 			continue
