@@ -54,6 +54,8 @@ is_litestream_enabled() {
   echo "${IS_ENABLED}"
 }
 
+printf "LogPaste version: %s %s\n" "$(git describe --tags --always)" "$(git rev-parse --short HEAD)"
+
 readonly IS_LITESTREAM_ENABLED="$(is_litestream_enabled)"
 if [[ "${IS_LITESTREAM_ENABLED}" == 'true' ]]; then
 
