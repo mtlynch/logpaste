@@ -49,7 +49,7 @@ jobs:
       - checkout
       - run:
           name: Install flyctl
-          command: curl -L https://fly.io/install.sh | sh "${FLYCTL_VERSION}"
+          command: curl -L https://fly.io/install.sh | sh /dev/stdin "${FLYCTL_VERSION}"
       - run:
           name: Create fly.io config file
           command: |
