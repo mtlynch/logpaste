@@ -44,22 +44,22 @@ jobs:
       - image: cimg/base:2020.01
     environment:
       APP_NAME: logpaste-com
+      FLYCTL_VERSION: "0.0.200"
     steps:
       - checkout
       - run:
           name: Install flyctl
-          command: curl -L https://fly.io/install.sh | sh
+          command: curl -L https://fly.io/install.sh | sh "${FLYCTL_VERSION}"
       - run:
           name: Create fly.io config file
           command: |
             set -x
-            echo "app = \"${APP_NAME}\"" > fly.toml && \
-              tail +5 fly.toml.tmpl >> fly.toml
+            curl -s -L https://raw.githubusercontent.com/mtlynch/logpaste/master/dev-scripts/make-fly-config | \
+              bash /dev/stdin "${APP_NAME}"
       - run:
           name: Deploy logpaste to fly.io
           command: |
-            set -x
-            "${HOME}/.fly/bin/flyctl" deploy --app "${APP_NAME}"
+            "${HOME}/.fly/bin/flyctl" deploy
 workflows:
   version: 2
   test:
