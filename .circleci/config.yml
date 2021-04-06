@@ -44,12 +44,11 @@ jobs:
       - image: cimg/base:2020.01
     environment:
       APP_NAME: logpaste-com
-      FLYCTL_VERSION: "0.0.200"
     steps:
       - checkout
       - run:
           name: Install flyctl
-          command: curl -L https://fly.io/install.sh | sh -s -- "${FLYCTL_VERSION}"
+          command: curl -L https://fly.io/install.sh | sh
       - run:
           name: Create fly.io config file
           command: |
