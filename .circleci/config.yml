@@ -58,7 +58,8 @@ jobs:
               bash /dev/stdin "${APP_NAME}"
       - run:
           name: Deploy logpaste to fly.io
-          command: "${HOME}/.fly/bin/flyctl" deploy
+          command: |
+            "${HOME}/.fly/bin/flyctl" deploy
 workflows:
   version: 2
   test:
