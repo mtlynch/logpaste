@@ -6,18 +6,9 @@ fly.io is the best host I've found for LogPaste. It fits in the free tier, and y
 
 You'll need a fly.io account. You should have `fly` [already installed](https://fly.io/docs/fly/installing/) and authenticated on your machine.
 
-## Clone the LogPaste repo
-
-To begin, clone the LogPaste repository:
-
-```bash
-git clone https://github.com/mtlynch/logpaste.git && \
-  cd logpaste
-```
-
 ## Set your environment variables
 
-Create environment variables for your AWS settings:
+To begin, create environment variables for your AWS settings:
 
 ```bash
 AWS_ACCESS_KEY_ID=YOUR-ACCESS-ID
@@ -34,7 +25,8 @@ Next, create your app on fly.io:
 RANDOM_SUFFIX="$(head /dev/urandom | tr -dc 'a-z0-9' | head -c 6 ; echo '')"
 APP_NAME="logpaste-${RANDOM_SUFFIX}"
 
-./dev-scripts/make-fly-config "${APP_NAME}"
+curl -s -L https://raw.githubusercontent.com/mtlynch/logpaste/master/dev-scripts/make-fly-config | \
+  bash /dev/stdin "${APP_NAME}"
 
 fly init "${APP_NAME}" --nowrite
 ```
@@ -73,6 +65,8 @@ fly deploy \
 
 echo "Your LogPaste instance is now ready at: https://${APP_NAME}.fly.dev/"
 ```
+
+## Testing your instance
 
 You can test the instance with this command:
 
