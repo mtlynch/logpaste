@@ -1,0 +1,75 @@
+#!/bin/bash
+#
+# Create a fly.toml file to deploy logpaste to fly.io.
+
+# Exit on first error.
+set -e
+
+# Treat undefined environment variables as errors.
+set -u
+
+print_help() {
+  cat << EOF
+Usage: ${0##*/} [-h] app_name
+  Creates a fly.toml config file.
+  app_name: Name of fly.io instance to use.
+  -h Display this help and exit.
+EOF
+}
+
+# Parse command-line arguments.
+while getopts 'h' opt; do
+  case "${opt}" in
+    h)
+      print_help
+      exit
+      ;;
+    *)
+      print_help >&2
+      exit 1
+  esac
+done
+
+# Ensure 'app_name' is given.
+shift $((OPTIND - 1))
+if (( $# == 0 )); then
+  echo 'Input parameter missing: app_name' >&2
+  exit 1
+fi
+readonly APP_NAME="$1"
+
+cat > fly.toml <<EOF
+app = "${APP_NAME}"
+
+kill_signal = "SIGINT"
+kill_timeout = 5
+
+[env]
+  PORT = "3001"
+
+[build]
+  image = "mtlynch/logpaste"
+
+[[services]]
+  internal_port = 3001
+  protocol = "tcp"
+
+  [services.concurrency]
+    hard_limit = 25
+    soft_limit = 20
+
+  [[services.ports]]
+    handlers = ["http"]
+    port = "80"
+
+  [[services.ports]]
+    handlers = ["tls", "http"]
+    port = "443"
+
+  [[services.tcp_checks]]
+    grace_period = "1s"
+    interval = "15s"
+    port = "3001"
+    restart_limit = 6
+    timeout = "2s"
+EOF
