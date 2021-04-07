@@ -54,22 +54,11 @@ func (d db) GetEntry(id string) (string, error) {
 }
 
 func (d db) InsertEntry(id string, contents string) error {
-	stmt, err := d.ctx.Prepare(`
+	_, err := d.ctx.Exec(`
 	INSERT INTO entries(
 		id,
 		creation_time,
 		contents)
-	values(?,?,?)`)
-	if err != nil {
-		return err
-	}
-	defer stmt.Close()
-
-	t := time.Now().Format(time.RFC3339)
-
-	_, err = stmt.Exec(id, t, contents)
-	if err != nil {
-		return err
-	}
-	return nil
+	values(?,?,?)`, id, time.Now().Format(time.RFC3339), contents)
+	return err
 }
