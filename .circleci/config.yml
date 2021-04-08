@@ -44,7 +44,7 @@ jobs:
       - image: cimg/base:2020.01
     environment:
       APP_NAME: logpaste-com
-      FLYCTL_VERSION: "0.0.200"
+      FLYCTL_VERSION: "0.0.204"
     steps:
       - checkout
       - run:
