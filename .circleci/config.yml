@@ -44,7 +44,10 @@ jobs:
       - image: cimg/base:2020.01
     environment:
       APP_NAME: logpaste-com
-      FLYCTL_VERSION: "0.0.204"
+      # The flyctl changes too much to use a specific version, so use the latest for the
+      # time being.
+      # https://github.com/superfly/flyctl/issues/394#issuecomment-815890166
+      FLYCTL_VERSION: "latest"
     steps:
       - checkout
       - run:
