@@ -1,10 +1,15 @@
 # Deploy LogPaste to fly.io
 
-fly.io is the best host I've found for LogPaste. It fits in the free tier, and you get a free SSL certificate.
+fly.io is the best host I've found for LogPaste. You can run up to three instances 24/7 for a month under their free tier, which includes free SSL certificates.
 
 ## Pre-requisites
 
-You'll need a fly.io account. You should have `fly` [already installed](https://fly.io/docs/fly/installing/) and authenticated on your machine.
+You'll need:
+
+* A fly.io account
+* The `fly` CLI [already installed](https://fly.io/docs/fly/installing/) and authenticated on your machine
+* Docker installed on your machine
+* A storage bucket and [IAM credentials](https://aws.amazon.com/iam/) on Amazon S3 or an S3-compatible storage service
 
 ## Set your environment variables
 
@@ -48,6 +53,7 @@ Finally, it's time to deploy your app. Run it once with `CREATE_NEW_DB='true'` s
 ```bash
 # Change this to the latest Docker image tag
 LOGPASTE_IMAGE="mtlynch/logpaste:0.1.1"
+
 fly deploy \
   --env "AWS_REGION=${AWS_REGION}" \
   --env "DB_REPLICA_URL=${DB_REPLICA_URL}" \
@@ -63,7 +69,8 @@ fly deploy \
   --env "DB_REPLICA_URL=${DB_REPLICA_URL}" \
   --image "${LOGPASTE_IMAGE}"
 
-echo "Your LogPaste instance is now ready at: https://${APP_NAME}.fly.dev/"
+LOGPASTE_URL="https://${APP_NAME}.fly.dev/"
+echo "Your LogPaste instance is now ready at: ${LOGPASTE_URL}"
 ```
 
 ## Testing your instance
@@ -72,5 +79,5 @@ You can test the instance with this command:
 
 ```bash
 echo "hello, new fly.io instance!" | \
-  curl -F '_=<-' "https://${APP_NAME}.fly.dev/"
+  curl -F '_=<-' "${LOGPASTE_URL}"
 ```
