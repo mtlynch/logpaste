@@ -4,9 +4,12 @@ fly.io is the best host I've found for LogPaste. You can run up to three instanc
 
 ## Pre-requisites
 
-You'll need a fly.io account. You should have `fly` [already installed](https://fly.io/docs/fly/installing/) and authenticated on your machine.
+You'll need:
 
-You'll also need a storage bucket and [IAM credentials](https://aws.amazon.com/iam/) on Amazon S3 or an S3-compatible storage service.
+* A fly.io account
+* The `fly` CLI [already installed](https://fly.io/docs/fly/installing/) and authenticated on your machine
+* Docker installed on your machine
+* A storage bucket and [IAM credentials](https://aws.amazon.com/iam/) on Amazon S3 or an S3-compatible storage service
 
 ## Set your environment variables
 
@@ -26,8 +29,6 @@ Next, create your app on fly.io:
 ```bash
 RANDOM_SUFFIX="$(head /dev/urandom | tr -dc 'a-z0-9' | head -c 6 ; echo '')"
 APP_NAME="logpaste-${RANDOM_SUFFIX}"
-
-. /home/mike/go/src/github.com/mtlynch/logpaste/.dev.env
 
 curl -s -L https://raw.githubusercontent.com/mtlynch/logpaste/master/dev-scripts/make-fly-config | \
   bash /dev/stdin "${APP_NAME}"

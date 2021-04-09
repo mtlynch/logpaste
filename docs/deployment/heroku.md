@@ -13,7 +13,7 @@ You'll need:
 * A Heroku account
 * The [heroku CLI](https://devcenter.heroku.com/articles/heroku-cli) installed and authenticated on your machine
 * Docker installed on your machine
-
+* A storage bucket and [IAM credentials](https://aws.amazon.com/iam/) on Amazon S3 or an S3-compatible storage service.
 
 ## Set your environment variables
 
