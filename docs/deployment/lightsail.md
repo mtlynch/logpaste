@@ -21,8 +21,11 @@ You'll need:
 
 Visit [Amazon LightSail's container management dashboard](https://lightsail.aws.amazon.com/ls/webapp/home/containers)
 
-|<img src="lightsail-images/create-container.png" alt="LightSail management screen">|
--
+<kbd>
+
+![LightSail management screen](lightsail-images/create-container.png)
+
+</kbd>
 
 Choose a Nano server with 1x scale.
 
