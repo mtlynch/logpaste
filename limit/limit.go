@@ -14,14 +14,14 @@ const RateLimitingDisabled = 0
 
 type IPRateLimiter struct {
 	limiters       map[string]*rate.Limiter
-	mu             sync.Mutex
+	mu             *sync.Mutex
 	perMinuteLimit int
 }
 
 func New(perMinuteLimit int) IPRateLimiter {
 	iprl := IPRateLimiter{
 		limiters:       make(map[string]*rate.Limiter),
-		mu:             sync.Mutex{},
+		mu:             &sync.Mutex{},
 		perMinuteLimit: perMinuteLimit,
 	}
 	return iprl
