@@ -26,11 +26,13 @@ Visit [Amazon LightSail's container management dashboard](https://lightsail.aws.
 
 Choose a Nano server with 1x scale.
 
-![LightSail server capacity screen](lightsail-images/nano-1x.png)
+|<img src="lightsail-images/nano-1x.png" alt="LightSail server capacity screen">|
+-
 
 Click "Set up deployment" and then choose "Specify a custom deployment."
 
-![Screenshot showing where to click specify custom deployment](lightsail-images/set-up-deployment.png)
+|<img src="lightsail-images/set-up-deployment.png" alt="Screenshot showing where to click specify custom deployment">|
+-
 
 Enter the following information for your custom deployment:
 
@@ -49,34 +51,42 @@ Enter the following information for your custom deployment:
 
 * Open ports: Choose port `3001`, protocol `HTTP`
 
-![Screenshot showing custom values for LightSail container](lightsail-images/container-config.png)
+|<img src="lightsail-images/container-config.png" alt="Screenshot showing custom values for LightSail container">|
+-
 
 Under "Public Endpoint," select the container you created above:
 
-![Screenshot showing "contoso-logpaste" in dropdown menu](lightsail-images/public-endpoint.png)
+|<img src="lightsail-images/public-endpoint.png" alt="Screenshot showing 'contoso-logpaste' in dropdown menu">|
+-
 
 Choose a name for your service (it can be the same as your container name):
 
-![Screenshot showing "contoso-logpaste" as name for service](lightsail-images/identify-service.png)
+|<img src="lightsail-images/identify-service.png" alt="Screenshot showing service name field">|
+-
 
 Finally, click "Create container service."
 
-![Screenshot showing "Create container service" button](lightsail-images/create-service.png)
+|<img src="lightsail-images/create-service.png" alt="Screenshot showing 'Create container service' button">|
+-
 
 ## Completing deployment
 
 As LightSail deploys your image, you'll see a status of "Pending" for the container.
 
-![Screenshot showing LightSail in the process of deploying a container at the "Pending" stage](lightsail-images/container-pending.png)
+|<img src="lightsail-images/container-pending.png" alt="Screenshot showing LightSail in the process of deploying a container at the 'Pending' stage">|
+-
 
 It will take LightSail about three to five minutes to deploy your instance for the first time. When deployment is complete, it will show a status of "Running."
 
-![Screenshot showing LightSail deployment complete](lightsail-images/container-running.png)
+|<img src="lightsail-images/container-running.png" alt="Screenshot showing LightSail deployment complete">|
+-
 
 When your container is running, you can access it through the "Public domain" URL.
 
-![Screenshot showing how to access container's public domain URL](lightsail-images/public-domain-url.png)
+|<img src="lightsail-images/public-domain-url.png" alt="Screenshot showing how to access container's public domain URL">|
+-
 
 You can view server logs for your LogPaste instance by clicking "Open log" in the box next to your container.
 
-![Screenshot showing LightSail logs in web dashboard](lightsail-images/view-logs.png)
+|<img src="lightsail-images/view-logs.png" alt="Screenshot showing LightSail logs in web dashboard">|
+-
