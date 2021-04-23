@@ -1,3 +1,15 @@
+FROM golang:1.16 as litestream-builder
+
+#TODO: Replace this with normal litestream.
+
+WORKDIR /src/litestream
+
+RUN git clone https://github.com/benbjohnson/litestream.git .
+
+RUN --mount=type=cache,target=/root/.cache/go-build \
+	--mount=type=cache,target=/go/pkg \
+	go build -ldflags '-s -w -extldflags "-static"' -tags osusergo,netgo,sqlite_omit_load_extension -o /usr/local/bin/litestream ./cmd/litestream
+
 FROM golang:1.13.5-buster as builder
 
 WORKDIR /app
@@ -15,20 +27,7 @@ RUN go build \
 
 FROM debian:stable-20210208-slim
 
-ARG litestream_version="0.3.3"
-ARG litestream_deb_filename="litestream-v${litestream_version}-linux-amd64.deb"
-
-RUN set -x && \
-    apt-get update && \
-    DEBIAN_FRONTEND=noninteractive apt-get install -y \
-      ca-certificates \
-      wget \
-      && \
-    wget "https://github.com/benbjohnson/litestream/releases/download/v${litestream_version}/${litestream_deb_filename}" && \
-    apt-get remove -y wget && \
-    rm -rf /var/lib/apt/lists/*
-
-RUN dpkg -i "${litestream_deb_filename}"
+COPY --from=litestream-builder /usr/local/bin/litestream /usr/local/bin/litestream
 
 COPY --from=builder /app/server /app/server
 COPY --from=builder /app/views /app/views
@@ -39,9 +38,5 @@ WORKDIR /app
 
 # Frequency that database snapshots are replicated.
 ENV DB_SYNC_INTERVAL="10s"
-
-# Should logpaste create a fresh database or pull down the latest replicated
-# version?
-ENV CREATE_NEW_DB="false"
 
 ENTRYPOINT ["/app/docker_entrypoint"]

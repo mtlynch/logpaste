@@ -1,0 +1,8 @@
+access-key-id: ${LITESTREAM_ACCESS_KEY_ID}
+secret-access-key: ${LITESTREAM_SECRET_ACCESS_KEY}
+region: ${LITESTREAM_REGION}
+dbs:
+  - path: ${DB_PATH}
+    replicas:
+      - url: ${DB_REPLICA_URL}
+        sync-interval: ${DB_SYNC_INTERVAL}

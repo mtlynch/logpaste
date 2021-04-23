@@ -20,9 +20,9 @@ You'll need:
 To begin, create environment variables for your AWS settings:
 
 ```bash
-AWS_ACCESS_KEY_ID=YOUR-ACCESS-ID
-AWS_SECRET_ACCESS_KEY=YOUR-SECRET-ACCESS-KEY
-AWS_REGION=YOUR-REGION
+LITESTREAM_ACCESS_KEY_ID=YOUR-ACCESS-ID
+LITESTREAM_SECRET_ACCESS_KEY=YOUR-SECRET-ACCESS-KEY
+LITESTREAM_REGION=YOUR-REGION
 DB_REPLICA_URL=s3://your-bucket-name/db
 ```
 
@@ -45,9 +45,9 @@ heroku apps:create "${APP_NAME}" --stack container
 Assign all the relevant environment variables to your app:
 
 ```bash
-heroku config:set --app "${APP_NAME}" AWS_ACCESS_KEY_ID="${AWS_ACCESS_KEY_ID}"
-heroku config:set --app "${APP_NAME}" AWS_SECRET_ACCESS_KEY="${AWS_SECRET_ACCESS_KEY}"
-heroku config:set --app "${APP_NAME}" AWS_REGION="${AWS_REGION}"
+heroku config:set --app "${APP_NAME}" LITESTREAM_ACCESS_KEY_ID="${LITESTREAM_ACCESS_KEY_ID}"
+heroku config:set --app "${APP_NAME}" LITESTREAM_SECRET_ACCESS_KEY="${LITESTREAM_SECRET_ACCESS_KEY}"
+heroku config:set --app "${APP_NAME}" LITESTREAM_REGION="${LITESTREAM_REGION}"
 heroku config:set --app "${APP_NAME}" DB_REPLICA_URL="${DB_REPLICA_URL}"
 ```
 
