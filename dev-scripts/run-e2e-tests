@@ -17,4 +17,8 @@ readonly EXTRA_FLAGS
 set -u
 
 cd e2e
-docker-compose up --exit-code-from cypress --abort-on-container-exit ${EXTRA_FLAGS}
+COMPOSE_DOCKER_CLI_BUILD=1 DOCKER_BUILDKIT=1 \
+  docker-compose up \
+    --exit-code-from cypress \
+    --abort-on-container-exit \
+    "${EXTRA_FLAGS}"
