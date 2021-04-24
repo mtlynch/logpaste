@@ -6,8 +6,6 @@ set -e
 # Exit on unset variable.
 set -u
 
-readonly DB_PATH="/app/data/store.db"
-
 env_vars_to_flags() {
   set +u
 
@@ -60,6 +58,8 @@ readonly IS_LITESTREAM_ENABLED="$(is_litestream_enabled)"
 set -x
 
 if [[ "${IS_LITESTREAM_ENABLED}" == 'true' ]]; then
+
+  export readonly DB_PATH="/app/data/store.db"
 
   # Restore database from S3.
   litestream restore -if-replica-exists -v "${DB_PATH}"

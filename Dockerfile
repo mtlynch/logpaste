@@ -32,9 +32,15 @@ COPY --from=litestream-builder /usr/local/bin/litestream /usr/local/bin/litestre
 COPY --from=builder /app/server /app/server
 COPY --from=builder /app/views /app/views
 COPY --from=builder /app/static /app/static
+COPY ./litestream.yml /etc/litestream.yml
 COPY ./docker_entrypoint /app/docker_entrypoint
 
 WORKDIR /app
+
+RUN apt-get update \
+ && apt-get install -y --no-install-recommends ca-certificates
+
+RUN update-ca-certificates
 
 # Frequency that database snapshots are replicated.
 ENV DB_SYNC_INTERVAL="10s"
