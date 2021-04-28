@@ -57,7 +57,7 @@ Finally, deploy your app:
 
 ```bash
 # Change this to the latest Docker image tag
-LOGPASTE_IMAGE="mtlynch/logpaste:0.1.1"
+LOGPASTE_IMAGE="mtlynch/logpaste:0.2.0"
 
 HEROKU_PROCESS_TYPE="web"
 HEROKU_IMAGE_PATH="registry.heroku.com/${APP_NAME}/${HEROKU_PROCESS_TYPE}"

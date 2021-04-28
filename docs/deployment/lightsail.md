@@ -46,7 +46,7 @@ Click "Set up deployment" and then choose "Specify a custom deployment."
 Enter the following information for your custom deployment:
 
 * Container name: Choose whatever name you want, such as `yourcompany-logpaste`
-* Image: `mtlynch/logpaste:0.1.1` (or whatever the [latest LogPaste version](https://github.com/mtlynch/logpaste/releases) is)
+* Image: `mtlynch/logpaste:0.2.0` (or whatever the [latest LogPaste version](https://github.com/mtlynch/logpaste/releases) is)
 * Launch command: *leave blank*
 * Environment variables
 
