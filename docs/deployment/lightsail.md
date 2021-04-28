@@ -54,9 +54,9 @@ Enter the following information for your custom deployment:
 |---------------------|--------|
 | `PORT`              | 3001   |
 | `DB_REPLICA_URL`    | The S3 URL of your S3 bucket |
-| `AWS_REGION`        | The region of your S3 bucket |
-| `AWS_ACCESS_KEY_ID` | The AWS access key ID from your IAM credentials |
-| `AWS_SECRET_ACCESS_KEY` | The AWS secret access key from your IAM credentials |
+| `LITESTREAM_REGION`        | The region of your S3 bucket |
+| `LITESTREAM_ACCESS_KEY_ID` | The AWS access key ID from your IAM credentials |
+| `LITESTREAM_SECRET_ACCESS_KEY` | The AWS secret access key from your IAM credentials |
 
 * Open ports: Choose port `3001`, protocol `HTTP`
 

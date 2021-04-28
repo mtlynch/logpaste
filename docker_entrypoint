@@ -6,8 +6,6 @@ set -e
 # Exit on unset variable.
 set -u
 
-readonly DB_PATH="/app/data/store.db"
-
 env_vars_to_flags() {
   set +u
 
@@ -43,9 +41,9 @@ is_litestream_enabled() {
 
   local IS_ENABLED='false'
 
-  if [[ ! -z "${AWS_ACCESS_KEY_ID}" ]] && \
-      [[ ! -z "${AWS_SECRET_ACCESS_KEY}" ]] && \
-      [[ ! -z "${AWS_REGION}" ]]; then
+  if [[ ! -z "${LITESTREAM_ACCESS_KEY_ID}" ]] && \
+      [[ ! -z "${LITESTREAM_SECRET_ACCESS_KEY}" ]] && \
+      [[ ! -z "${LITESTREAM_REGION}" ]]; then
     IS_ENABLED='true';
   fi
 
@@ -55,32 +53,16 @@ is_litestream_enabled() {
 }
 
 readonly IS_LITESTREAM_ENABLED="$(is_litestream_enabled)"
-if [[ "${IS_LITESTREAM_ENABLED}" == 'true' ]]; then
-
-  # Set litestream configuration
-  cat > /etc/litestream.yml <<EOF
-  access-key-id:     "${AWS_ACCESS_KEY_ID}"
-  secret-access-key: "${AWS_SECRET_ACCESS_KEY}"
-  region: "${AWS_REGION}"
-
-  dbs:
-    - path: "${DB_PATH}"
-      replicas:
-        - url: "${DB_REPLICA_URL}"
-          sync-interval: "${DB_SYNC_INTERVAL}"
-EOF
-
-fi
 
 # Echo commands to stdout.
 set -x
 
 if [[ "${IS_LITESTREAM_ENABLED}" == 'true' ]]; then
 
+  export readonly DB_PATH="/app/data/store.db"
+
   # Restore database from S3.
-  if [[ "${CREATE_NEW_DB}" != 'true' ]]; then
-    litestream restore -v "${DB_PATH}"
-  fi
+  litestream restore -if-replica-exists -v "${DB_PATH}"
 
   # Begin replication to S3 in the background.
   # Note: It would be nicer to use the systemd service, but systemd

@@ -16,9 +16,9 @@ You'll need:
 To begin, create environment variables for your AWS settings:
 
 ```bash
-AWS_ACCESS_KEY_ID=YOUR-ACCESS-ID
-AWS_SECRET_ACCESS_KEY=YOUR-SECRET-ACCESS-KEY
-AWS_REGION=YOUR-REGION
+LITESTREAM_ACCESS_KEY_ID=YOUR-ACCESS-ID
+LITESTREAM_SECRET_ACCESS_KEY=YOUR-SECRET-ACCESS-KEY
+LITESTREAM_REGION=YOUR-REGION
 DB_REPLICA_URL=s3://your-bucket-name/db
 ```
 
@@ -42,30 +42,20 @@ Use the `fly secrets set` command to securely save your AWS credentials to your 
 
 ```bash
 fly secrets set \
-  "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" \
-  "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}"
+  "LITESTREAM_ACCESS_KEY_ID=${LITESTREAM_ACCESS_KEY_ID}" \
+  "LITESTREAM_SECRET_ACCESS_KEY=${LITESTREAM_SECRET_ACCESS_KEY}"
 ```
 
 ## Deploy
 
-Finally, it's time to deploy your app. Run it once with `CREATE_NEW_DB='true'` so that LogPaste can bootstrap its database.
+Finally, it's time to deploy your app.
 
 ```bash
 # Change this to the latest Docker image tag
 LOGPASTE_IMAGE="mtlynch/logpaste:0.1.1"
 
 fly deploy \
-  --env "AWS_REGION=${AWS_REGION}" \
-  --env "DB_REPLICA_URL=${DB_REPLICA_URL}" \
-  --env "CREATE_NEW_DB='true'" \
-  --image "${LOGPASTE_IMAGE}"
-```
-
-After that command succeeds, deploy it without the `CREATE_NEW_DB` parameter. On all future deployments, deploy with this command:
-
-```bash
-fly deploy \
-  --env "AWS_REGION=${AWS_REGION}" \
+  --env "LITESTREAM_REGION=${LITESTREAM_REGION}" \
   --env "DB_REPLICA_URL=${DB_REPLICA_URL}" \
   --image "${LOGPASTE_IMAGE}"
 

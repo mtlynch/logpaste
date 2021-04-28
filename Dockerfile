@@ -15,7 +15,7 @@ RUN go build \
 
 FROM debian:stable-20210208-slim
 
-ARG litestream_version="0.3.3"
+ARG litestream_version="0.3.4"
 ARG litestream_deb_filename="litestream-v${litestream_version}-linux-amd64.deb"
 
 RUN set -x && \
@@ -33,15 +33,12 @@ RUN dpkg -i "${litestream_deb_filename}"
 COPY --from=builder /app/server /app/server
 COPY --from=builder /app/views /app/views
 COPY --from=builder /app/static /app/static
+COPY ./litestream.yml /etc/litestream.yml
 COPY ./docker_entrypoint /app/docker_entrypoint
 
 WORKDIR /app
 
 # Frequency that database snapshots are replicated.
 ENV DB_SYNC_INTERVAL="10s"
-
-# Should logpaste create a fresh database or pull down the latest replicated
-# version?
-ENV CREATE_NEW_DB="false"
 
 ENTRYPOINT ["/app/docker_entrypoint"]

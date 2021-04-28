@@ -48,18 +48,17 @@ If you specify settings for an S3 bucket, LogPaste will use [Litestream](https:/
 You can kill the container and start it later, and it will restore your data from the S3 bucket and continue as if there was no no interruption.
 
 ```bash
-AWS_ACCESS_KEY_ID=YOUR-ACCESS-ID
-AWS_SECRET_ACCESS_KEY=YOUR-SECRET-ACCESS-KEY
-AWS_REGION=YOUR-REGION
+LITESTREAM_ACCESS_KEY_ID=YOUR-ACCESS-ID
+LITESTREAM_SECRET_ACCESS_KEY=YOUR-SECRET-ACCESS-KEY
+LITESTREAM_REGION=YOUR-REGION
 DB_REPLICA_URL=s3://your-bucket-name/db
 
 docker run \
   -e "PORT=3001" \
-  -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" \
-  -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" \
-  -e "AWS_REGION=${AWS_REGION}" \
+  -e "LITESTREAM_ACCESS_KEY_ID=${LITESTREAM_ACCESS_KEY_ID}" \
+  -e "LITESTREAM_SECRET_ACCESS_KEY=${LITESTREAM_SECRET_ACCESS_KEY}" \
+  -e "LITESTREAM_REGION=${LITESTREAM_REGION}" \
   -e "DB_REPLICA_URL=${DB_REPLICA_URL}" \
-  -e "CREATE_NEW_DB='true'" `# change to false after first run` \
   -p 3001:3001/tcp \
   --name logpaste \
   mtlynch/logpaste
@@ -67,7 +66,6 @@ docker run \
 
 Some notes:
 
-* After you run your container for the first time, remove the `CREATE_NEW_DB` line.
 * Only run one Docker container for each S3 location
   * LogPaste can't sync writes across multiple instances.
 
@@ -119,10 +117,9 @@ You can adjust behavior of the Docker container by passing these parameters with
 | `SITE_SHOW_DOCUMENTATION` | Value to set the `-showdocs` command-line flag |
 | `PER_MINUTE_LIMIT`   | Value to set the `-perminutelimit` command-line flag |
 | `DB_REPLICA_URL`     | S3 URL where you want to replicate the LogPaste datastore (e.g., `s3://mybucket.mydomain.com/db`) |
-| `AWS_REGION`         | AWS region where your S3 bucket is located |
-| `AWS_ACCESS_KEY_ID`  | AWS access key ID for an IAM role with access to the bucket where you want to replicate data. |
-| `AWS_SECRET_ACCESS_KEY` | AWS secret access key for an IAM role with access to the bucket where you want to replicate data. |
-| `CREATE_NEW_DB`      | When replicating to S3, set to `"true"` the first time you run LogPaste against a particular S3 replica URL to initialize a new SQLite database. Exclude this variable or set it to `"false"` on future runs so that LogPaste restores the database from S3 instead of initializing a new one. |
+| `LITESTREAM_REGION`         | AWS region where your S3 bucket is located |
+| `LITESTREAM_ACCESS_KEY_ID`  | AWS access key ID for an IAM role with access to the bucket where you want to replicate data. |
+| `LITESTREAM_SECRET_ACCESS_KEY` | AWS secret access key for an IAM role with access to the bucket where you want to replicate data. |
 
 ### Docker build args
 
