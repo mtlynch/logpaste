@@ -7,7 +7,7 @@ fly.io is the best host I've found for LogPaste. You can run up to three instanc
 You'll need:
 
 * A fly.io account
-* The `fly` CLI [already installed](https://fly.io/docs/fly/installing/) and authenticated on your machine
+* The `fly` CLI [already installed](https://fly.io/docs/getting-started/installing-flyctl/) and authenticated on your machine
 * Docker installed on your machine
 * A storage bucket and [IAM credentials](https://aws.amazon.com/iam/) on Amazon S3 or an S3-compatible storage service
 
