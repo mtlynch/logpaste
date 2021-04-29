@@ -13,12 +13,14 @@ A minimalist web service for uploading and sharing log files.
   * Runs in a single Docker container
   * Fits in the free tier of Heroku
 * Easy database management
-  * Replicates to and restores datastore to S3-compatible interfaces
+  * Syncs persistent data to any S3-compatible cloud storage provider
 * Customizable UI without changing source code
 
 ## Demo
 
 * <http://logpaste.com>
+
+[![asciicast](https://asciinema.org/a/I2HcYheYayeh7aHj23QSY9Vyf.png)](https://asciinema.org/a/I2HcYheYayeh7aHj23QSY9Vyf)
 
 ## Run LogPaste
 
@@ -136,3 +138,7 @@ LogPaste is easy to deploy to cloud services. Here are some places it works well
 * [fly.io](docs/deployment/fly.io.md) (recommended)
 * [Heroku](docs/deployment/heroku.md)
 * [Amazon LightSail](docs/deployment/lightsail.md)
+
+## Further reading
+
+* ["How Litestream Eliminated My Database Server for $0.03/month"](https://mtlynch.io/litestream/): Explains the motivation behind LogPaste
