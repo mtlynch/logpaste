@@ -45,7 +45,7 @@ docker run \
 
 If you specify settings for an S3 bucket, LogPaste will use [Litestream](https://litestream.io/) to automatically replicate your data to S3.
 
-You can kill the container and start it later, and it will restore your data from the S3 bucket and continue as if there was no no interruption.
+You can kill the container and start it later, and it will restore your data from the S3 bucket and continue as if there was no interruption.
 
 ```bash
 LITESTREAM_ACCESS_KEY_ID=YOUR-ACCESS-ID
