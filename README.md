@@ -4,6 +4,8 @@
 [![Docker Pulls](https://img.shields.io/docker/pulls/mtlynch/logpaste.svg?maxAge=604800)](https://hub.docker.com/r/mtlynch/logpaste/)
 [![License](http://img.shields.io/:license-mit-blue.svg?style=flat-square)](LICENSE)
 
+[![LogPaste animated demo](https://raw.githubusercontent.com/mtlynch/logpaste/master/.readme-assets/demo-800w.gif)](https://raw.githubusercontent.com/mtlynch/logpaste/master/.readme-assets/demo.gif)
+
 A minimalist web service for uploading and sharing log files.
 
 ## Features
@@ -19,8 +21,6 @@ A minimalist web service for uploading and sharing log files.
 ## Demo
 
 * <http://logpaste.com>
-
-[![asciicast](https://asciinema.org/a/I2HcYheYayeh7aHj23QSY9Vyf.png)](https://asciinema.org/a/I2HcYheYayeh7aHj23QSY9Vyf)
 
 ## Run LogPaste
 
