@@ -88,7 +88,7 @@ func (s defaultServer) pastePost() http.HandlerFunc {
 
 		w.Header().Set("Access-Control-Allow-Origin", "*")
 
-		body, ok := parsePasteFromMultipartForm(r.MultipartForm)
+		body, ok := parsePasteFromMultipartForm(r.MultipartForm, w)
 		if !ok {
 			log.Print("form did not contain any recognizable data")
 			http.Error(w, "form data or file is required", http.StatusBadRequest)
@@ -130,11 +130,11 @@ func validatePaste(p string, w http.ResponseWriter) bool {
 	return true
 }
 
-func parsePasteFromMultipartForm(f *multipart.Form) (string, bool) {
+func parsePasteFromMultipartForm(f *multipart.Form, w http.ResponseWriter) (string, bool) {
 	if content, ok := parsePasteFromMultipartFormValue(f); ok {
 		return content, true
 	}
-	if content, ok := parsePasteFromMultipartFormFile(f); ok {
+	if content, ok := parsePasteFromMultipartFormFile(f, w); ok {
 		return content, true
 	}
 	return "", false
@@ -155,13 +155,13 @@ func anyValueInForm(f *multipart.Form) (string, bool) {
 	return "", false
 }
 
-func parsePasteFromMultipartFormFile(f *multipart.Form) (string, bool) {
+func parsePasteFromMultipartFormFile(f *multipart.Form, w http.ResponseWriter) (string, bool) {
 	file, ok := anyFileInForm(f.File)
 	if !ok {
 		return "", false
 	}
 
-	body, err := ioutil.ReadAll(file)
+	body, err := ioutil.ReadAll(http.MaxBytesReader(w, file, MaxPasteCharacters))
 	if err != nil {
 		log.Printf("failed to read form file: %v", err)
 		return "", false
