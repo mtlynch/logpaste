@@ -8,7 +8,7 @@ services:
     volumes:
       - ./:/app/e2e
   cypress:
-    image: "cypress/included:6.8.0"
+    image: "mtlynch/cypress:8.1.0-chrome91"
     command: ["--browser", "chrome"]
     depends_on:
       - logpaste
