@@ -64,11 +64,12 @@ if [[ "${IS_LITESTREAM_ENABLED}" == 'true' ]]; then
   # Restore database from S3.
   litestream restore -if-replica-exists -v "${DB_PATH}"
 
-  # Begin replication to S3 in the background.
-  # Note: It would be nicer to use the systemd service, but systemd
-  # is trickier within Docker.
-  litestream replicate "${DB_PATH}" "${DB_REPLICA_URL}" &
+  # Let Litestream start LogPaste as a child process
+  exec litestream replicate \
+    -exec "/app/server $(env_vars_to_flags)"
+    "${DB_PATH}" \
+    "${DB_REPLICA_URL}"
+else
+  # Start server.
+  eval "/app/server $(env_vars_to_flags)"
 fi
-
-# Start server.
-eval "/app/server $(env_vars_to_flags)"
