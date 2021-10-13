@@ -13,7 +13,7 @@ RUN go build \
   -o /app/server \
   ./main.go
 
-FROM debian:stable-20210208-slim
+FROM debian:stable-20211011-slim
 
 ARG litestream_version="0.3.5"
 ARG litestream_deb_filename="litestream-v${litestream_version}-linux-amd64.deb"
