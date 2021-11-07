@@ -1,0 +1,23 @@
+button {
+  color: white;
+  background-color: #0078e7;
+  border-color: #082375;
+}
+
+button:hover {
+  background-color: #009ee7;
+}
+
+#upload-textarea {
+  border-color: #cccccc;
+}
+
+#result {
+  background-color: #d6ffd9;
+  border-color: green;
+}
+
+#form-upload-error {
+  background-color: #ffa6a6;
+  border-color: red;
+}

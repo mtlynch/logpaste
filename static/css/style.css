@@ -55,16 +55,11 @@ button {
   padding: 0.35em 1.2em;
   border-radius: 0.2em;
   box-sizing: border-box;
-  color: white;
-  background-color: #0078e7;
-  border: 0.1em solid #082375;
   text-align: center;
   transition: all 0.2s;
   font-size: 1.05em;
-}
-
-button:hover {
-  background-color: #009ee7;
+  border-width: 0.1em;
+  border-style: solid;
 }
 
 .upload-form {
@@ -85,9 +80,9 @@ button:hover {
   box-sizing: border-box;
   -moz-box-sizing: border-box;
   -webkit-box-sizing: border-box;
-  border: 1px solid #cccccc;
   margin: 1rem 0;
   padding: 0.5rem;
+  border-width: 1px;
 }
 
 .button-row {
@@ -96,9 +91,9 @@ button:hover {
 
 #result {
   visibility: hidden;
-  background-color: #d6ffd9;
   padding: 1.5rem 1.75rem;
-  border: 1px solid green;
+  border-width: 1px;
+  border-style: solid;
   margin: 1rem auto 0 auto;
 }
 
@@ -115,9 +110,9 @@ button:hover {
 
 #form-upload-error {
   visibility: hidden;
-  background-color: #ffa6a6;
   padding: 1rem 0.75rem;
-  border: 1px solid red;
+  border-width: 1px;
+  border-style: solid;
 }
 
 #more-info {
