@@ -1,0 +1,41 @@
+body {
+  background: #121212;
+  color: #f0f0f0;
+}
+
+a {
+  color: #009e1a;
+}
+
+textarea {
+  background: #808080;
+}
+
+button {
+  background-color: #2455a3;
+  color: #f0f0f0;
+  border-color: #648ed1;
+}
+
+button:hover {
+  background-color: #2e66bf;
+}
+
+pre {
+  background: #424242;
+  border-color: #c7c7c7;
+}
+
+#upload-textarea {
+  border-color: #cccccc;
+}
+
+#result {
+  background-color: #454270;
+  border-color: #6d68b0;
+}
+
+#form-upload-error {
+  background-color: #9c2222;
+  border-color: #cc3f3f;
+}

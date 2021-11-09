@@ -31,6 +31,7 @@ type SiteProperties struct {
 	Title      string
 	Subtitle   string
 	FooterHTML string
+	DarkMode   bool
 	ShowDocs   bool
 }
 
