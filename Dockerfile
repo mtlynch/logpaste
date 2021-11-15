@@ -1,4 +1,4 @@
-FROM golang:1.13.5-buster as builder
+FROM golang:1.17.3-buster as backend_builder
 
 WORKDIR /app
 
@@ -13,26 +13,30 @@ RUN go build \
   -o /app/server \
   ./main.go
 
-FROM debian:stable-20211011-slim
+FROM golang:1.17.3-buster AS litestream_builder
 
-ARG litestream_version="0.3.6"
-ARG litestream_deb_filename="litestream-v${litestream_version}-linux-amd64.deb"
+ARG litestream_version="v0.3.6"
 
 RUN set -x && \
     apt-get update && \
-    DEBIAN_FRONTEND=noninteractive apt-get install -y \
-      ca-certificates \
-      wget \
-      && \
-    wget "https://github.com/benbjohnson/litestream/releases/download/v${litestream_version}/${litestream_deb_filename}" && \
-    apt-get remove -y wget && \
-    rm -rf /var/lib/apt/lists/*
+    DEBIAN_FRONTEND=noninteractive apt-get install -y git
 
-RUN dpkg -i "${litestream_deb_filename}"
+RUN set -x && \
+    git clone --branch "${litestream_version}" --single-branch https://github.com/benbjohnson/litestream.git
 
-COPY --from=builder /app/server /app/server
-COPY --from=builder /app/views /app/views
-COPY --from=builder /app/static /app/static
+RUN set -x && \
+    cd litestream && \
+    go install ./cmd/litestream && \
+    echo "litestream installed to ${GOPATH}/bin/litestream"
+
+FROM debian:stable-20211011-slim
+
+COPY --from=backend_builder /app/server /app/server
+COPY --from=backend_builder /app/views /app/views
+COPY --from=backend_builder /app/static /app/static
+COPY --from=litestream_builder /go/bin/litestream /app/litestream
+COPY ./litestream.yml /etc/litestream.yml
+COPY ./docker_entrypoint /app/docker_entrypoint
 COPY ./litestream.yml /etc/litestream.yml
 COPY ./docker_entrypoint /app/docker_entrypoint
 
