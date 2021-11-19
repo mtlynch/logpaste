@@ -50,4 +50,4 @@ WORKDIR /app
 # Frequency that database snapshots are replicated.
 ENV DB_SYNC_INTERVAL="10s"
 
-ENTRYPOINT ["./docker_entrypoint"]
+ENTRYPOINT ["/app/docker_entrypoint"]
