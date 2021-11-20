@@ -40,6 +40,7 @@ FROM alpine:3.15
 RUN apk add --no-cache bash
 
 COPY --from=backend_builder /app/server /app/server
+COPY --from=litestream_downloader /litestream/litestream /app/litestream
 COPY ./docker_entrypoint /app/docker_entrypoint
 COPY ./litestream.yml /etc/litestream.yml
 COPY ./static /app/static
