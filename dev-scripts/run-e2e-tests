@@ -21,4 +21,4 @@ COMPOSE_DOCKER_CLI_BUILD=1 DOCKER_BUILDKIT=1 \
   docker-compose up \
     --exit-code-from cypress \
     --abort-on-container-exit \
-    "${EXTRA_FLAGS}"
+    ${EXTRA_FLAGS}
