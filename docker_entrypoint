@@ -66,10 +66,10 @@ if [[ "${IS_LITESTREAM_ENABLED}" == 'true' ]]; then
   export readonly DB_PATH="/app/data/store.db"
 
   # Restore database from S3.
-  litestream restore -if-replica-exists -v "${DB_PATH}"
+  /app/litestream restore -if-replica-exists -v "${DB_PATH}"
 
   # Let Litestream start LogPaste as a child process
-  exec litestream replicate \
+  exec /app/litestream replicate \
     -exec "/app/server $(env_vars_to_flags)"
     "${DB_PATH}" \
     "${DB_REPLICA_URL}"
