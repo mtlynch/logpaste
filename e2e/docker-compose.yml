@@ -12,9 +12,6 @@ services:
     environment:
       - PORT=3333
       - DB_REPLICA_URL="sftp://dummyuser:dummypass@test_sftp:8022/sftp"
-      - LITESTREAM_ACCESS_KEY_ID="dummyaccesskeyid"
-      - LITESTREAM_SECRET_ACCESS_KEY="dummysecretaccesskey"
-      - LITESTREAM_REGION="dummyregion"
     volumes:
       - ./:/app/e2e
     depends_on:
