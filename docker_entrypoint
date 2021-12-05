@@ -45,9 +45,7 @@ is_litestream_enabled() {
 
   local IS_ENABLED='false'
 
-  if [[ ! -z "${LITESTREAM_ACCESS_KEY_ID}" ]] && \
-      [[ ! -z "${LITESTREAM_SECRET_ACCESS_KEY}" ]] && \
-      [[ ! -z "${LITESTREAM_REGION}" ]]; then
+  if [[ ! -z "${DB_REPLICA_URL}" ]]; then
     IS_ENABLED='true';
   fi
 
