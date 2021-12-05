@@ -51,7 +51,7 @@ Finally, it's time to deploy your app.
 
 ```bash
 # Change this to the latest Docker image tag
-LOGPASTE_IMAGE="mtlynch/logpaste:0.2.0"
+LOGPASTE_IMAGE="mtlynch/logpaste:0.2.5"
 
 fly deploy \
   --env "LITESTREAM_REGION=${LITESTREAM_REGION}" \
