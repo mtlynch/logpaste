@@ -92,6 +92,8 @@ Thanks to [Steren Giannini](https://github.com/steren) from the Google Cloud Run
 
 ## Set custom domain (optional)
 
+You'll need to [verify ownership](https://cloud.google.com/run/docs/mapping-custom-domains#command-line) first.
+
 ```bash
 CUSTOM_DOMAIN="logpaste.example.com"
 ```
@@ -102,3 +104,5 @@ gcloud beta run domain-mappings create \
   --domain "${CUSTOM_DOMAIN}" \
   --region "${GCP_REGION}"
 ```
+
+The command will show you a DNS record to add to your DNS. When you add the record, you'll be able to access the Cloud Run instance from your custom domain.
