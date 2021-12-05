@@ -66,7 +66,9 @@ docker pull "${LOGPASTE_VERSION}" && \
 Finally, it's time to deploy your image to Cloud Run.
 
 ```bash
-gcloud beta run deploy logpaste \
+GCR_SERVICE_NAME="logpaste"
+gcloud beta run deploy \
+  "${GCR_SERVICE_NAME}" \
   --image "${LOGPASTE_GCR_URL}" \
   --set-env-vars "DB_REPLICA_URL=gcs://${GCS_BUCKET}/db" \
   --allow-unauthenticated \
@@ -87,3 +89,16 @@ Your LogPaste instance will serve at the URL listed next to "Service URL."
 On Cloud Run, you'll notice that LogPaste shuts down a few seconds after each request. This is normal. It's persisting all of its data in Google Cloud Storage, and it will start up again upon the next HTTP request it receives with all the same data.
 
 Thanks to [Steren Giannini](https://github.com/steren) from the Google Cloud Run team for his help with these instructions.
+
+## Set custom domain (optional)
+
+```bash
+CUSTOM_DOMAIN="logpaste.example.com"
+```
+
+```bash
+gcloud beta run domain-mappings create \
+  --service "${GCR_SERVICE_NAME}" \
+  --domain "${CUSTOM_DOMAIN}" \
+  --region "${GCP_REGION}"
+```
