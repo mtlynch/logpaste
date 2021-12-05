@@ -2,8 +2,6 @@ version: "3.2"
 services:
   test_sftp:
     image: emberstack/sftp:build-5.0.3
-    ports:
-      - "8022:22"
     volumes:
       - ./sftp.json:/app/config/sftp.json:ro
   logpaste:
@@ -11,7 +9,7 @@ services:
       context: ../
     environment:
       - PORT=3333
-      - DB_REPLICA_URL="sftp://dummyuser:dummypass@test_sftp:8022/sftp"
+      - DB_REPLICA_URL="sftp://dummyuser:dummypass@test_sftp"
     volumes:
       - ./:/app/e2e
     depends_on:
