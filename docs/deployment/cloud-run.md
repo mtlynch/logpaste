@@ -1,11 +1,10 @@
 # Deploy LogPaste to Google Cloud Run
 
-TODO: Finish this, still a work in progress.
+It's possible to run LogPaste as a microservice on Google Cloud Run, Google's platform for launching Docker containers on-demand.
 
-TODO: Mention that Cloud Run uses limited resources
-TODO: Mention that Cloud Run access GCS, so you don't need separate S3 credentials.
+Google Cloud Run launches your LogPaste instance in response to HTTP requests and then shuts it down during inactivity. This minimizes hosting costs, as you only pay for the time that your instance is running.
 
-## Overview
+Another benefit of running LogPaste on Google Cloud Run is that you don't need to configure S3 credentials. By default, Cloud Run executes LogPaste in a context that has write access to Google Cloud Storage for persistent storage, so LogPaste can read and write data without accruing bandwidth fees or managing credentials for an external service.
 
 ## Requirements
 
@@ -27,7 +26,7 @@ GCP_REGION="us-east1"           # Replace with your desired GCP region
 
 ### Authenticate
 
-You need to authenticate gcloud and configure docker to push to Google Container Registry.
+To use the Google Cloud SDK, you need to authenticate gcloud and configure docker to push to Google Container Registry:
 
 ```bash
 gcloud auth login && \
@@ -36,7 +35,7 @@ gcloud auth login && \
 
 ### Specify GCP Project
 
-Next, configure gcloud to remember your GCP project to save you from typing it in every command:
+Next, configure gcloud to remember your GCP project:
 
 ```bash
 gcloud config set project "${GCP_PROJECT}"
@@ -83,7 +82,7 @@ Finally, it's time to deploy your image to Cloud Run:
 GCR_SERVICE_NAME="logpaste"
 
 # Limit to a single instance, as multiple workers will generate sync
-# conflicts with the database.
+# conflicts with the data store.
 MAX_INSTANCES="1"
 
 gcloud beta run deploy \
@@ -106,11 +105,11 @@ Service URL: https://logpaste-abc123-ue.a.run.app
 
 Your LogPaste instance will serve at the URL listed after to "Service URL."
 
-Cloud Run will shut down your LogPaste instance within a few minutes of each HTTP request. This is normal. LogPaste persists all of its data in Google Cloud Storage before it shuts down, and it will start up again on the next HTTP request it receives with all the same data.
+If you review your GCP logs, you'll see that the LogPaste server terminates within a few minutes of each HTTP request. This is normal. LogPaste persists all of its data in Google Cloud Storage before it shuts down, and it will start up again on the next HTTP request it receives with all the same data.
 
 ## Run as service account (optional)
 
-The instructions above launch LogPaste a Cloud Run service under the default Compute service credentials. You can improve security by running LogPaste under a service account with a stricter set of permissions:
+The instructions above launch LogPaste a Cloud Run service under the Default Compute Service credentials. You can improve security by running LogPaste under a service account with a stricter set of permissions:
 
 ```bash
 SERVICE_ACCOUNT_NAME="logpaste"
@@ -136,7 +135,7 @@ gcloud run services update "${GCR_SERVICE_NAME}" \
 You may receive this error after executing `gcloud run services`:
 
 ```text
-cannot fetch generations: googleapi: Error 403: logpaste@logpaste.iam.gserviceaccount.com does not have storage.objects.list access to the Google Cloud Storage bucket., forbidden
+cannot fetch generations: googleapi: Error 403: logpaste@yourproject.iam.gserviceaccount.com does not have storage.objects.list access to the Google Cloud Storage bucket., forbidden
 ```
 
 On GCP, IAM permissions sometimes take a few minutes to go into effect. Wait 2-3 minutes and try running the `gcloud run services update` command again.
