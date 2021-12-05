@@ -141,6 +141,7 @@ LogPaste is easy to deploy to cloud services. Here are some places it works well
 
 * [fly.io](docs/deployment/fly.io.md) (recommended)
 * [Heroku](docs/deployment/heroku.md)
+* [Google Cloud Run](docs/deployment/cloud-run.md)
 * [Amazon LightSail](docs/deployment/lightsail.md)
 
 ## Further reading
