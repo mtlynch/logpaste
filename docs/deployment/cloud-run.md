@@ -4,7 +4,7 @@ It's possible to run LogPaste as a microservice on Google Cloud Run, Google's pl
 
 Google Cloud Run launches your LogPaste instance in response to HTTP requests and then shuts it down during inactivity. This minimizes hosting costs, as you only pay for the time that your instance is running.
 
-Another benefit of running LogPaste on Google Cloud Run is that you don't need to configure S3 credentials. By default, Cloud Run executes LogPaste in a context that has write access to Google Cloud Storage for persistent storage, so LogPaste can read and write data without accruing bandwidth fees or managing credentials for an external service.
+Another benefit of running LogPaste on Google Cloud Run is that you don't need to configure credentials. By default, Cloud Run executes LogPaste in a context that has write access to Google Cloud Storage for persistent storage, so LogPaste can read and write data without accruing bandwidth fees or managing credentials for an external service.
 
 ## Requirements
 
