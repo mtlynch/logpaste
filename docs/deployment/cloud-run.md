@@ -2,11 +2,22 @@
 
 TODO: Finish this, still a work in progress.
 
+TODO: Mention that Cloud Run uses limited resources
+TODO: Mention that Cloud Run access GCS, so you don't need separate S3 credentials.
+
+## Overview
+
 ## Requirements
 
-* [Google Cloud SDK](https://cloud.google.com/sdk/docs/install)
+You'll need:
 
-## Set project variables
+* A Google Cloud Platform account
+* [Google Cloud SDK](https://cloud.google.com/sdk/docs/install)
+* Docker
+
+## Set your environment variables
+
+To begin, create environment variables for your GCP  settings:
 
 ```bash
 GCP_PROJECT="your-gcp-project"  # Replace with your GCP project ID
@@ -39,7 +50,7 @@ Your GCP project will need the [Cloud Run API](https://cloud.google.com/run/docs
 gcloud services enable run.googleapis.com
 ```
 
-### Create a Google Cloud Storage bucket (optional)
+### Create a Google Cloud Storage bucket
 
 If you haven't already created the GCS bucket to provide LogPaste's persistent storage, create it with the command below:
 
