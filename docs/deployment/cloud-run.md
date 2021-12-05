@@ -23,16 +23,23 @@ gcloud auth login && \
   gcloud auth configure-docker
 ```
 
-### Enable services
+### Specify GCP Project
 
 ```bash
-gcloud config set project "${GCP_PROJECT}" && \
-  gcloud services enable run.googleapis.com
+gcloud config set project "${GCP_PROJECT}"
+```
+
+### Enable services
+
+Your GCP project will need the [Cloud Run API](https://cloud.google.com/run/docs/reference/rest) enabled, so ensure your project enables this API:
+
+```bash
+gcloud services enable run.googleapis.com
 ```
 
 ### Create a Google Cloud Storage bucket
 
-If you haven't already created the GCS bucket, create it with the command below:
+If you haven't already created the GCS bucket to provide LogPaste's persistent storage, create it with the command below:
 
 ```bash
 gsutil mb "gs://${GCS_BUCKET}"
@@ -43,8 +50,8 @@ gsutil mb "gs://${GCS_BUCKET}"
 Cloud Run can't run Docker images from external image repositories, so next you'll copy the official LogPaste image to Google Container Registry:
 
 ```bash
-LOGPASTE_VERSION="mtlynch/logpaste:latest" # LogPaste version on DockerHub
-LOGPASTE_GCR_TAG="logpaste"
+LOGPASTE_VERSION="mtlynch/logpaste:latest"  # LogPaste version on DockerHub
+LOGPASTE_GCR_TAG="logpaste"                 # Change to whatever name you prefer
 LOGPASTE_GCR_URL="gcr.io/${GCP_PROJECT}/${LOGPASTE_GCR_TAG}"
 ```
 
@@ -75,6 +82,8 @@ Service [logpaste] revision [logpaste-00002-cos] has been deployed and is servin
 Service URL: https://logpaste-abc123-ue.a.run.app
 ```
 
-Your LogPaste instance will serve at the URL listed next to "Service URL." It will shut down a few seconds after each request, but it will start up when it receives its next HTTP request, and it will load all of its data from its persistent GCS bucket.
+Your LogPaste instance will serve at the URL listed next to "Service URL."
+
+On Cloud Run, you'll notice that LogPaste shuts down a few seconds after each request. This is normal. It's persisting all of its data in Google Cloud Storage, and it will start up again upon the next HTTP request it receives with all the same data.
 
 Thanks to [Steren Giannini](https://github.com/steren) from the Google Cloud Run team for his help with these instructions.
