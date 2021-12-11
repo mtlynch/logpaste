@@ -24,15 +24,26 @@ func New() store.Store {
 	if err != nil {
 		log.Fatalln(err)
 	}
-	_, err = ctx.Exec(`
-CREATE TABLE IF NOT EXISTS entries (
-	id TEXT PRIMARY KEY,
-	creation_time TEXT,
-	contents TEXT
-	)`)
-	if err != nil {
-		log.Fatalln(err)
+
+	initStmts := []string{
+		// The Litestream documentation recommends these pragmas.
+		// https://litestream.io/tips/
+		`PRAGMA busy_timeout = 5000`,
+		`PRAGMA synchronous = NORMAL`,
+
+		`CREATE TABLE IF NOT EXISTS entries (
+			id TEXT PRIMARY KEY,
+			creation_time TEXT,
+			contents TEXT
+			)`,
 	}
+	for _, stmt := range initStmts {
+		_, err = ctx.Exec(stmt)
+		if err != nil {
+			log.Fatalln(err)
+		}
+	}
+
 	return &db{
 		ctx: ctx,
 	}
