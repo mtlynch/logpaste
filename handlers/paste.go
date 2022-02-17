@@ -29,6 +29,7 @@ func (s defaultServer) pasteGet() http.HandlerFunc {
 		if err != nil {
 			log.Printf("Error retrieving entry with id %s: %v", id, err)
 			http.Error(w, "entry not found", http.StatusNotFound)
+			return
 		}
 		io.WriteString(w, contents)
 	}
