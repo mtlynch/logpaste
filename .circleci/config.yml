@@ -15,7 +15,7 @@ jobs:
           command: dev-scripts/check-go-formatting
   check_frontend_formatting:
     docker:
-      - image: circleci/node:13.2.0-stretch
+      - image: cimg/node:13.2.0
     steps:
       - checkout
       - run:
