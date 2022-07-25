@@ -2,7 +2,7 @@ version: 2.1
 jobs:
   test:
     docker:
-      - image: cimg/go:1.13
+      - image: cimg/go:1.18.4
     steps:
       - checkout
       - attach_workspace:

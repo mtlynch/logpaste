@@ -1,4 +1,4 @@
-FROM golang:1.17.3-buster as backend_builder
+FROM golang:1.18.4 as backend_builder
 
 WORKDIR /app
 
