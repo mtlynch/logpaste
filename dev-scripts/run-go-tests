@@ -35,7 +35,7 @@ fi
 
 go test "${go_test_flags[@]}" ./...
 go vet ./...
-g
+
 if [[ -n "$full_test" ]]; then
   go tool cover -html "${COVERAGE_FILE_RAW}" -o "${COVERAGE_FILE_HTML}"
 fi
