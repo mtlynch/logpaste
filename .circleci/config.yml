@@ -67,6 +67,9 @@ jobs:
           name: Create fly.io config file
           command: dev-scripts/make-fly-config "${APP_NAME}"
       - run:
+          name: Remove lines specifying target Docker image (force a build from source)
+          command: sed '/^\[build\]/d' fly.toml | sed '/^ *image =/d'
+      - run:
           name: Deploy logpaste to fly.io
           command: |
             "${HOME}/.fly/bin/flyctl" deploy \
