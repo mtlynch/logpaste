@@ -146,7 +146,7 @@ func TestPastePut(t *testing.T) {
 			if got, want := w.Code, tt.statusExpected; got != want {
 				t.Fatalf("status=%d, want=%d", got, want)
 			}
-			if tt.statusExpected != http.StatusOK {
+			if w.Code != http.StatusOK {
 				return
 			}
 
@@ -166,57 +166,6 @@ func TestPastePut(t *testing.T) {
 }
 
 func TestPastePost(t *testing.T) {
-	var pasteTests = []struct {
-		contentType      string
-		body             string
-		statusExpected   int
-		contentsExpected string
-	}{
-		{
-			"text/plain",
-			"hello, world!",
-			http.StatusBadRequest,
-			"",
-		},
-		// Empty input
-		{
-			"multipart/form-data; boundary=------------------------aea33768a2527972",
-			`
---------------------------aea33768a2527972
-Content-Disposition: form-data; name="dummyname1"
-
-
-
---------------------------aea33768a2527972--`,
-			http.StatusBadRequest,
-			"",
-		},
-		// Valid input
-		{
-			"multipart/form-data; boundary=------------------------aea33768a2527972",
-			`
---------------------------aea33768a2527972
-Content-Disposition: form-data; name="dummyname2"
-
-some data I want to upload
---------------------------aea33768a2527972--`,
-			http.StatusOK,
-			"some data I want to upload",
-		},
-		{
-			"multipart/form-data; boundary=------------------------ff01448fc0d75457",
-			`
---------------------------ff01448fc0d75457
-Content-Disposition: form-data; name="dummyname3"; filename="text.txt"
-Content-Type: text/plain
-
-some data in a file
---------------------------ff01448fc0d75457--`,
-			http.StatusOK,
-			"some data in a file",
-		},
-	}
-
 	ds := mockStore{
 		entries: make(map[string]string),
 	}
@@ -226,31 +175,84 @@ some data in a file
 		router: router,
 	}
 	s.routes()
+	for _, tt := range []struct {
+		description      string
+		contentType      string
+		body             string
+		statusExpected   int
+		contentsExpected string
+	}{
+		{
+			description:      "reject non-multipart data",
+			contentType:      "text/plain",
+			body:             "hello, world!",
+			statusExpected:   http.StatusBadRequest,
+			contentsExpected: "",
+		},
+		{
+			description: "rejects empty input",
+			contentType: "multipart/form-data; boundary=------------------------aea33768a2527972",
+			body: `
+--------------------------aea33768a2527972
+Content-Disposition: form-data; name="dummyname1"
 
-	for _, tt := range pasteTests {
-		ds.Reset()
 
-		req, err := http.NewRequest("POST", "/",
-			strings.NewReader(strings.ReplaceAll(tt.body, "\n", "\r\n")))
-		if err != nil {
-			t.Fatal(err)
-		}
-		req.Header.Add("Content-Type", tt.contentType)
 
-		w := httptest.NewRecorder()
-		s.router.ServeHTTP(w, req)
+--------------------------aea33768a2527972--`,
+			statusExpected:   http.StatusBadRequest,
+			contentsExpected: "",
+		},
+		{
+			description: "accepts string data",
+			contentType: "multipart/form-data; boundary=------------------------aea33768a2527972",
+			body: `
+--------------------------aea33768a2527972
+Content-Disposition: form-data; name="dummyname2"
 
-		if status := w.Code; status != tt.statusExpected {
-			t.Fatalf("handler returned wrong status code: got %v want %v",
-				status, tt.statusExpected)
-		}
-		if tt.statusExpected != http.StatusOK {
-			continue
-		}
-		for _, contents := range ds.entries {
-			if contents != tt.contentsExpected {
-				t.Fatalf("saved incorrect contents. got: [%s], want [%s]", contents, tt.contentsExpected)
+some data I want to upload
+--------------------------aea33768a2527972--`,
+			statusExpected:   http.StatusOK,
+			contentsExpected: "some data I want to upload",
+		},
+		{
+			description: "accepts file data",
+			contentType: "multipart/form-data; boundary=------------------------ff01448fc0d75457",
+			body: `
+--------------------------ff01448fc0d75457
+Content-Disposition: form-data; name="dummyname3"; filename="text.txt"
+Content-Type: text/plain
+
+some data in a file
+--------------------------ff01448fc0d75457--`,
+			statusExpected:   http.StatusOK,
+			contentsExpected: "some data in a file",
+		},
+	} {
+		t.Run(tt.description, func(t *testing.T) {
+			ds.Reset()
+
+			req, err := http.NewRequest("POST", "/",
+				strings.NewReader(strings.ReplaceAll(tt.body, "\n", "\r\n")))
+			if err != nil {
+				t.Fatal(err)
 			}
-		}
+			req.Header.Add("Content-Type", tt.contentType)
+
+			w := httptest.NewRecorder()
+			s.router.ServeHTTP(w, req)
+
+			if got, want := w.Code, tt.statusExpected; got != want {
+				t.Fatalf("status=%d, want=%d", got, want)
+			}
+			if w.Code != http.StatusOK {
+				return
+			}
+
+			for _, contents := range ds.entries {
+				if got, want := contents, tt.contentsExpected; got != want {
+					t.Fatalf("contents=%s, want=%s", got, want)
+				}
+			}
+		})
 	}
 }
