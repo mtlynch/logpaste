@@ -52,6 +52,9 @@ func New() store.Store {
 func (d db) GetEntry(id string) (string, error) {
 	var contents string
 	if err := d.ctx.QueryRow("SELECT contents FROM entries WHERE id=?", id).Scan(&contents); err != nil {
+		if err == sql.ErrNoRows {
+			return "", store.EntryNotFoundError{ID: id}
+		}
 		return "", err
 	}
 	return contents, nil
