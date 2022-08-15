@@ -50,15 +50,8 @@ func New() store.Store {
 }
 
 func (d db) GetEntry(id string) (string, error) {
-	stmt, err := d.ctx.Prepare("SELECT contents FROM entries WHERE id=?")
-	if err != nil {
-		return "", err
-	}
-	defer stmt.Close()
-
 	var contents string
-	err = stmt.QueryRow(id).Scan(&contents)
-	if err != nil {
+	if err := d.ctx.QueryRow("SELECT contents FROM entries WHERE id=?", id).Scan(&contents); err != nil {
 		return "", err
 	}
 	return contents, nil
