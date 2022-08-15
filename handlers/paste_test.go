@@ -3,6 +3,7 @@ package handlers
 import (
 	"encoding/json"
 	"errors"
+	"fmt"
 	"io/ioutil"
 	"net/http"
 	"net/http/httptest"
@@ -183,11 +184,10 @@ func TestPastePost(t *testing.T) {
 		contentsExpected string
 	}{
 		{
-			description:      "reject non-multipart data",
-			contentType:      "text/plain",
-			body:             "hello, world!",
-			statusExpected:   http.StatusBadRequest,
-			contentsExpected: "",
+			description:    "reject non-multipart data",
+			contentType:    "text/plain",
+			body:           "hello, world!",
+			statusExpected: http.StatusBadRequest,
 		},
 		{
 			description: "rejects empty input",
@@ -199,8 +199,7 @@ Content-Disposition: form-data; name="dummyname1"
 
 
 --------------------------aea33768a2527972--`,
-			statusExpected:   http.StatusBadRequest,
-			contentsExpected: "",
+			statusExpected: http.StatusBadRequest,
 		},
 		{
 			description: "accepts string data",
@@ -213,6 +212,29 @@ some data I want to upload
 --------------------------aea33768a2527972--`,
 			statusExpected:   http.StatusOK,
 			contentsExpected: "some data I want to upload",
+		},
+		{
+			description: "accepts string data at size limit",
+			contentType: "multipart/form-data; boundary=------------------------aea33768a2527972",
+			body: fmt.Sprintf(`
+--------------------------aea33768a2527972
+Content-Disposition: form-data; name="dummyname2"
+
+%s
+--------------------------aea33768a2527972--`, strings.Repeat("A", MaxPasteCharacters)),
+			statusExpected:   http.StatusOK,
+			contentsExpected: strings.Repeat("A", MaxPasteCharacters),
+		},
+		{
+			description: "rejects string data above size limit",
+			contentType: "multipart/form-data; boundary=------------------------aea33768a2527972",
+			body: fmt.Sprintf(`
+--------------------------aea33768a2527972
+Content-Disposition: form-data; name="dummyname2"
+
+%s
+--------------------------aea33768a2527972--`, strings.Repeat("A", MaxPasteCharacters+1)),
+			statusExpected: http.StatusBadRequest,
 		},
 		{
 			description: "accepts file data",
