@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io"
 	"io/ioutil"
@@ -14,6 +15,7 @@ import (
 	"github.com/gorilla/mux"
 
 	"github.com/mtlynch/logpaste/random"
+	"github.com/mtlynch/logpaste/store"
 )
 
 const MaxPasteCharacters = 2 * 1000 * 1000
@@ -27,9 +29,12 @@ func (s defaultServer) pasteGet() http.HandlerFunc {
 		id := mux.Vars(r)["id"]
 		w.Header().Set("Content-Type", "text/plain; charset=UTF-8")
 		contents, err := s.store.GetEntry(id)
-		if err != nil {
-			log.Printf("Error retrieving entry with id %s: %v", id, err)
+		if errors.Is(err, store.EntryNotFoundError{}) {
 			http.Error(w, "entry not found", http.StatusNotFound)
+			return
+		} else if err != nil {
+			log.Printf("failed to retrieve entry %s from datastore: %v", id, err)
+			http.Error(w, "failed to retrieve entry", http.StatusInternalServerError)
 			return
 		}
 		io.WriteString(w, contents)
