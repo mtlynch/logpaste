@@ -1,8 +1,6 @@
 package handlers
 
 import (
-	"net/http"
-
 	"github.com/gorilla/mux"
 
 	"github.com/mtlynch/logpaste/limit"
@@ -24,8 +22,6 @@ func New(sp SiteProperties, perMinuteLimit int) Server {
 	s.routes()
 	return s
 }
-
-type httpMiddlewareHandler func(http.Handler) http.Handler
 
 type SiteProperties struct {
 	Title      string
