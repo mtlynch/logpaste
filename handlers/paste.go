@@ -80,8 +80,8 @@ func (s defaultServer) pastePut() http.HandlerFunc {
 
 func (s defaultServer) pastePost() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		r.Body = http.MaxBytesReader(w, r.Body, MaxPasteCharacters)
-		if err := r.ParseMultipartForm(MaxPasteCharacters + 1024); err != nil {
+		r.Body = http.MaxBytesReader(w, r.Body, MaxPasteCharacters+1024)
+		if err := r.ParseMultipartForm(MaxPasteCharacters); err != nil {
 			log.Printf("failed to parse form: %v", err)
 			http.Error(w, "no valid multipart/form-data found", http.StatusBadRequest)
 			return
