@@ -45,6 +45,7 @@ heroku apps:create "${APP_NAME}" --stack container
 Assign all the relevant environment variables to your app:
 
 ```bash
+heroku config:set --app "${APP_NAME}" PS_BEHIND_PROXY="y"
 heroku config:set --app "${APP_NAME}" LITESTREAM_ACCESS_KEY_ID="${LITESTREAM_ACCESS_KEY_ID}"
 heroku config:set --app "${APP_NAME}" LITESTREAM_SECRET_ACCESS_KEY="${LITESTREAM_SECRET_ACCESS_KEY}"
 heroku config:set --app "${APP_NAME}" LITESTREAM_REGION="${LITESTREAM_REGION}"

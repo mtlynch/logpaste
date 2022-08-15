@@ -53,6 +53,7 @@ Enter the following information for your custom deployment:
 | Key                 | Value  |
 |---------------------|--------|
 | `PORT`              | 3001   |
+| `PS_BEHIND_PROXY`   | "y"    |
 | `DB_REPLICA_URL`    | The S3 URL of your S3 bucket |
 | `LITESTREAM_REGION`        | The region of your S3 bucket |
 | `LITESTREAM_ACCESS_KEY_ID` | The AWS access key ID from your IAM credentials |

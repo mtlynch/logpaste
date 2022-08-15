@@ -27,7 +27,7 @@ A minimalist web service for uploading and sharing log files.
 ### From source
 
 ```bash
-PORT=3001 go run main.go
+PORT=3001 go run cmd/logpaste/main.go
 ```
 
 ### From Docker
@@ -116,6 +116,7 @@ You can adjust behavior of the Docker container by passing these parameters with
 | Environment Variable | Meaning |
 |----------------------|---------|
 | `PORT`               | TCP port on which to listen for HTTP connections (defaults to 3001) |
+| `PS_BEHIND_PROXY`    | Set to `y` if running behind an HTTP proxy to improve logging |
 | `SITE_TITLE`         | Value to set the `-title` command-line flag |
 | `SITE_SUBTITLE`      | Value to set the `-subtitle` command-line flag |
 | `SITE_FOOTER`        | Value to set the `-footer` command-line flag |
