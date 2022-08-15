@@ -6,8 +6,28 @@ set -e
 # Echo commands to stdout.
 set -x
 
+full_test=""
+go_test_flags=()
+readonly COVERAGE_FILE_RAW=".coverage.out"
+readonly COVERAGE_FILE_HTML=".coverage.html"
+if [[ "$1" = "--full" ]]; then
+  full_test="1"
+  go_test_flags+=("-v")
+  go_test_flags+=("-race")
+  go_test_flags+=("--coverprofile=${COVERAGE_FILE_RAW}")
+fi
+
 # Exit on unset variable.
 set -u
 
-go test -v ./...
+# Change directory to repository root.
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
+readonly SCRIPT_DIR
+cd "${SCRIPT_DIR}/.."
+
+go test "${go_test_flags[@]}" ./...
 go vet ./...
+
+if [[ -n "$full_test" ]]; then
+  go tool cover -html "${COVERAGE_FILE_RAW}" -o "${COVERAGE_FILE_HTML}"
+fi
