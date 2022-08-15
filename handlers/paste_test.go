@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"errors"
 	"io/ioutil"
-	"log"
 	"net/http"
 	"net/http/httptest"
 	"strings"
@@ -34,25 +33,6 @@ func (ds *mockStore) Reset() {
 }
 
 func TestPasteGet(t *testing.T) {
-	var pasteTests = []struct {
-		id              string
-		statusExpected  int
-		contentExpected string
-	}{
-		// Valid entry
-		{
-			"12345678",
-			http.StatusOK,
-			"dummy entry",
-		},
-		// Non-existent entry
-		{
-			"missing1",
-			http.StatusNotFound,
-			"",
-		},
-	}
-
 	ds := mockStore{
 		entries: map[string]string{
 			"12345678": "dummy entry",
@@ -65,29 +45,48 @@ func TestPasteGet(t *testing.T) {
 	}
 	s.routes()
 
-	for _, tt := range pasteTests {
-		req, err := http.NewRequest("GET", "/"+tt.id, nil)
-		if err != nil {
-			t.Fatal(err)
-		}
+	for _, tt := range []struct {
+		description     string
+		id              string
+		statusExpected  int
+		contentExpected string
+	}{
+		{
+			description:     "valid entry",
+			id:              "12345678",
+			statusExpected:  http.StatusOK,
+			contentExpected: "dummy entry",
+		},
+		{
+			description:     "non-existent entry",
+			id:              "missing1",
+			statusExpected:  http.StatusNotFound,
+			contentExpected: "",
+		},
+	} {
+		t.Run(tt.description, func(t *testing.T) {
+			req, err := http.NewRequest("GET", "/"+tt.id, nil)
+			if err != nil {
+				t.Fatal(err)
+			}
 
-		w := httptest.NewRecorder()
-		s.router.ServeHTTP(w, req)
+			w := httptest.NewRecorder()
+			s.router.ServeHTTP(w, req)
 
-		if status := w.Code; status != tt.statusExpected {
-			t.Fatalf("for ID [%s], handler returned wrong status code: got %v want %v",
-				tt.id, status, tt.statusExpected)
-		}
-		if tt.statusExpected != http.StatusOK {
-			continue
-		}
-		bodyBytes, err := ioutil.ReadAll(w.Body)
-		if err != nil {
-			t.Fatalf("failed to read HTTP response body: %v", err)
-		}
-		if tt.contentExpected != string(bodyBytes) {
-			log.Fatalf("for ID [%s], got %s, want %s", tt.id, string(bodyBytes), tt.contentExpected)
-		}
+			if got, want := w.Code, tt.statusExpected; got != want {
+				t.Fatalf("status=%d, want=%d", got, want)
+			}
+			if w.Code != http.StatusOK {
+				return
+			}
+			bodyBytes, err := ioutil.ReadAll(w.Body)
+			if err != nil {
+				t.Fatalf("failed to read HTTP response body: %v", err)
+			}
+			if got, want := string(bodyBytes), tt.contentExpected; got != want {
+				t.Errorf("body=%s, want=%s", got, want)
+			}
+		})
 	}
 }
 
