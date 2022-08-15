@@ -65,10 +65,7 @@ jobs:
           command: curl -L https://fly.io/install.sh | sh -s "${FLYCTL_VERSION}"
       - run:
           name: Create fly.io config file
-          command: |
-            set -x
-            curl -s -L https://raw.githubusercontent.com/mtlynch/logpaste/master/dev-scripts/make-fly-config | \
-              bash /dev/stdin "${APP_NAME}"
+          command: dev-scripts/make-fly-config "${APP_NAME}"
       - run:
           name: Deploy logpaste to fly.io
           command: |
