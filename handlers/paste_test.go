@@ -35,9 +35,9 @@ func (ds *mockStore) Reset() {
 
 func TestPasteGet(t *testing.T) {
 	var pasteTests = []struct {
-		id                 string
-		httpStatusExpected int
-		contentExpected    string
+		id              string
+		statusExpected  int
+		contentExpected string
 	}{
 		// Valid entry
 		{
@@ -74,11 +74,11 @@ func TestPasteGet(t *testing.T) {
 		w := httptest.NewRecorder()
 		s.router.ServeHTTP(w, req)
 
-		if status := w.Code; status != tt.httpStatusExpected {
+		if status := w.Code; status != tt.statusExpected {
 			t.Fatalf("for ID [%s], handler returned wrong status code: got %v want %v",
-				tt.id, status, tt.httpStatusExpected)
+				tt.id, status, tt.statusExpected)
 		}
-		if tt.httpStatusExpected != http.StatusOK {
+		if tt.statusExpected != http.StatusOK {
 			continue
 		}
 		bodyBytes, err := ioutil.ReadAll(w.Body)
@@ -92,86 +92,86 @@ func TestPasteGet(t *testing.T) {
 }
 
 func TestPastePut(t *testing.T) {
-	var pasteTests = []struct {
-		body               string
-		httpStatusExpected int
+	for _, tt := range []struct {
+		description    string
+		body           string
+		statusExpected int
 	}{
-		// Valid content
 		{
-			"hello, world!",
-			http.StatusOK,
+			description:    "valid content",
+			body:           "hello, world!",
+			statusExpected: http.StatusOK,
 		},
-		// Just at size limit
 		{
-			strings.Repeat("A", MaxPasteCharacters),
-			http.StatusOK,
+			description:    "just at size limit",
+			body:           strings.Repeat("A", MaxPasteCharacters),
+			statusExpected: http.StatusOK,
 		},
-		// Too long content
 		{
-			strings.Repeat("A", MaxPasteCharacters+1),
-			http.StatusBadRequest,
+			description:    "too long content",
+			body:           strings.Repeat("A", MaxPasteCharacters+1),
+			statusExpected: http.StatusBadRequest,
 		},
-		// Empty content
 		{
-			"",
-			http.StatusBadRequest,
+			description:    "empty content",
+			body:           "",
+			statusExpected: http.StatusBadRequest,
 		},
-		// Just whitespace
 		{
-			"  ",
-			http.StatusBadRequest,
+			description:    "just whitespace",
+			body:           "  ",
+			statusExpected: http.StatusBadRequest,
 		},
-	}
+	} {
+		t.Run(tt.description, func(t *testing.T) {
+			ds := mockStore{
+				entries: make(map[string]string),
+			}
+			router := mux.NewRouter()
+			s := defaultServer{
+				store:  &ds,
+				router: router,
+			}
+			s.routes()
 
-	ds := mockStore{
-		entries: make(map[string]string),
-	}
-	router := mux.NewRouter()
-	s := defaultServer{
-		store:  &ds,
-		router: router,
-	}
-	s.routes()
+			ds.Reset()
 
-	for _, tt := range pasteTests {
-		ds.Reset()
+			req, err := http.NewRequest("PUT", "/", strings.NewReader(tt.body))
+			if err != nil {
+				t.Fatal(err)
+			}
 
-		req, err := http.NewRequest("PUT", "/", strings.NewReader(tt.body))
-		if err != nil {
-			t.Fatal(err)
-		}
+			w := httptest.NewRecorder()
+			s.router.ServeHTTP(w, req)
 
-		w := httptest.NewRecorder()
-		s.router.ServeHTTP(w, req)
+			if got, want := w.Code, tt.statusExpected; got != want {
+				t.Fatalf("status=%d, want=%d", got, want)
+			}
+			if tt.statusExpected != http.StatusOK {
+				return
+			}
 
-		if status := w.Code; status != tt.httpStatusExpected {
-			t.Fatalf("handler returned wrong status code: got %v want %v",
-				status, tt.httpStatusExpected)
-		}
-		if tt.httpStatusExpected != http.StatusOK {
-			continue
-		}
-		resp := PastePutResponse{}
-		err = json.NewDecoder(w.Body).Decode(&resp)
-		if err != nil {
-			t.Fatalf("failed to read HTTP response body: %v", err)
-		}
-		storedContents, err := ds.GetEntry(resp.Id)
-		if err != nil {
-			t.Fatalf("no entry found with id: %s", resp.Id)
-		}
-		if storedContents != tt.body {
-			t.Fatalf("stored content doesn't match request body: stored: %s, want: %s", storedContents, tt.body)
-		}
+			var resp PastePutResponse
+			if err := json.NewDecoder(w.Body).Decode(&resp); err != nil {
+				t.Fatalf("failed to read HTTP response body: %v", err)
+			}
+			storedContents, err := ds.GetEntry(resp.Id)
+			if err != nil {
+				t.Fatalf("no entry found with id: %s", resp.Id)
+			}
+			if got, want := storedContents, tt.body; got != want {
+				t.Fatalf("stored=%v, want=%v", got, want)
+			}
+		})
 	}
 }
 
 func TestPastePost(t *testing.T) {
 	var pasteTests = []struct {
-		contentType        string
-		body               string
-		httpStatusExpected int
-		contentsExpected   string
+		contentType      string
+		body             string
+		statusExpected   int
+		contentsExpected string
 	}{
 		{
 			"text/plain",
@@ -241,11 +241,11 @@ some data in a file
 		w := httptest.NewRecorder()
 		s.router.ServeHTTP(w, req)
 
-		if status := w.Code; status != tt.httpStatusExpected {
+		if status := w.Code; status != tt.statusExpected {
 			t.Fatalf("handler returned wrong status code: got %v want %v",
-				status, tt.httpStatusExpected)
+				status, tt.statusExpected)
 		}
-		if tt.httpStatusExpected != http.StatusOK {
+		if tt.statusExpected != http.StatusOK {
 			continue
 		}
 		for _, contents := range ds.entries {
