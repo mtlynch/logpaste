@@ -5,11 +5,11 @@ WORKDIR /app
 COPY go.* ./
 RUN go mod download
 
+COPY ./cmd /app/cmd
 COPY ./handlers /app/handlers
 COPY ./limit /app/limit
 COPY ./random /app/random
 COPY ./store /app/store
-COPY main.go ./
 
 RUN GOOS=linux GOARCH=amd64 \
   go build \
@@ -18,7 +18,7 @@ RUN GOOS=linux GOARCH=amd64 \
   -mod=readonly \
   -v \
   -o /app/server \
-  ./main.go
+  ./cmd/logpaste/main.go
 
 FROM debian:stable-20211011-slim AS litestream_downloader
 

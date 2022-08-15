@@ -13,6 +13,16 @@ jobs:
       - run:
           name: Verify golang formatting
           command: dev-scripts/check-go-formatting
+  build_backend:
+    docker:
+      - image: cimg/go:1.18.4
+    steps:
+      - checkout
+      - attach_workspace:
+          at: ./
+      - run:
+          name: Compile backend
+          command: dev-scripts/build-backend
   check_frontend_formatting:
     docker:
       - image: cimg/node:13.2.0
@@ -119,6 +129,10 @@ workflows:
           filters:
             tags:
               only: /.*/
+      - build_backend:
+          filters:
+            tags:
+              only: /.*/
       - e2e:
           filters:
             tags:
@@ -130,6 +144,7 @@ workflows:
       - build_docker_images:
           requires:
             - test
+            - build_backend
             - e2e
             - check_frontend_formatting
           filters:
@@ -140,6 +155,7 @@ workflows:
       - deploy:
           requires:
             - test
+            - build_backend
             - e2e
             - check_frontend_formatting
           filters:
