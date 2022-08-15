@@ -8,6 +8,7 @@ import (
 	"log"
 	"mime/multipart"
 	"net/http"
+	"os"
 	"strings"
 
 	"github.com/gorilla/mux"
@@ -109,7 +110,7 @@ func (s defaultServer) pastePost() http.HandlerFunc {
 		log.Printf("saved entry of %d characters", len(body))
 
 		w.Header().Set("Content-Type", "text/plain")
-		w.Write([]byte(fmt.Sprintf("http://%s/%s\n", r.Host, id)))
+		w.Write([]byte(fmt.Sprintf("%s/%s\n", baseURLFromRequest(r), id)))
 	}
 }
 
@@ -184,4 +185,15 @@ func anyFileInForm(formFiles map[string][]*multipart.FileHeader) (multipart.File
 		return file, true
 	}
 	return nil, false
+}
+
+func baseURLFromRequest(r *http.Request) string {
+	var scheme string
+	// If we're running behind a proxy, assume that it's a TLS proxy.
+	if r.TLS != nil || os.Getenv("PS_BEHIND_PROXY") != "" {
+		scheme = "https"
+	} else {
+		scheme = "http"
+	}
+	return fmt.Sprintf("%s://%s", scheme, r.Host)
 }
