@@ -80,8 +80,8 @@ func (s defaultServer) pastePut() http.HandlerFunc {
 
 func (s defaultServer) pastePost() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		err := r.ParseMultipartForm(MaxPasteCharacters + 1024)
-		if err != nil {
+		r.Body = http.MaxBytesReader(w, r.Body, MaxPasteCharacters+1024)
+		if err := r.ParseMultipartForm(MaxPasteCharacters); err != nil {
 			log.Printf("failed to parse form: %v", err)
 			http.Error(w, "no valid multipart/form-data found", http.StatusBadRequest)
 			return
@@ -101,8 +101,7 @@ func (s defaultServer) pastePost() http.HandlerFunc {
 		}
 
 		id := generateEntryId()
-		err = s.store.InsertEntry(id, body)
-		if err != nil {
+		if err := s.store.InsertEntry(id, body); err != nil {
 			log.Printf("failed to save entry: %v", err)
 			http.Error(w, "can't save entry", http.StatusInternalServerError)
 			return
@@ -162,7 +161,7 @@ func parsePasteFromMultipartFormFile(f *multipart.Form, w http.ResponseWriter) (
 		return "", false
 	}
 
-	body, err := ioutil.ReadAll(http.MaxBytesReader(w, file, MaxPasteCharacters))
+	body, err := ioutil.ReadAll(file)
 	if err != nil {
 		log.Printf("failed to read form file: %v", err)
 		return "", false
