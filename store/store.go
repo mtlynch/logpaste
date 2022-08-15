@@ -13,5 +13,5 @@ type EntryNotFoundError struct {
 }
 
 func (f EntryNotFoundError) Error() string {
-	return fmt.Sprintf("Could not find entry with ID %v", f.ID)
+	return fmt.Sprintf("could not find entry with ID=%v", f.ID)
 }

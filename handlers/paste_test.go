@@ -2,7 +2,6 @@ package handlers
 
 import (
 	"encoding/json"
-	"errors"
 	"fmt"
 	"io/ioutil"
 	"net/http"
@@ -11,6 +10,7 @@ import (
 	"testing"
 
 	"github.com/gorilla/mux"
+	"github.com/mtlynch/logpaste/store"
 )
 
 type mockStore struct {
@@ -21,7 +21,7 @@ func (ds mockStore) GetEntry(id string) (string, error) {
 	if contents, ok := ds.entries[id]; ok {
 		return contents, nil
 	}
-	return "", errors.New("not found")
+	return "", store.EntryNotFoundError{ID: id}
 }
 
 func (ds *mockStore) InsertEntry(id string, contents string) error {
