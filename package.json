@@ -1,0 +1,26 @@
+{
+  "name": "logpaste-dev",
+  "version": "1.0.0",
+  "description": "LogPaste dev scripts",
+  "scripts": {
+    "check-format": "prettier --check .",
+    "format": "prettier --write .",
+    "lint": "eslint ./**/*.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mtlynch/logpaste.git"
+  },
+  "author": "Michael Lynch",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/mtlynch/logpaste/issues"
+  },
+  "homepage": "https://logpaste.com",
+  "devDependencies": {
+    "eslint": "^8.11.0",
+    "eslint-plugin-cypress": "^2.12.1",
+    "prettier": "^2.6.0",
+    "prettier-plugin-go-template": "0.0.13"
+  }
+}
