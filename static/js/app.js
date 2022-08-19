@@ -1,5 +1,8 @@
 "use strict";
 
+const Prism = window.Prism;
+const logpaste = window.logpaste;
+
 const baseUrl = document.location.toString().replace(/\/$/, "");
 
 const curlCmd = document.getElementById("curl-cmd");
@@ -81,7 +84,7 @@ function displayError(error) {
   uploadError.style.visibility = "visible";
 }
 
-document.getElementById("upload").addEventListener("click", (evt) => {
+document.getElementById("upload").addEventListener("click", () => {
   const textToUpload = document.getElementById("upload-textarea").value;
   logpaste
     .uploadText(textToUpload)
