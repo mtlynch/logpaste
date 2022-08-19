@@ -3,7 +3,7 @@
 // Make ESLint happy.
 /* global Prism, logpaste */
 
-const baseUrl = document.location.toString().replace(/\/$/, "");
+const baseUrl = document.location.origin;
 
 const curlCmd = document.getElementById("curl-cmd");
 if (curlCmd) {
