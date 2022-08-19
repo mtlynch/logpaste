@@ -17,9 +17,7 @@ type db struct {
 
 func New() store.Store {
 	dbDir := "data"
-	if _, err := os.Stat(dbDir); os.IsNotExist(err) {
-		os.Mkdir(dbDir, os.ModePerm)
-	}
+	ensureDirExists(dbDir)
 	ctx, err := sql.Open("sqlite3", dbDir+"/store.db")
 	if err != nil {
 		log.Fatalln(err)
@@ -68,4 +66,12 @@ func (d db) InsertEntry(id string, contents string) error {
 		contents)
 	values(?,?,?)`, id, time.Now().Format(time.RFC3339), contents)
 	return err
+}
+
+func ensureDirExists(dir string) {
+	if _, err := os.Stat(dir); os.IsNotExist(err) {
+		if err := os.Mkdir(dir, os.ModePerm); err != nil {
+			panic(err)
+		}
+	}
 }

@@ -37,7 +37,9 @@ func (s defaultServer) pasteGet() http.HandlerFunc {
 			http.Error(w, "failed to retrieve entry", http.StatusInternalServerError)
 			return
 		}
-		io.WriteString(w, contents)
+		if _, err := io.WriteString(w, contents); err != nil {
+			log.Printf("failed to write response: %v", err)
+		}
 	}
 }
 
@@ -115,7 +117,10 @@ func (s defaultServer) pastePost() http.HandlerFunc {
 		log.Printf("saved entry of %d characters", len(body))
 
 		w.Header().Set("Content-Type", "text/plain")
-		w.Write([]byte(fmt.Sprintf("%s/%s\n", baseURLFromRequest(r), id)))
+		resultURL := fmt.Sprintf("%s/%s\n", baseURLFromRequest(r), id)
+		if _, err := w.Write([]byte(resultURL)); err != nil {
+			log.Printf("failed to write response: %v", err)
+		}
 	}
 }
 
