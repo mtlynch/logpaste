@@ -1,6 +1,6 @@
 "use strict";
 
-(function (windows) {
+(function () {
   function uploadText(text, baseUrl = "") {
     return fetch(baseUrl + "/", {
       method: "PUT",
@@ -25,8 +25,9 @@
       })
       .then((data) => data.id);
   }
-  if (!window.hasOwnProperty("logpaste")) {
-    window.logpaste = {};
+  if (!window.logpaste) {
+    window.logpaste = {
+      uploadText,
+    };
   }
-  window.logpaste.uploadText = uploadText;
-})(window);
+})();

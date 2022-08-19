@@ -3,3 +3,4 @@ client-secret.json
 data/
 fly.toml
 fly.alias
+node_modules

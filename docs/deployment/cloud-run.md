@@ -10,13 +10,13 @@ Another benefit of running LogPaste on Google Cloud Run is that you don't need t
 
 You'll need:
 
-* A Google Cloud Platform account
-* [Google Cloud SDK](https://cloud.google.com/sdk/docs/install)
-* Docker
+- A Google Cloud Platform account
+- [Google Cloud SDK](https://cloud.google.com/sdk/docs/install)
+- Docker
 
 ## Set your environment variables
 
-To begin, create environment variables for your GCP  settings:
+To begin, create environment variables for your GCP settings:
 
 ```bash
 GCP_PROJECT="your-gcp-project"  # Replace with your GCP project ID
