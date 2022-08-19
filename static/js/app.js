@@ -1,7 +1,7 @@
 "use strict";
 
-const Prism = window.Prism;
-const logpaste = window.logpaste;
+// Make ESLint happy.
+/* global Prism, logpaste */
 
 const baseUrl = document.location.toString().replace(/\/$/, "");
 
