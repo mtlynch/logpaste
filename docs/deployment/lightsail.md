@@ -4,9 +4,9 @@
 
 Amazon LightSail is an attractive option for launching LogPaste to production for two main reasons:
 
-* You can deploy entirely from Amazon's AWS dashboard, so you don't need to install any software.
-* You can view LogPaste's server logs directly from your AWS dashboard.
-* LightSail offers free TLS certificates for a custom domain.
+- You can deploy entirely from Amazon's AWS dashboard, so you don't need to install any software.
+- You can view LogPaste's server logs directly from your AWS dashboard.
+- LightSail offers free TLS certificates for a custom domain.
 
 The downside is that it doesn't fit within AWS's free tier, so hosting will cost $7 per month, as of this writing.
 
@@ -14,8 +14,8 @@ The downside is that it doesn't fit within AWS's free tier, so hosting will cost
 
 You'll need:
 
-* An Amazon AWS account
-* A storage bucket and [IAM credentials](https://aws.amazon.com/iam/) on Amazon S3 or an S3-compatible storage service.
+- An Amazon AWS account
+- A storage bucket and [IAM credentials](https://aws.amazon.com/iam/) on Amazon S3 or an S3-compatible storage service.
 
 ## Create a LogPaste container
 
@@ -45,21 +45,21 @@ Click "Set up deployment" and then choose "Specify a custom deployment."
 
 Enter the following information for your custom deployment:
 
-* Container name: Choose whatever name you want, such as `yourcompany-logpaste`
-* Image: `mtlynch/logpaste:0.2.5` (or whatever the [latest LogPaste version](https://github.com/mtlynch/logpaste/releases) is)
-* Launch command: *leave blank*
-* Environment variables
+- Container name: Choose whatever name you want, such as `yourcompany-logpaste`
+- Image: `mtlynch/logpaste:0.2.5` (or whatever the [latest LogPaste version](https://github.com/mtlynch/logpaste/releases) is)
+- Launch command: _leave blank_
+- Environment variables
 
-| Key                 | Value  |
-|---------------------|--------|
-| `PORT`              | 3001   |
-| `PS_BEHIND_PROXY`   | "y"    |
-| `DB_REPLICA_URL`    | The S3 URL of your S3 bucket |
-| `LITESTREAM_REGION`        | The region of your S3 bucket |
-| `LITESTREAM_ACCESS_KEY_ID` | The AWS access key ID from your IAM credentials |
+| Key                            | Value                                               |
+| ------------------------------ | --------------------------------------------------- |
+| `PORT`                         | 3001                                                |
+| `PS_BEHIND_PROXY`              | "y"                                                 |
+| `DB_REPLICA_URL`               | The S3 URL of your S3 bucket                        |
+| `LITESTREAM_REGION`            | The region of your S3 bucket                        |
+| `LITESTREAM_ACCESS_KEY_ID`     | The AWS access key ID from your IAM credentials     |
 | `LITESTREAM_SECRET_ACCESS_KEY` | The AWS secret access key from your IAM credentials |
 
-* Open ports: Choose port `3001`, protocol `HTTP`
+- Open ports: Choose port `3001`, protocol `HTTP`
 
 <kbd>
 

@@ -10,17 +10,17 @@ A minimalist web service for uploading and sharing log files.
 
 ## Features
 
-* Accept text uploads from command-line, JavaScript, and web UI
-* Simple to deploy
-  * Runs in a single Docker container
-  * Fits in the free tier of Heroku
-* Easy database management
-  * Syncs persistent data to any S3-compatible cloud storage provider
-* Customizable UI without changing source code
+- Accept text uploads from command-line, JavaScript, and web UI
+- Simple to deploy
+  - Runs in a single Docker container
+  - Fits in the free tier of Heroku
+- Easy database management
+  - Syncs persistent data to any S3-compatible cloud storage provider
+- Customizable UI without changing source code
 
 ## Demo
 
-* <http://logpaste.com>
+- <http://logpaste.com>
 
 ## Run LogPaste
 
@@ -68,8 +68,8 @@ docker run \
 
 Some notes:
 
-* Only run one Docker container for each S3 location
-  * LogPaste can't sync writes across multiple instances.
+- Only run one Docker container for each S3 location
+  - LogPaste can't sync writes across multiple instances.
 
 ### With custom site settings
 
@@ -100,51 +100,51 @@ docker run \
 
 ### Command-line flags
 
-| Flag | Meaning | Default Value |
-|------|---------|---------------|
-| `-title` | Title to display on homepage | `"LogPaste"` |
-| `-subtitle` | Subtitle to display on homepage | `"A minimalist, open-source debug log upload service"` |
-| `-footer` | Footer to display on homepage (may include HTML) | |
-| `-darkmode` | Whether to use dark mode theme on homepage | `false` |
-| `-showdocs` | Whether to display usage documentation on homepage | `true` |
-| `-perminutelimit` | Number of pastes to allow per IP per minute | `0` (no limit) |
+| Flag              | Meaning                                            | Default Value                                          |
+| ----------------- | -------------------------------------------------- | ------------------------------------------------------ |
+| `-title`          | Title to display on homepage                       | `"LogPaste"`                                           |
+| `-subtitle`       | Subtitle to display on homepage                    | `"A minimalist, open-source debug log upload service"` |
+| `-footer`         | Footer to display on homepage (may include HTML)   |                                                        |
+| `-darkmode`       | Whether to use dark mode theme on homepage         | `false`                                                |
+| `-showdocs`       | Whether to display usage documentation on homepage | `true`                                                 |
+| `-perminutelimit` | Number of pastes to allow per IP per minute        | `0` (no limit)                                         |
 
 ### Docker environment variables
 
 You can adjust behavior of the Docker container by passing these parameters with `docker run -e`:
 
-| Environment Variable | Meaning |
-|----------------------|---------|
-| `PORT`               | TCP port on which to listen for HTTP connections (defaults to 3001) |
-| `PS_BEHIND_PROXY`    | Set to `y` if running behind an HTTP proxy to improve logging |
-| `SITE_TITLE`         | Value to set the `-title` command-line flag |
-| `SITE_SUBTITLE`      | Value to set the `-subtitle` command-line flag |
-| `SITE_FOOTER`        | Value to set the `-footer` command-line flag |
-| `SITE_DARK_MODE`     | Value to set the `-darkmode` command-line flag |
-| `SITE_SHOW_DOCUMENTATION` | Value to set the `-showdocs` command-line flag |
-| `PER_MINUTE_LIMIT`   | Value to set the `-perminutelimit` command-line flag |
-| `DB_REPLICA_URL`     | S3 URL where you want to replicate the LogPaste datastore (e.g., `s3://mybucket.mydomain.com/db`) |
-| `LITESTREAM_REGION`         | AWS region where your S3 bucket is located |
-| `LITESTREAM_ACCESS_KEY_ID`  | AWS access key ID for an IAM role with access to the bucket where you want to replicate data. |
+| Environment Variable           | Meaning                                                                                           |
+| ------------------------------ | ------------------------------------------------------------------------------------------------- |
+| `PORT`                         | TCP port on which to listen for HTTP connections (defaults to 3001)                               |
+| `PS_BEHIND_PROXY`              | Set to `y` if running behind an HTTP proxy to improve logging                                     |
+| `SITE_TITLE`                   | Value to set the `-title` command-line flag                                                       |
+| `SITE_SUBTITLE`                | Value to set the `-subtitle` command-line flag                                                    |
+| `SITE_FOOTER`                  | Value to set the `-footer` command-line flag                                                      |
+| `SITE_DARK_MODE`               | Value to set the `-darkmode` command-line flag                                                    |
+| `SITE_SHOW_DOCUMENTATION`      | Value to set the `-showdocs` command-line flag                                                    |
+| `PER_MINUTE_LIMIT`             | Value to set the `-perminutelimit` command-line flag                                              |
+| `DB_REPLICA_URL`               | S3 URL where you want to replicate the LogPaste datastore (e.g., `s3://mybucket.mydomain.com/db`) |
+| `LITESTREAM_REGION`            | AWS region where your S3 bucket is located                                                        |
+| `LITESTREAM_ACCESS_KEY_ID`     | AWS access key ID for an IAM role with access to the bucket where you want to replicate data.     |
 | `LITESTREAM_SECRET_ACCESS_KEY` | AWS secret access key for an IAM role with access to the bucket where you want to replicate data. |
 
 ### Docker build args
 
 If you rebuild the Docker image from source, you can adjust the build behavior with `docker build --build-arg`:
 
-| Build Arg | Meaning | Default Value |
-| --------- | ------- | ------------- |
-| `litestream_version` | Version of [Litestream](https://litestream.io/) to use for data replication | `v0.3.9` |
+| Build Arg            | Meaning                                                                     | Default Value |
+| -------------------- | --------------------------------------------------------------------------- | ------------- |
+| `litestream_version` | Version of [Litestream](https://litestream.io/) to use for data replication | `v0.3.9`      |
 
 ## Deployment
 
 LogPaste is easy to deploy to cloud services. Here are some places it works well:
 
-* [fly.io](docs/deployment/fly.io.md) (recommended)
-* [Heroku](docs/deployment/heroku.md)
-* [Google Cloud Run](docs/deployment/cloud-run.md)
-* [Amazon LightSail](docs/deployment/lightsail.md)
+- [fly.io](docs/deployment/fly.io.md) (recommended)
+- [Heroku](docs/deployment/heroku.md)
+- [Google Cloud Run](docs/deployment/cloud-run.md)
+- [Amazon LightSail](docs/deployment/lightsail.md)
 
 ## Further reading
 
-* ["How Litestream Eliminated My Database Server for $0.03/month"](https://mtlynch.io/litestream/): Explains the motivation behind LogPaste
+- ["How Litestream Eliminated My Database Server for $0.03/month"](https://mtlynch.io/litestream/): Explains the motivation behind LogPaste
