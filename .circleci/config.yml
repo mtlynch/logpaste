@@ -23,6 +23,19 @@ jobs:
       - run:
           name: Run static analysis on bash scripts
           command: ./dev-scripts/check-bash
+  lint_sql:
+    docker:
+      - image: sqlfluff/sqlfluff:1.2.1
+        user: root
+    steps:
+      - checkout
+      - run:
+          name: Lint SQL files
+          command: |
+            sqlfluff lint \
+              --disable_progress_bar \
+              --dialect sqlite \
+              store/sqlite/migrations
   test:
     docker:
       - image: cimg/go:1.18.4
@@ -161,6 +174,10 @@ workflows:
           filters:
             tags:
               only: /.*/
+      - lint_sql:
+          filters:
+            tags:
+              only: /.*/
       - test:
           filters:
             tags:
@@ -181,6 +198,7 @@ workflows:
           requires:
             - check_whitespace
             - check_bash
+            - lint_sql
             - test
             - build_backend
             - e2e
@@ -194,6 +212,7 @@ workflows:
           requires:
             - check_whitespace
             - check_bash
+            - lint_sql
             - test
             - build_backend
             - e2e

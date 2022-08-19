@@ -23,24 +23,17 @@ func New() store.Store {
 		log.Fatalln(err)
 	}
 
-	initStmts := []string{
-		// The Litestream documentation recommends these pragmas.
-		// https://litestream.io/tips/
-		`PRAGMA busy_timeout = 5000`,
-		`PRAGMA synchronous = NORMAL`,
+	if _, err := ctx.Exec(`
+-- Apply Litestream recommendations: https://litestream.io/tips/
+PRAGMA busy_timeout = 5000;
+PRAGMA synchronous = NORMAL;
+PRAGMA journal_mode = WAL;
+PRAGMA wal_autocheckpoint = 0;
+		`); err != nil {
+		log.Fatalf("failed to set pragmas: %v", err)
+	}
 
-		`CREATE TABLE IF NOT EXISTS entries (
-			id TEXT PRIMARY KEY,
-			creation_time TEXT,
-			contents TEXT
-			)`,
-	}
-	for _, stmt := range initStmts {
-		_, err = ctx.Exec(stmt)
-		if err != nil {
-			log.Fatalln(err)
-		}
-	}
+	applyMigrations(ctx)
 
 	return &db{
 		ctx: ctx,
