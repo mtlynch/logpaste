@@ -68,7 +68,7 @@ if [[ "${IS_LITESTREAM_ENABLED}" == 'true' ]]; then
   /app/litestream restore -if-replica-exists -v "${DB_PATH}"
 
   # Let Litestream start LogPaste as a child process
-  exec /app/litestream replicate \
+  /app/litestream replicate \
     -exec "/app/server $(env_vars_to_flags)"
     "${DB_PATH}" \
     "${DB_REPLICA_URL}"
