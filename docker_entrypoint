@@ -11,15 +11,15 @@ env_vars_to_flags() {
 
   local flags=""
 
-  if [[ ! -z "${SITE_TITLE}" ]]; then
+  if [[ -n "${SITE_TITLE}" ]]; then
     flags+=" -title \"${SITE_TITLE}\""
   fi
 
-  if [[ ! -z "${SITE_SUBTITLE}" ]]; then
+  if [[ -n "${SITE_SUBTITLE}" ]]; then
     flags+=" -subtitle \"${SITE_SUBTITLE}\""
   fi
 
-  if [[ ! -z "${SITE_FOOTER}" ]]; then
+  if [[ -n "${SITE_FOOTER}" ]]; then
     flags+=" -footer \"${SITE_FOOTER}\""
   fi
 
@@ -31,7 +31,7 @@ env_vars_to_flags() {
     flags+=" -showdocs=false"
   fi
 
-  if [[ ! -z "${PER_MINUTE_LIMIT}" ]]; then
+  if [[ -n "${PER_MINUTE_LIMIT}" ]]; then
     flags+=" -perminutelimit \"${PER_MINUTE_LIMIT}\""
   fi
 
@@ -45,7 +45,7 @@ is_litestream_enabled() {
 
   local IS_ENABLED='false'
 
-  if [[ ! -z "${DB_REPLICA_URL}" ]]; then
+  if [[ -n "${DB_REPLICA_URL}" ]]; then
     IS_ENABLED='true';
   fi
 
@@ -54,7 +54,8 @@ is_litestream_enabled() {
   echo "${IS_ENABLED}"
 }
 
-readonly IS_LITESTREAM_ENABLED="$(is_litestream_enabled)"
+IS_LITESTREAM_ENABLED="$(is_litestream_enabled)"
+readonly IS_LITESTREAM_ENABLED
 
 # Echo commands to stdout.
 set -x
@@ -67,7 +68,7 @@ if [[ "${IS_LITESTREAM_ENABLED}" == 'true' ]]; then
   /app/litestream restore -if-replica-exists -v "${DB_PATH}"
 
   # Let Litestream start LogPaste as a child process
-  exec /app/litestream replicate \
+  /app/litestream replicate \
     -exec "/app/server $(env_vars_to_flags)"
     "${DB_PATH}" \
     "${DB_REPLICA_URL}"
