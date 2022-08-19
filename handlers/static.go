@@ -5,37 +5,41 @@ import (
 	"net/http"
 	"os"
 	"path"
+	"strconv"
+	"time"
 )
 
-const staticRootDir = "./static"
+// serveStaticResource serves any static file under the ./static directory.
+func serveStaticResource() http.HandlerFunc {
+	const staticRootDir = "./static"
+	fs := http.FileServer(http.Dir(staticRootDir))
 
-func (s defaultServer) serveStaticResource() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		fs := http.Dir(staticRootDir)
-		file, err := fs.Open(r.URL.Path)
-		if os.IsNotExist(err) {
-			http.Error(w, "not found", http.StatusNotFound)
-			return
-		} else if err != nil {
-			log.Printf("Failed to retrieve the file %s from the file system: %s", r.URL.Path, err)
-			http.Error(w, "Failed to find file: "+r.URL.Path, http.StatusInternalServerError)
-			return
-		}
-		defer file.Close()
-
-		stat, err := file.Stat()
-		if err != nil {
-			log.Printf("Failed to retrieve the information of %s from the file system: %s", r.URL.Path, err)
-			http.Error(w, "Failed to serve: "+r.URL.Path, http.StatusInternalServerError)
-			return
-		}
-		if stat.IsDir() {
-			log.Printf("client attempted to access a static directory: %s", r.URL.Path)
-			http.Error(w, "not found", http.StatusNotFound)
-			return
+		// Set cache headers
+		if mt, ok := lastModTime(path.Join(staticRootDir, r.URL.Path)); ok {
+			etag := "\"" + strconv.FormatInt(mt.UnixMilli(), 10) + "\""
+			w.Header().Set("Etag", etag)
+			w.Header().Set("Cache-Control", "max-age=3600")
 		}
 
-		// Otherwise, serve a static file.
-		http.ServeFile(w, r, path.Join(staticRootDir, r.URL.Path))
+		fs.ServeHTTP(w, r)
 	}
+}
+
+func lastModTime(path string) (time.Time, bool) {
+	file, err := os.Open(path)
+	if err != nil {
+		return time.Time{}, false
+	}
+	defer func() {
+		if err := file.Close(); err != nil {
+			log.Printf("failed to close file handle for %s: %v", path, err)
+		}
+	}()
+
+	stat, err := file.Stat()
+	if err != nil {
+		return time.Time{}, false
+	}
+	return stat.ModTime(), true
 }
