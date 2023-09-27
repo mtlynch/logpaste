@@ -23,10 +23,6 @@ env_vars_to_flags() {
     flags+=" -footer \"${SITE_FOOTER}\""
   fi
 
-  if [[ "${SITE_DARK_MODE}" == "true" ]]; then
-    flags+=" -darkmode"
-  fi
-
   if [[ "${SITE_SHOW_DOCUMENTATION}" == "false" ]]; then
     flags+=" -showdocs=false"
   fi
