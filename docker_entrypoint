@@ -62,7 +62,8 @@ set -x
 
 if [[ "${IS_LITESTREAM_ENABLED}" == 'true' ]]; then
 
-  export readonly DB_PATH="/app/data/store.db"
+  readonly DB_PATH="/app/data/store.db"
+  export DB_PATH
 
   # Restore database from S3.
   /app/litestream restore -if-replica-exists -v "${DB_PATH}"
