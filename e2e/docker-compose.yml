@@ -1,7 +1,7 @@
 version: "3.2"
 services:
   test_sftp:
-    image: emberstack/sftp:build-5.0.3
+    image: emberstack/sftp:build-5.1.66-amd64
     volumes:
       - ./sftp.json:/app/config/sftp.json:ro
   logpaste:
