@@ -4,14 +4,12 @@ import (
 	"net/http"
 )
 
-func notFound() http.HandlerFunc {
-	return func(w http.ResponseWriter, r *http.Request) {
-		http.Error(w, "Resource not found", http.StatusNotFound)
-	}
+func faviconHandler(w http.ResponseWriter, r *http.Request) {
+	http.ServeFile(w, r, "static/images/favicon.ico")
 }
 
 func (s *defaultServer) routes() {
-	s.router.HandleFunc("/favicon.ico", notFound()).Methods(http.MethodGet)
+	s.router.HandleFunc("/favicon.ico", faviconHandler).Methods(http.MethodGet)
 	s.router.PathPrefix("/css/").HandlerFunc(serveStaticResource()).Methods(http.MethodGet)
 	s.router.PathPrefix("/js/").HandlerFunc(serveStaticResource()).Methods(http.MethodGet)
 	s.router.PathPrefix("/third-party/").HandlerFunc(serveStaticResource()).Methods(http.MethodGet)
