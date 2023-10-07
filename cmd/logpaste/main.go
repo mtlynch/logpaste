@@ -20,7 +20,6 @@ func main() {
 		"A minimalist, open-source debug log upload service",
 		"subtitle for the site")
 	footer := flag.String("footer", "", "custom page footer (can contain HTML)")
-	darkMode := flag.Bool("darkmode", false, "display homepage in dark mode")
 	showDocs := flag.Bool("showdocs",
 		true, "whether to display usage information on homepage")
 	perMinuteLimit := flag.Int("perminutelimit",
@@ -32,7 +31,6 @@ func main() {
 		Title:      *title,
 		Subtitle:   *subtitle,
 		FooterHTML: *footer,
-		DarkMode:   *darkMode,
 		ShowDocs:   *showDocs,
 	}, *perMinuteLimit).Router())
 	if os.Getenv("PS_BEHIND_PROXY") != "" {

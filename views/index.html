@@ -4,27 +4,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{{.Title}}</title>
-    <!-- prettier-ignore -->
-    {{ if .ShowDocs }}
-    <!-- prettier-ignore -->
-    {{ if .DarkMode }}
-    <link rel="stylesheet" type="text/css" href="/third-party/prism/dark.css" />
-    <!-- prettier-ignore -->
-    {{ else }}
-    <link
-      rel="stylesheet"
-      type="text/css"
-      href="/third-party/prism/default.css"
-    />
-    <!-- prettier-ignore -->
-    {{ end }}
-    {{ end }}
     <link rel="stylesheet" type="text/css" href="/css/style.css" />
-    {{ if .DarkMode }}
-    <link rel="stylesheet" type="text/css" href="/css/dark.css" />
-    {{ else }}
-    <link rel="stylesheet" type="text/css" href="/css/light.css" />
-    {{ end }}
   </head>
   <body>
     <div class="container">
