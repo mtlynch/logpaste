@@ -20,7 +20,7 @@
   "devDependencies": {
     "eslint": "^8.22.0",
     "eslint-plugin-cypress": "^2.12.1",
-    "prettier": "^2.7.1",
-    "prettier-plugin-go-template": "0.0.13"
+    "prettier": "3.0.3",
+    "prettier-plugin-go-template": "0.0.15"
   }
 }
