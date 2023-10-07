@@ -12,7 +12,7 @@ if (curlCmd) {
 echo "some text I want to upload" | \\
   curl -F '_=<-' ${baseUrl}`.trim(),
     Prism.languages.bash,
-    "bash"
+    "bash",
   );
 }
 
@@ -22,7 +22,7 @@ if (curlFileCmd) {
     `
 curl -F "_=@/path/to/file.txt" ${baseUrl}`.trim(),
     Prism.languages.bash,
-    "bash"
+    "bash",
   );
 }
 
@@ -40,7 +40,7 @@ logpaste.uploadText(text).then((id) => {
 </script>
     `.trim(),
     Prism.languages.javascript,
-    "javascript"
+    "javascript",
   );
 }
 
