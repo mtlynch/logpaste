@@ -105,7 +105,6 @@ docker run \
 | `-title`          | Title to display on homepage                       | `"LogPaste"`                                           |
 | `-subtitle`       | Subtitle to display on homepage                    | `"A minimalist, open-source debug log upload service"` |
 | `-footer`         | Footer to display on homepage (may include HTML)   |                                                        |
-| `-darkmode`       | Whether to use dark mode theme on homepage         | `false`                                                |
 | `-showdocs`       | Whether to display usage documentation on homepage | `true`                                                 |
 | `-perminutelimit` | Number of pastes to allow per IP per minute        | `0` (no limit)                                         |
 
@@ -120,7 +119,6 @@ You can adjust behavior of the Docker container by passing these parameters with
 | `SITE_TITLE`                   | Value to set the `-title` command-line flag                                                       |
 | `SITE_SUBTITLE`                | Value to set the `-subtitle` command-line flag                                                    |
 | `SITE_FOOTER`                  | Value to set the `-footer` command-line flag                                                      |
-| `SITE_DARK_MODE`               | Value to set the `-darkmode` command-line flag                                                    |
 | `SITE_SHOW_DOCUMENTATION`      | Value to set the `-showdocs` command-line flag                                                    |
 | `PER_MINUTE_LIMIT`             | Value to set the `-perminutelimit` command-line flag                                              |
 | `DB_REPLICA_URL`               | S3 URL where you want to replicate the LogPaste datastore (e.g., `s3://mybucket.mydomain.com/db`) |
