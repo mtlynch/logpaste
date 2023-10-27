@@ -59,8 +59,11 @@ jobs:
       - attach_workspace:
           at: ./
       - run:
-          name: Compile backend
+          name: Compile production backend
           command: dev-scripts/build-backend
+      - run:
+          name: Compile dev backend
+          command: dev-scripts/build-backend dev
   check_frontend:
     docker:
       - image: cimg/node:20.6.1
