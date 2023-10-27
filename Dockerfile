@@ -1,4 +1,4 @@
-FROM golang:1.18.4 as backend_builder
+FROM golang:1.21.1 as backend_builder
 
 WORKDIR /app
 
@@ -6,19 +6,13 @@ COPY go.* ./
 RUN go mod download
 
 COPY ./cmd /app/cmd
+COPY ./dev-scripts /app/dev-scripts
 COPY ./handlers /app/handlers
 COPY ./limit /app/limit
 COPY ./random /app/random
 COPY ./store /app/store
 
-RUN GOOS=linux GOARCH=amd64 \
-  go build \
-  -tags netgo \
-  -ldflags '-w -extldflags "-static"' \
-  -mod=readonly \
-  -v \
-  -o /app/server \
-  ./cmd/logpaste/main.go
+RUN TARGETPLATFORM="${TARGETPLATFORM}" ./dev-scripts/build-backend "prod"
 
 FROM debian:stable-20211011-slim AS litestream_downloader
 
@@ -39,7 +33,7 @@ FROM alpine:3.15
 
 RUN apk add --no-cache bash
 
-COPY --from=backend_builder /app/server /app/server
+COPY --from=backend_builder /app/bin/logpaste /app/logpaste
 COPY --from=litestream_downloader /litestream/litestream /app/litestream
 COPY ./docker_entrypoint /app/docker_entrypoint
 COPY ./litestream.yml /etc/litestream.yml
