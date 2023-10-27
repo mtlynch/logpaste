@@ -76,12 +76,13 @@ jobs:
           name: Check lint
           command: npm run lint
   e2e:
-    machine:
-      # Choose an explicit machine image so that we get the latest version of
-      # docker-compose.
-      image: ubuntu-2004:202010-01
+    docker:
+      - image: cimg/base:stable
     steps:
       - checkout
+      - setup_remote_docker:
+          version: 20.10.24
+          docker_layer_caching: true
       - run:
           name: Perform e2e tests.
           command: dev-scripts/run-e2e-tests
