@@ -114,7 +114,6 @@ jobs:
           name: Deploy logpaste to fly.io
           command: |
             "${HOME}/.fly/bin/flyctl" deploy \
-              --local-only \
               --env "SITE_FOOTER=<h2>Notice</h2><p>This is a demo instance. Uploads are wiped every few hours.</p>"
 
   build_docker_images:
