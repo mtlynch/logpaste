@@ -6,6 +6,7 @@ COPY go.* ./
 RUN go mod download
 
 COPY ./cmd /app/cmd
+COPY ./dev-scripts /app/dev-scripts
 COPY ./handlers /app/handlers
 COPY ./limit /app/limit
 COPY ./random /app/random
