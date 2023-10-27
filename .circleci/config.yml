@@ -82,7 +82,7 @@ jobs:
     machine:
       # Choose an explicit machine image so that we get the latest version of
       # docker-compose.
-      image: ubuntu-2004:202010-01
+      image: ubuntu-2204:2023.10.1
     steps:
       - checkout
       - run:
@@ -117,7 +117,6 @@ jobs:
           name: Deploy logpaste to fly.io
           command: |
             "${HOME}/.fly/bin/flyctl" deploy \
-              --local-only \
               --env "SITE_FOOTER=<h2>Notice</h2><p>This is a demo instance. Uploads are wiped every few hours.</p>"
 
   build_docker_images:
