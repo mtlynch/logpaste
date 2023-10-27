@@ -1,5 +1,5 @@
 {
-  description = "Dev environment for PicoShare";
+  description = "Dev environment for LogPaste";
 
   inputs = {
     flake-utils.url = "github:numtide/flake-utils";
