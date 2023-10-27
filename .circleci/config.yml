@@ -95,8 +95,9 @@ jobs:
       - store_artifacts:
           path: e2e/cypress/screenshots
   deploy:
-    machine:
-      image: ubuntu-2004:202010-01
+    docker:
+      - image: cimg/base:stable
+    resource_class: small
     environment:
       APP_NAME: logpaste-com
       # The flyctl changes too much to use a specific version, so use the latest for the
