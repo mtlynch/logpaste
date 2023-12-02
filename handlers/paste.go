@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
-	"io/ioutil"
 	"log"
 	"mime/multipart"
 	"net/http"
@@ -55,7 +54,7 @@ func (s defaultServer) pastePut() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Access-Control-Allow-Origin", "*")
 
-		bodyRaw, err := ioutil.ReadAll(http.MaxBytesReader(w, r.Body, MaxPasteCharacters))
+		bodyRaw, err := io.ReadAll(http.MaxBytesReader(w, r.Body, MaxPasteCharacters))
 		if err != nil {
 			log.Printf("Error reading body: %v", err)
 			http.Error(w, "can't read request body", http.StatusBadRequest)
@@ -172,7 +171,7 @@ func parsePasteFromMultipartFormFile(f *multipart.Form, w http.ResponseWriter) (
 		return "", false
 	}
 
-	body, err := ioutil.ReadAll(file)
+	body, err := io.ReadAll(file)
 	if err != nil {
 		log.Printf("failed to read form file: %v", err)
 		return "", false
