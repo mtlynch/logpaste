@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"log"
 	"os"
+	"path/filepath"
 	"time"
 
 	_ "github.com/mattn/go-sqlite3"
@@ -15,10 +16,9 @@ type db struct {
 	ctx *sql.DB
 }
 
-func New() store.Store {
-	dbDir := "data"
-	ensureDirExists(dbDir)
-	ctx, err := sql.Open("sqlite3", dbDir+"/store.db")
+func New(path string) store.Store {
+	ensureDirExists(filepath.Dir(path))
+	ctx, err := sql.Open("sqlite3", path)
 	if err != nil {
 		log.Fatalln(err)
 	}

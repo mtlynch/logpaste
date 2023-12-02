@@ -15,7 +15,7 @@ type Server interface {
 func New(sp SiteProperties, perMinuteLimit int) Server {
 	s := defaultServer{
 		router:        mux.NewRouter(),
-		store:         sqlite.New(),
+		store:         sqlite.New("data/store.db"),
 		siteProps:     sp,
 		ipRateLimiter: limit.New(perMinuteLimit),
 	}

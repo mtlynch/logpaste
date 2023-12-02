@@ -10,35 +10,11 @@ import (
 	"testing"
 
 	"github.com/gorilla/mux"
-	"github.com/mtlynch/logpaste/store"
+	"github.com/mtlynch/logpaste/store/test_sqlite"
 )
 
-type mockStore struct {
-	entries map[string]string
-}
-
-func (ds mockStore) GetEntry(id string) (string, error) {
-	if contents, ok := ds.entries[id]; ok {
-		return contents, nil
-	}
-	return "", store.EntryNotFoundError{ID: id}
-}
-
-func (ds *mockStore) InsertEntry(id string, contents string) error {
-	ds.entries[id] = contents
-	return nil
-}
-
-func (ds *mockStore) Reset() {
-	ds.entries = make(map[string]string)
-}
-
 func TestPasteGet(t *testing.T) {
-	ds := mockStore{
-		entries: map[string]string{
-			"12345678": "dummy entry",
-		},
-	}
+	ds := test_sqlite.New()
 	router := mux.NewRouter()
 	s := defaultServer{
 		store:  &ds,
@@ -124,9 +100,7 @@ func TestPastePut(t *testing.T) {
 		},
 	} {
 		t.Run(tt.description, func(t *testing.T) {
-			ds := mockStore{
-				entries: make(map[string]string),
-			}
+			ds := test_sqlite.New()
 			router := mux.NewRouter()
 			s := defaultServer{
 				store:  &ds,
@@ -167,15 +141,6 @@ func TestPastePut(t *testing.T) {
 }
 
 func TestPastePost(t *testing.T) {
-	ds := mockStore{
-		entries: make(map[string]string),
-	}
-	router := mux.NewRouter()
-	s := defaultServer{
-		store:  &ds,
-		router: router,
-	}
-	s.routes()
 	for _, tt := range []struct {
 		description      string
 		contentType      string
@@ -251,7 +216,13 @@ some data in a file
 		},
 	} {
 		t.Run(tt.description, func(t *testing.T) {
-			ds.Reset()
+			ds := test_sqlite.New()
+			router := mux.NewRouter()
+			s := defaultServer{
+				store:  &ds,
+				router: router,
+			}
+			s.routes()
 
 			req, err := http.NewRequest("POST", "/",
 				strings.NewReader(strings.ReplaceAll(tt.body, "\n", "\r\n")))
