@@ -17,8 +17,6 @@ import (
 	"github.com/mtlynch/logpaste/store"
 )
 
-const MaxPasteCharacters = 2 * 1000 * 1000
-
 type PastePutResponse struct {
 	Id string `json:"id"`
 }
@@ -55,7 +53,7 @@ func (s defaultServer) pastePut() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Access-Control-Allow-Origin", "*")
 
-		bodyRaw, err := ioutil.ReadAll(http.MaxBytesReader(w, r.Body, MaxPasteCharacters))
+		bodyRaw, err := ioutil.ReadAll(http.MaxBytesReader(w, r.Body, s.maxCharLimit))
 		if err != nil {
 			log.Printf("Error reading body: %v", err)
 			http.Error(w, "can't read request body", http.StatusBadRequest)
@@ -63,7 +61,7 @@ func (s defaultServer) pastePut() http.HandlerFunc {
 		}
 
 		body := string(bodyRaw)
-		if !validatePaste(body, w) {
+		if !validatePaste(body, w, s.maxCharLimit) {
 			return
 		}
 
@@ -88,13 +86,12 @@ func (s defaultServer) pastePut() http.HandlerFunc {
 
 func (s defaultServer) pastePost() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		r.Body = http.MaxBytesReader(w, r.Body, MaxPasteCharacters+1024)
-		if err := r.ParseMultipartForm(MaxPasteCharacters); err != nil {
+		r.Body = http.MaxBytesReader(w, r.Body, s.maxCharLimit+1024)
+		if err := r.ParseMultipartForm(s.maxCharLimit); err != nil {
 			log.Printf("failed to parse form: %v", err)
 			http.Error(w, "no valid multipart/form-data found", http.StatusBadRequest)
 			return
 		}
-
 		w.Header().Set("Access-Control-Allow-Origin", "*")
 
 		body, ok := parsePasteFromMultipartForm(r.MultipartForm, w)
@@ -104,7 +101,7 @@ func (s defaultServer) pastePost() http.HandlerFunc {
 			return
 		}
 
-		if !validatePaste(body, w) {
+		if !validatePaste(body, w, s.maxCharLimit) {
 			return
 		}
 
@@ -128,12 +125,12 @@ func generateEntryId() string {
 	return random.String(8)
 }
 
-func validatePaste(p string, w http.ResponseWriter) bool {
+func validatePaste(p string, w http.ResponseWriter, maxCharLimit int64) bool {
 	if len(strings.TrimSpace(p)) == 0 {
 		log.Print("Paste body was empty")
 		http.Error(w, "empty body", http.StatusBadRequest)
 		return false
-	} else if len(p) > MaxPasteCharacters {
+	} else if int64(len(p)) > maxCharLimit {
 		log.Printf("Paste body was too long: %d characters", len(p))
 		http.Error(w, "body too long", http.StatusBadRequest)
 		return false

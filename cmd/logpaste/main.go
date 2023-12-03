@@ -24,6 +24,7 @@ func main() {
 		true, "whether to display usage information on homepage")
 	perMinuteLimit := flag.Int("perminutelimit",
 		0, "number of pastes to allow per IP per minute (set to 0 to disable rate limiting)")
+	maxPasteMiB := flag.Int64("maxsize", 2, "max file size as MiB")
 
 	flag.Parse()
 
@@ -32,7 +33,7 @@ func main() {
 		Subtitle:   *subtitle,
 		FooterHTML: *footer,
 		ShowDocs:   *showDocs,
-	}, *perMinuteLimit).Router())
+	}, *perMinuteLimit, *maxPasteMiB).Router())
 	if os.Getenv("PS_BEHIND_PROXY") != "" {
 		h = gorilla.ProxyIPHeadersHandler(h)
 	}
