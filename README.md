@@ -107,6 +107,7 @@ docker run \
 | `-footer`         | Footer to display on homepage (may include HTML)   |                                                        |
 | `-showdocs`       | Whether to display usage documentation on homepage | `true`                                                 |
 | `-perminutelimit` | Number of pastes to allow per IP per minute        | `0` (no limit)                                         |
+| `-maxsize`        | Max file size users can upload                     | `512` (512 MiB)                                        |
 
 ### Docker environment variables
 
