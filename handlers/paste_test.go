@@ -13,6 +13,8 @@ import (
 	"github.com/mtlynch/logpaste/store"
 )
 
+const MaxPasteCharacters = 2 * 1024 * 1024
+
 type mockStore struct {
 	entries map[string]string
 }
@@ -41,8 +43,9 @@ func TestPasteGet(t *testing.T) {
 	}
 	router := mux.NewRouter()
 	s := defaultServer{
-		store:  &ds,
-		router: router,
+		store:        &ds,
+		router:       router,
+		maxCharLimit: MaxPasteCharacters,
 	}
 	s.routes()
 
@@ -129,8 +132,9 @@ func TestPastePut(t *testing.T) {
 			}
 			router := mux.NewRouter()
 			s := defaultServer{
-				store:  &ds,
-				router: router,
+				store:        &ds,
+				router:       router,
+				maxCharLimit: MaxPasteCharacters,
 			}
 			s.routes()
 
@@ -172,8 +176,9 @@ func TestPastePost(t *testing.T) {
 	}
 	router := mux.NewRouter()
 	s := defaultServer{
-		store:  &ds,
-		router: router,
+		store:        &ds,
+		router:       router,
+		maxCharLimit: MaxPasteCharacters,
 	}
 	s.routes()
 	for _, tt := range []struct {
