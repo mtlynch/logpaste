@@ -12,10 +12,7 @@ type Server interface {
 	Router() *mux.Router
 }
 
-const charactersPerMiB = 1024 * 1024
-
-func New(sp SiteProperties, perMinuteLimit int, maxPasteMiB int64) Server {
-	maxCharLimit := maxPasteMiB * charactersPerMiB
+func New(sp SiteProperties, perMinuteLimit int, maxCharLimit int64) Server {
 	s := defaultServer{
 		router:        mux.NewRouter(),
 		store:         sqlite.New(),

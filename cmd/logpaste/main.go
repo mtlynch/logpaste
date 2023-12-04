@@ -28,12 +28,15 @@ func main() {
 
 	flag.Parse()
 
+	const charactersPerMiB = 1024 * 1024
+	maxCharLimit := *maxPasteMiB * charactersPerMiB
+
 	h := gorilla.LoggingHandler(os.Stdout, handlers.New(handlers.SiteProperties{
 		Title:      *title,
 		Subtitle:   *subtitle,
 		FooterHTML: *footer,
 		ShowDocs:   *showDocs,
-	}, *perMinuteLimit, *maxPasteMiB).Router())
+	}, *perMinuteLimit, maxCharLimit).Router())
 	if os.Getenv("PS_BEHIND_PROXY") != "" {
 		h = gorilla.ProxyIPHeadersHandler(h)
 	}
