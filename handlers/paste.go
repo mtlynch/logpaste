@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
-	"io/ioutil"
 	"log"
 	"mime/multipart"
 	"net/http"
@@ -169,7 +168,7 @@ func parsePasteFromMultipartFormFile(f *multipart.Form, w http.ResponseWriter) (
 		return "", false
 	}
 
-	body, err := ioutil.ReadAll(file)
+	body, err := io.ReadAll(file)
 	if err != nil {
 		log.Printf("failed to read form file: %v", err)
 		return "", false

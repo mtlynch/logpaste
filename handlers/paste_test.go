@@ -3,7 +3,7 @@ package handlers
 import (
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"net/http/httptest"
 	"strings"
@@ -83,7 +83,7 @@ func TestPasteGet(t *testing.T) {
 			if w.Code != http.StatusOK {
 				return
 			}
-			bodyBytes, err := ioutil.ReadAll(w.Body)
+			bodyBytes, err := io.ReadAll(w.Body)
 			if err != nil {
 				t.Fatalf("failed to read HTTP response body: %v", err)
 			}
