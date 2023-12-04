@@ -6,36 +6,6 @@ set -e
 # Exit on unset variable.
 set -u
 
-env_vars_to_flags() {
-  set +u
-
-  local flags=""
-
-  if [[ -n "${SITE_TITLE}" ]]; then
-    flags+=" -title \"${SITE_TITLE}\""
-  fi
-
-  if [[ -n "${SITE_SUBTITLE}" ]]; then
-    flags+=" -subtitle \"${SITE_SUBTITLE}\""
-  fi
-
-  if [[ -n "${SITE_FOOTER}" ]]; then
-    flags+=" -footer \"${SITE_FOOTER}\""
-  fi
-
-  if [[ "${SITE_SHOW_DOCUMENTATION}" == "false" ]]; then
-    flags+=" -showdocs=false"
-  fi
-
-  if [[ -n "${PER_MINUTE_LIMIT}" ]]; then
-    flags+=" -perminutelimit \"${PER_MINUTE_LIMIT}\""
-  fi
-
-  set -u
-
-  echo "${flags}"
-}
-
 is_litestream_enabled() {
   set +ux
 
@@ -68,8 +38,9 @@ if [[ "${IS_LITESTREAM_ENABLED}" == 'true' ]]; then
   /app/litestream replicate \
     -exec "/app/logpaste $(env_vars_to_flags)"
     "${DB_PATH}" \
-    "${DB_REPLICA_URL}"
+    "${DB_REPLICA_URL}" \
+    "$@"
 else
   # Start server.
-  eval "/app/logpaste $(env_vars_to_flags)"
+  /app/logpaste "$@"
 fi
