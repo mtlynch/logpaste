@@ -53,7 +53,7 @@ func (s defaultServer) pastePut() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Access-Control-Allow-Origin", "*")
 
-		bodyRaw, err := ioutil.ReadAll(http.MaxBytesReader(w, r.Body, s.maxCharLimit))
+		bodyRaw, err := io.ReadAll(http.MaxBytesReader(w, r.Body, s.maxCharLimit))
 		if err != nil {
 			log.Printf("Error reading body: %v", err)
 			http.Error(w, "can't read request body", http.StatusBadRequest)
