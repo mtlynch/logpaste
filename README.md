@@ -76,12 +76,6 @@ Some notes:
 LogPaste offers some options to customize the text for your site. Here's an example that uses a custom title, subtitle, and footer:
 
 ```bash
-SITE_TITLE="My Cool Log Pasting Service"
-SITE_SUBTITLE="Upload all your logs for FooBar here"
-SITE_FOOTER="<h2>Notice</h2><p>Only cool users can share logs here.</p>"
-SITE_SHOW_DOCUMENTATION="false" # Hide usage information from homepage
-PER_MINUTE_LIMIT="5" # Allow only 5 pastes per minute per IP
-
 docker run \
   -e "PORT=3001" \
   -e "SITE_TITLE=${SITE_TITLE}" \
@@ -91,7 +85,12 @@ docker run \
   -e "PER_MINUTE_LIMIT=${PER_MINUTE_LIMIT}" \
   -p 3001:3001/tcp \
   --name logpaste \
-  mtlynch/logpaste
+  mtlynch/logpaste \
+  -title 'My Cool Log Pasting Service' \
+  -subtitle 'Upload all your logs for FooBar here' \
+  -footer '<h2>Notice</h2><p>Only cool users can share logs here.</p>' \
+  -showdocs false \
+  -perminutelimit 5
 ```
 
 ## Parameters
