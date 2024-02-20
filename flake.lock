@@ -18,6 +18,22 @@
         "type": "github"
       }
     },
+    "flyctl_dep": {
+      "locked": {
+        "lastModified": 1707099344,
+        "narHash": "sha256-TtKolIs+Fm3rleTJ3/mCv391c42KILDnZq0f8PxhSc4=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "0a254180b4cad6be45aa46dce896bdb8db5d2930",
+        "type": "github"
+      },
+      "original": {
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "0a254180b4cad6be45aa46dce896bdb8db5d2930",
+        "type": "github"
+      }
+    },
     "go_dep": {
       "locked": {
         "lastModified": 1694343207,
@@ -53,6 +69,7 @@
     "root": {
       "inputs": {
         "flake-utils": "flake-utils",
+        "flyctl_dep": "flyctl_dep",
         "go_dep": "go_dep",
         "nodejs_dep": "nodejs_dep",
         "shellcheck_dep": "shellcheck_dep",
