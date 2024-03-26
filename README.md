@@ -78,11 +78,6 @@ LogPaste offers some options to customize the text for your site. Here's an exam
 ```bash
 docker run \
   -e "PORT=3001" \
-  -e "SITE_TITLE=${SITE_TITLE}" \
-  -e "SITE_SUBTITLE=${SITE_SUBTITLE}" \
-  -e "SITE_FOOTER=${SITE_FOOTER}" \
-  -e "SITE_SHOW_DOCUMENTATION=${SITE_SHOW_DOCUMENTATION}" \
-  -e "PER_MINUTE_LIMIT=${PER_MINUTE_LIMIT}" \
   -p 3001:3001/tcp \
   --name logpaste \
   mtlynch/logpaste \
@@ -114,11 +109,6 @@ You can adjust behavior of the Docker container by passing these parameters with
 | ------------------------------ | ------------------------------------------------------------------------------------------------- |
 | `PORT`                         | TCP port on which to listen for HTTP connections (defaults to 3001)                               |
 | `PS_BEHIND_PROXY`              | Set to `y` if running behind an HTTP proxy to improve logging                                     |
-| `SITE_TITLE`                   | Value to set the `-title` command-line flag                                                       |
-| `SITE_SUBTITLE`                | Value to set the `-subtitle` command-line flag                                                    |
-| `SITE_FOOTER`                  | Value to set the `-footer` command-line flag                                                      |
-| `SITE_SHOW_DOCUMENTATION`      | Value to set the `-showdocs` command-line flag                                                    |
-| `PER_MINUTE_LIMIT`             | Value to set the `-perminutelimit` command-line flag                                              |
 | `DB_REPLICA_URL`               | S3 URL where you want to replicate the LogPaste datastore (e.g., `s3://mybucket.mydomain.com/db`) |
 | `LITESTREAM_REGION`            | AWS region where your S3 bucket is located                                                        |
 | `LITESTREAM_ACCESS_KEY_ID`     | AWS access key ID for an IAM role with access to the bucket where you want to replicate data.     |
