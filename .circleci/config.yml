@@ -1,8 +1,17 @@
 version: 2.1
+executors:
+  base:
+    docker:
+      - image: cimg/base:2024.02
+  go:
+    docker:
+      - image: cimg/go:1.21.1
+  node:
+    docker:
+      - image: cimg/node:20.6.1
 jobs:
   check_whitespace:
-    docker:
-      - image: cimg/base:2021.04
+    executor: base
     resource_class: small
     steps:
       - checkout
@@ -37,8 +46,7 @@ jobs:
               --dialect sqlite \
               store/sqlite/migrations
   test:
-    docker:
-      - image: cimg/go:1.21.1
+    executor: go
     steps:
       - checkout
       - attach_workspace:
@@ -52,8 +60,7 @@ jobs:
           name: Verify golang formatting
           command: dev-scripts/check-go-formatting
   build_backend:
-    docker:
-      - image: cimg/go:1.21.1
+    executor: go
     steps:
       - checkout
       - attach_workspace:
@@ -65,8 +72,7 @@ jobs:
           name: Compile dev backend
           command: dev-scripts/build-backend dev
   check_frontend:
-    docker:
-      - image: cimg/node:20.6.1
+    executor: node
     steps:
       - checkout
       - run:
@@ -95,8 +101,7 @@ jobs:
       - store_artifacts:
           path: e2e/cypress/screenshots
   deploy:
-    docker:
-      - image: cimg/base:stable
+    executor: base
     resource_class: small
     environment:
       APP_NAME: logpaste-com
@@ -120,10 +125,8 @@ jobs:
           command: |
             "${HOME}/.fly/bin/flyctl" deploy \
               --env "SITE_FOOTER=<h2>Notice</h2><p>This is a demo instance. Uploads are wiped every few hours.</p>"
-
   build_docker_images:
-    docker:
-      - image: cimg/base:stable
+    executor: base
     environment:
       BUILD_TARGETS: "linux/amd64"
     steps:
