@@ -196,7 +196,7 @@ func anyFileInForm(formFiles map[string][]*multipart.FileHeader) (multipart.File
 func baseURLFromRequest(r *http.Request) string {
 	var scheme string
 	// If we're running behind a proxy, assume that it's a TLS proxy.
-	if r.TLS != nil || os.Getenv("PS_BEHIND_PROXY") != "" {
+	if r.TLS != nil || os.Getenv("LP_BEHIND_PROXY") != "" {
 		scheme = "https"
 	} else {
 		scheme = "http"
