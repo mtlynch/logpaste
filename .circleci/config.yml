@@ -2,7 +2,7 @@ version: 2.1
 executors:
   base:
     docker:
-      - image: cimg/base:2024.03
+      - image: cimg/base:2024.02
   go:
     docker:
       - image: cimg/go:1.21.1
