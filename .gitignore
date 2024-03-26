@@ -9,3 +9,6 @@ node_modules
 .env.*
 # .env.example is an exception as it only contains dummy secrets.
 !.env.example
+
+# Compiled binaries
+bin/
