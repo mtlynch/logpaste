@@ -35,7 +35,7 @@ RUN apk add --no-cache bash
 
 COPY --from=backend_builder /app/bin/logpaste /app/logpaste
 COPY --from=litestream_downloader /litestream/litestream /app/litestream
-COPY ./docker_entrypoint /app/docker_entrypoint
+COPY ./docker-entrypoint /app/docker-entrypoint
 COPY ./litestream.yml /etc/litestream.yml
 COPY ./static /app/static
 COPY ./views /app/views
@@ -45,4 +45,4 @@ WORKDIR /app
 # Frequency that database snapshots are replicated.
 ENV DB_SYNC_INTERVAL="10s"
 
-ENTRYPOINT ["/app/docker_entrypoint"]
+ENTRYPOINT ["/app/docker-entrypoint"]
