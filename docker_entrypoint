@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # Exit build script on first failure.
 set -e
@@ -27,17 +27,27 @@ readonly IS_LITESTREAM_ENABLED
 set -x
 
 if [[ "${IS_LITESTREAM_ENABLED}" == 'true' ]]; then
+  /app/litestream version
+  echo "DB_REPLICA_URL=${DB_REPLICA_URL}"
 
-  readonly DB_PATH="/app/data/store.db"
+  readonly DB_PATH='/app/data/store.db'
+  # We need to export DB_PATH because litestream.yml references it.
   export DB_PATH
 
-  # Restore database from S3.
-  /app/litestream restore -if-replica-exists -v "${DB_PATH}"
+  if [[ -f "$DB_PATH" ]]; then
+    echo "Existing database is $(stat -c %s "${DB_PATH}") bytes"
+  else
+    echo "No existing database found"
+    # Restore database from remote storage.
+    /app/litestream restore -if-replica-exists -v "${DB_PATH}"
+  fi
 
   # Let Litestream start LogPaste as a child process
   /app/litestream replicate \
     -exec /app/logpaste "$@"
 else
+  echo "Starting without litestream"
+
   # Start server.
   /app/logpaste "$@"
 fi
