@@ -44,10 +44,7 @@ if [[ "${IS_LITESTREAM_ENABLED}" == 'true' ]]; then
 
   # Let Litestream start LogPaste as a child process
   /app/litestream replicate \
-    -exec "/app/logpaste $(env_vars_to_flags)"
-    "${DB_PATH}" \
-    "${DB_REPLICA_URL}" \
-    "$@"
+    -exec /app/logpaste "$@"
 else
   echo "Starting without litestream"
 
