@@ -36,8 +36,7 @@ if [[ "${IS_LITESTREAM_ENABLED}" == 'true' ]]; then
 
   # Let Litestream start LogPaste as a child process
   /app/litestream replicate \
-    -exec /app/logpaste \
-    "$@"
+    -exec /app/logpaste "$@"
 else
   # Start server.
   /app/logpaste "$@"
