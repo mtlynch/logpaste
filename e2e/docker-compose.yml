@@ -8,7 +8,7 @@ services:
     build:
       context: ../
     entrypoint: /app/e2e/wait-for-sftp.bash
-    command: ["test_sftp", "22", "--", "/app/docker_entrypoint"]
+    command: ["test_sftp", "22", "--", "/app/docker-entrypoint"]
     environment:
       - PORT=3333
       - DB_REPLICA_URL="sftp://dummyuser:dummypass@test_sftp"
