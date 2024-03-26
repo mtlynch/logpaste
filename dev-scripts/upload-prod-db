@@ -1,0 +1,43 @@
+#!/usr/bin/env bash
+
+set -ex
+
+# Change directory to repository root.
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
+readonly SCRIPT_DIR
+cd "${SCRIPT_DIR}/.."
+
+export DB_PATH="$1"
+
+set -u
+
+set +x
+# shellcheck disable=SC1091
+. .env.prod
+set -x
+
+export LITESTREAM_REGION
+export DB_REPLICA_URL
+export LITESTREAM_ACCESS_KEY_ID
+export LITESTREAM_SECRET_ACCESS_KEY
+
+if [[ -z "${DB_PATH}" ]]; then
+      echo "usage: upload-prod-db [db_path]" && exit 1
+fi
+
+read -pr "Really overwrite prod database? (y/N): " choice
+
+echo "Choice is ${choice}"
+
+if [[ $choice != "y" ]]; then
+  echo "Upload aborted"
+  exit 1
+fi
+
+flyctl scale count 0 --app "${FLY_APP_NAME}"
+
+echo "Replacing prod database"
+
+litestream replicate -config litestream.yml -exec "sleep 30"
+
+flyctl scale count 1 --app "${FLY_APP_NAME}"
