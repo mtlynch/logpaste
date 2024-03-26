@@ -84,7 +84,7 @@ docker run \
   -title 'My Cool Log Pasting Service' \
   -subtitle 'Upload all your logs for FooBar here' \
   -footer '<h2>Notice</h2><p>Only cool users can share logs here.</p>' \
-  -showdocs false \
+  -showdocs=false \
   -perminutelimit 5
 ```
 
