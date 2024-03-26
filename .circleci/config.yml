@@ -101,7 +101,7 @@ jobs:
       - store_artifacts:
           path: e2e/cypress/screenshots
   deploy:
-    executor: stable
+    executor: base
     resource_class: small
     environment:
       APP_NAME: logpaste-com
