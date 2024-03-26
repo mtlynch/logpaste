@@ -46,7 +46,7 @@ kill_timeout = 5
 
 [env]
   PORT = "3001"
-  PS_BEHIND_PROXY="yes"
+  LP_BEHIND_PROXY="yes"
 
 [build]
   image = "mtlynch/logpaste"

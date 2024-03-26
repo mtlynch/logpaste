@@ -108,7 +108,7 @@ You can adjust behavior of the Docker container by passing these parameters with
 | Environment Variable           | Meaning                                                                                           |
 | ------------------------------ | ------------------------------------------------------------------------------------------------- |
 | `PORT`                         | TCP port on which to listen for HTTP connections (defaults to 3001)                               |
-| `PS_BEHIND_PROXY`              | Set to `y` if running behind an HTTP proxy to improve logging                                     |
+| `LP_BEHIND_PROXY`              | Set to `y` if running behind an HTTP proxy to improve logging                                     |
 | `DB_REPLICA_URL`               | S3 URL where you want to replicate the LogPaste datastore (e.g., `s3://mybucket.mydomain.com/db`) |
 | `LITESTREAM_REGION`            | AWS region where your S3 bucket is located                                                        |
 | `LITESTREAM_ACCESS_KEY_ID`     | AWS access key ID for an IAM role with access to the bucket where you want to replicate data.     |
