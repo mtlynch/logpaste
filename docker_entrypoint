@@ -28,8 +28,7 @@ set -x
 
 if [[ "${IS_LITESTREAM_ENABLED}" == 'true' ]]; then
   /app/litestream version
-  echo "LITESTREAM_BUCKET=${LITESTREAM_BUCKET}"
-  echo "LITESTREAM_ENDPOINT=${LITESTREAM_ENDPOINT}"
+  echo "DB_REPLICA_URL=${DB_REPLICA_URL}"
 
   readonly DB_PATH='/app/data/store.db'
   # We need to export DB_PATH because litestream.yml references it.
