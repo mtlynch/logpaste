@@ -1,6 +1,11 @@
 client-secret.json
-.*.env
 data/
 fly.toml
 fly.alias
 node_modules
+
+# .env files contain secrets, so they should never be checked in to source
+# control.
+.env.*
+# .env.example is an exception as it only contains dummy secrets.
+!.env.example
