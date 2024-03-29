@@ -26,6 +26,9 @@ readonly IS_LITESTREAM_ENABLED
 # Echo commands to stdout.
 set -x
 
+
+LP_LAUNCH_CMD="/app/logpaste $*"
+
 if [[ "${IS_LITESTREAM_ENABLED}" == 'true' ]]; then
   /app/litestream version
   echo "DB_REPLICA_URL=${DB_REPLICA_URL}"
@@ -44,10 +47,10 @@ if [[ "${IS_LITESTREAM_ENABLED}" == 'true' ]]; then
 
   # Let Litestream start LogPaste as a child process
   /app/litestream replicate \
-    -exec /app/logpaste "$@"
+    -exec "${LP_LAUNCH_CMD}"
 else
   echo "Starting without litestream"
 
   # Start server.
-  /app/logpaste "$@"
+  eval "exec ${LP_LAUNCH_CMD}"
 fi
