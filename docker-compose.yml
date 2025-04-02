@@ -1,0 +1,52 @@
+services:
+  traefik:
+    image: traefik:v3.3
+    container_name: traefik
+    restart: always
+    ports:
+     - "80:80"
+     - "443:443"
+    command:
+     - "--providers.docker=true"
+     - "--providers.docker.exposedbydefault=false"
+     - "--entrypoints.web.address=:80"
+     - "--entrypoints.web.http.redirections.entrypoint.to=websecure"
+     - "--entrypoints.web.http.redirections.entrypoint.scheme=https"
+     - "--entrypoints.websecure.address=:443"
+     - "--certificatesresolvers.myresolver.acme.httpchallenge=true"
+     - "--certificatesresolvers.myresolver.acme.httpchallenge.entrypoint=web"
+     - "--certificatesresolvers.myresolver.acme.email=${EMAIL_ADDRESS}"
+     - "--certificatesresolvers.myresolver.acme.storage=/acme.json"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - /opt/traefik/acme.json:/acme.json
+    networks:
+      - web
+
+  logpaste-backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: logpaste-backend:latest
+    container_name: logpaste_backend
+    ports:
+      - "3001:3001"
+    environment:
+      - DB_SYNC_INTERVAL=10s
+    volumes:
+      - ./static:/app/static
+      - ./views:/app/views
+      - ./litestream.yml:/etc/litestream.yml
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.backend.rule=Host(`${DOMAIN_NAME}`)"
+      - "traefik.http.routers.backend.entrypoints=websecure"
+      - "traefik.http.routers.backend.tls=true"
+      - "traefik.http.routers.backend.tls.certresolver=myresolver"
+      - "traefik.http.services.backend.loadbalancer.server.port=3001"
+    networks:
+      - web
+
+networks:
+  web:
+    driver: bridge
