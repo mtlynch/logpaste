@@ -1,10 +1,13 @@
 ### Why serve logpaste with Traefik?
+
 In LogPaste, it handles HTTP(S) traffic, and manages SSL certificates with Let's Encrypt, ensuring secure connections. This simplifies deployment by automating routing and SSL setup.
 
 **Create `acme.json` file**:
-   - Before starting the services, create an empty `acme.json` file in `/opt/traefik/` with proper permissions (`chmod 600 acme.json`). This file will store the SSL certificates.
+
+- Before starting the services, create an empty `acme.json` file in `/opt/traefik/` with proper permissions (`chmod 600 acme.json`). This file will store the SSL certificates.
 
 ### Docker Compose
+
 The `docker-compose.yml` file already includes the required services for Traefik and LogPaste, with proper labels for routing and SSL.
 
 ```bash
@@ -13,6 +16,7 @@ docker-compose up -d
 ```
 
 ### Docker Compose Environment Variables for Traefik and LogPaste
+
 To configure Traefik for LogPaste within Docker Compose, set the following environment variables:
 
 ```bash
