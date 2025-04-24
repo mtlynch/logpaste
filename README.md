@@ -75,10 +75,10 @@ Some notes:
 
 ### Command-line flags
 
-| Flag              | Meaning                                            | Default Value                                          |
-| ----------------- | -------------------------------------------------- | ------------------------------------------------------ |
-| `-perminutelimit` | Number of pastes to allow per IP per minute        | `0` (no limit)                                         |
-| `-maxsize`        | Max file size users can upload                     | `2` (2 MiB)                                            |
+| Flag              | Meaning                                     | Default Value  |
+| ----------------- | ------------------------------------------- | -------------- |
+| `-perminutelimit` | Number of pastes to allow per IP per minute | `0` (no limit) |
+| `-maxsize`        | Max file size users can upload              | `2` (2 MiB)    |
 
 ### Docker environment variables
 
