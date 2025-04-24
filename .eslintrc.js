@@ -14,5 +14,5 @@ module.exports = {
       { allow: ["error"] },
     ],
   },
-  ignorePatterns: ["static/third-party/**/*.js"],
+  ignorePatterns: ["handlers/static/third-party/**/*.js"],
 };
