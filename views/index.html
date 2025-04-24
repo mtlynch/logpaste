@@ -3,12 +3,12 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>{{ .Title }}</title>
+    <title>LogPaste}</title>
     <link rel="stylesheet" type="text/css" href="/css/style.css" />
   </head>
   <body>
     <div class="container">
-      <h1>{{ .Title }}</h1>
+      <h1>LogPaste</h1>
 
       <p class="subtitle">{{ .Subtitle }}</p>
 
@@ -28,28 +28,27 @@
         <p id="form-upload-error">&nbsp;</p>
       </div>
 
-        <div class="documentation">
-          <div class="bash-example">
-            <h2>Upload from the command line</h2>
-            <p>Upload text:</p>
-            <pre><code id="curl-cmd" class="language-bash"></code></pre>
+      <div class="documentation">
+        <div class="bash-example">
+          <h2>Upload from the command line</h2>
+          <p>Upload text:</p>
+          <pre><code id="curl-cmd" class="language-bash"></code></pre>
 
-            <p>Upload a file's contents:</p>
-            <pre><code id="curl-file-cmd" class="language-bash"></code></pre>
-          </div>
-
-          <div class="js-example">
-            <h2>Upload via JavaScript</h2>
-
-            <pre><code id="js-example" class="language-javascript"></code></pre>
-          </div>
+          <p>Upload a file's contents:</p>
+          <pre><code id="curl-file-cmd" class="language-bash"></code></pre>
         </div>
 
+        <div class="js-example">
+          <h2>Upload via JavaScript</h2>
+
+          <pre><code id="js-example" class="language-javascript"></code></pre>
+        </div>
+      </div>
 
       <div id="more-info">
         <h2>Source code</h2>
         <p>
-          {{ .Title }}'s source is available under the MIT License and easy to
+          LogPaste's source is available under the MIT License and easy to
           self-host.
         </p>
         <ul>
@@ -61,16 +60,12 @@
         </ul>
       </div>
 
-      {{ if .FooterHTML }}
-        <div class="footer">
-          {{ .FooterHTML }}
-        </div>
-      {{ end }}
+      <div class="footer">
+        {{ .FooterHTML }}
+      </div>
     </div>
 
-    {{ if .ShowDocs }}
-      <script src="/third-party/prism/prism.js" data-manual></script>
-    {{ end }}
+    <script src="/third-party/prism/prism.js" data-manual></script>
     <script src="/js/logpaste.js"></script>
     <script src="/js/app.js"></script>
   </body>
