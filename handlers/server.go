@@ -24,13 +24,6 @@ func New(sp SiteProperties, perMinuteLimit int, maxCharLimit int64) Server {
 	return s
 }
 
-type SiteProperties struct {
-	Title      string
-	Subtitle   string
-	FooterHTML string
-	ShowDocs   bool
-}
-
 type defaultServer struct {
 	router        *mux.Router
 	store         store.Store

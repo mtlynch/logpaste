@@ -71,33 +71,12 @@ Some notes:
 - Only run one Docker container for each S3 location
   - LogPaste can't sync writes across multiple instances.
 
-### With custom site settings
-
-LogPaste offers some options to customize the text for your site. Here's an example that uses a custom title, subtitle, and footer:
-
-```bash
-docker run \
-  -e "PORT=3001" \
-  -p 3001:3001/tcp \
-  --name logpaste \
-  mtlynch/logpaste \
-  -title 'My Cool Log Pasting Service' \
-  -subtitle 'Upload all your logs for FooBar here' \
-  -footer '<h2>Notice</h2><p>Only cool users can share logs here.</p>' \
-  -showdocs=false \
-  -perminutelimit 5
-```
-
 ## Parameters
 
 ### Command-line flags
 
 | Flag              | Meaning                                            | Default Value                                          |
 | ----------------- | -------------------------------------------------- | ------------------------------------------------------ |
-| `-title`          | Title to display on homepage                       | `"LogPaste"`                                           |
-| `-subtitle`       | Subtitle to display on homepage                    | `"A minimalist, open-source debug log upload service"` |
-| `-footer`         | Footer to display on homepage (may include HTML)   |                                                        |
-| `-showdocs`       | Whether to display usage documentation on homepage | `true`                                                 |
 | `-perminutelimit` | Number of pastes to allow per IP per minute        | `0` (no limit)                                         |
 | `-maxsize`        | Max file size users can upload                     | `2` (2 MiB)                                            |
 
