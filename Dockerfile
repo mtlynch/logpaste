@@ -37,7 +37,6 @@ COPY --from=backend_builder /app/bin/logpaste /app/logpaste
 COPY --from=litestream_downloader /litestream/litestream /app/litestream
 COPY ./docker-entrypoint /app/docker-entrypoint
 COPY ./litestream.yml /etc/litestream.yml
-COPY ./static /app/static
 COPY ./views /app/views
 
 WORKDIR /app
