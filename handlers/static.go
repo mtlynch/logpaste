@@ -29,6 +29,14 @@ func GetStaticFilesHandler() http.Handler {
 		panic(err)
 	}
 
-	// Wrap the file server with our caching middleware
-	return CachingFileServer(http.FileServer(http.FS(staticFS)))
+	// Create a file server for the static files
+	fileServer := http.FileServer(http.FS(staticFS))
+
+	// Strip the /static/ prefix from the request path before passing to the file server
+	// This is necessary because the URL path includes /static/ but our embedded filesystem
+	// already has the files under the "static" directory
+	handler := http.StripPrefix("/static/", fileServer)
+
+	// Wrap the handler with our caching middleware
+	return CachingFileServer(handler)
 }
