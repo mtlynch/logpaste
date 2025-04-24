@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 #
 # Create a fly.toml file to deploy logpaste to fly.io.
 
