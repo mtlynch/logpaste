@@ -4,7 +4,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{{ .Title }}</title>
-    <link rel="stylesheet" type="text/css" href="/css/style.css" />
+    <link rel="stylesheet" type="text/css" href="/static/css/style.css" />
   </head>
   <body>
     <div class="container">
@@ -71,9 +71,9 @@
     </div>
 
     {{ if .ShowDocs }}
-      <script src="/third-party/prism/prism.js" data-manual></script>
+      <script src="/static/third-party/prism/prism.js" data-manual></script>
     {{ end }}
-    <script src="/js/logpaste.js"></script>
-    <script src="/js/app.js"></script>
+    <script src="/static/js/logpaste.js"></script>
+    <script src="/static/js/app.js"></script>
   </body>
 </html>
