@@ -27,7 +27,11 @@ readonly IS_LITESTREAM_ENABLED
 set -x
 
 
-LP_LAUNCH_CMD="/app/logpaste $*"
+# Ensure that arguments stay quoted.
+LP_LAUNCH_CMD="/app/logpaste"
+for arg in "$@"; do
+  LP_LAUNCH_CMD="${LP_LAUNCH_CMD} $(printf '%q' "$arg")"
+done
 
 if [[ "${IS_LITESTREAM_ENABLED}" == 'true' ]]; then
   /app/litestream version
