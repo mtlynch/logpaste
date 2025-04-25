@@ -122,10 +122,7 @@ jobs:
           command: sed '/^\[build\]/d' fly.toml | sed '/^ *image =/d'
       - run:
           name: Add a custom footer to the demo site.
-          command: |
-            echo '' >> fly.toml
-            echo '[experimental]' >> fly.toml
-            echo '  cmd = ["-footer", "<h2>Notice</h2><p>This is a demo instance. Uploads are wiped every few hours.</p>"]' >> fly.toml
+          command: printf '\n[experimental]\n  cmd = ["-footer", "'\''<h2>Notice</h2><p>This is a demo instance. Uploads are wiped every few hours.</p>'\''"]\n' >> fly.toml
       - run:
           name: Deploy logpaste to fly.io
           command: |
