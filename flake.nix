@@ -5,61 +5,69 @@
     flake-utils.url = "github:numtide/flake-utils";
 
     # 1.21.1 release
-    go_dep.url = "github:NixOS/nixpkgs/78058d810644f5ed276804ce7ea9e82d92bee293";
+    go-nixpkgs.url = "github:NixOS/nixpkgs/78058d810644f5ed276804ce7ea9e82d92bee293";
 
     # 3.44.2 release
-    sqlite_dep.url = "github:NixOS/nixpkgs/5ad9903c16126a7d949101687af0aa589b1d7d3d";
+    sqlite-nixpkgs.url = "github:NixOS/nixpkgs/5ad9903c16126a7d949101687af0aa589b1d7d3d";
 
     # 20.6.1 release
-    nodejs_dep.url = "github:NixOS/nixpkgs/78058d810644f5ed276804ce7ea9e82d92bee293";
+    nodejs-nixpkgs.url = "github:NixOS/nixpkgs/78058d810644f5ed276804ce7ea9e82d92bee293";
 
     # 0.9.0 release
-    shellcheck_dep.url = "github:NixOS/nixpkgs/8b5ab8341e33322e5b66fb46ce23d724050f6606";
+    shellcheck-nixpkgs.url = "github:NixOS/nixpkgs/8b5ab8341e33322e5b66fb46ce23d724050f6606";
 
     # 1.2.1 release
-    sqlfluff_dep.url = "github:NixOS/nixpkgs/7cf5ccf1cdb2ba5f08f0ac29fc3d04b0b59a07e4";
+    sqlfluff-nixpkgs.url = "github:NixOS/nixpkgs/7cf5ccf1cdb2ba5f08f0ac29fc3d04b0b59a07e4";
 
     # 0.1.147 release
-    flyctl_dep.url = "github:NixOS/nixpkgs/0a254180b4cad6be45aa46dce896bdb8db5d2930";
+    flyctl-nixpkgs.url = "github:NixOS/nixpkgs/0a254180b4cad6be45aa46dce896bdb8db5d2930";
 
     # 0.3.13 release
-    litestream_dep.url = "github:NixOS/nixpkgs/a343533bccc62400e8a9560423486a3b6c11a23b";
+    litestream-nixpkgs.url = "github:NixOS/nixpkgs/a343533bccc62400e8a9560423486a3b6c11a23b";
   };
 
-  outputs = { self, flake-utils, go_dep, sqlite_dep, nodejs_dep, shellcheck_dep, sqlfluff_dep, flyctl_dep, litestream_dep }@inputs :
-    flake-utils.lib.eachDefaultSystem (system:
-    let
-      go_dep = inputs.go_dep.legacyPackages.${system};
-      sqlite_dep = inputs.sqlite_dep.legacyPackages.${system};
-      nodejs_dep = inputs.nodejs_dep.legacyPackages.${system};
-      shellcheck_dep = inputs.shellcheck_dep.legacyPackages.${system};
-      sqlfluff_dep = inputs.sqlfluff_dep.legacyPackages.${system};
-      flyctl_dep = inputs.flyctl_dep.legacyPackages.${system};
-      litestream_dep = inputs.litestream_dep.legacyPackages.${system};
-    in
-    {
-      devShells.default = go_dep.mkShell.override { stdenv = go_dep.pkgsStatic.stdenv; } {
+  outputs = {
+    self,
+    flake-utils,
+    go-nixpkgs,
+    sqlite-nixpkgs,
+    nodejs-nixpkgs,
+    shellcheck-nixpkgs,
+    sqlfluff-nixpkgs,
+    flyctl-nixpkgs,
+    litestream-nixpkgs,
+  } @ inputs:
+    flake-utils.lib.eachDefaultSystem (system: let
+      gopkg = go-nixpkgs.legacyPackages.${system};
+      go = gopkg.go_1_21;
+      sqlite = sqlite-nixpkgs.legacyPackages.${system}.sqlite;
+      nodejs = nodejs-nixpkgs.legacyPackages.${system}.nodejs_20;
+      shellcheck = shellcheck-nixpkgs.legacyPackages.${system}.shellcheck;
+      sqlfluff = sqlfluff-nixpkgs.legacyPackages.${system}.sqlfluff;
+      flyctl = flyctl-nixpkgs.legacyPackages.${system}.flyctl;
+      litestream = litestream-nixpkgs.legacyPackages.${system}.litestream;
+    in {
+      devShells.default = gopkg.mkShell.override { stdenv = gopkg.pkgsStatic.stdenv; } {
         packages = [
-          go_dep.gotools
-          go_dep.gopls
-          go_dep.go-outline
-          go_dep.gocode
-          go_dep.gopkgs
-          go_dep.gocode-gomod
-          go_dep.godef
-          go_dep.golint
-          go_dep.go_1_21
-          sqlite_dep.sqlite
-          nodejs_dep.nodejs_20
-          shellcheck_dep.shellcheck
-          sqlfluff_dep.sqlfluff
-          flyctl_dep.flyctl
-          litestream_dep.litestream
+          gopkg.gotools
+          gopkg.gopls
+          gopkg.go-outline
+          gopkg.gocode
+          gopkg.gopkgs
+          gopkg.gocode-gomod
+          gopkg.godef
+          gopkg.golint
+          go
+          sqlite
+          nodejs
+          shellcheck
+          sqlfluff
+          flyctl
+          litestream
         ];
 
         shellHook = ''
-          GOROOT="$(dirname $(dirname $(which go)))/share/go"
-          export GOROOT
+          export GOROOT="${go}/share/go"
 
           echo "shellcheck" "$(shellcheck --version | grep '^version:')"
           sqlfluff --version
@@ -71,5 +79,7 @@
           go version
         '';
       };
+
+      formatter = gopkg.alejandra;
     });
 }
