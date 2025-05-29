@@ -29,6 +29,7 @@ type SiteProperties struct {
 	Subtitle   string
 	FooterHTML string
 	ShowDocs   bool
+	Prefix string
 }
 
 type defaultServer struct {

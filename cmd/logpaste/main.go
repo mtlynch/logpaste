@@ -22,6 +22,7 @@ func main() {
 	footer := flag.String("footer", "", "custom page footer (can contain HTML)")
 	showDocs := flag.Bool("showdocs",
 		true, "whether to display usage information on homepage")
+	prefix := flag.String("prefix", "", "prefix in pathes to css and js files in static's main index.html")
 	perMinuteLimit := flag.Int("perminutelimit",
 		0, "number of pastes to allow per IP per minute (set to 0 to disable rate limiting)")
 	maxPasteMiB := flag.Int64("maxsize", 2, "max file size as MiB")
@@ -36,6 +37,7 @@ func main() {
 		Subtitle:   *subtitle,
 		FooterHTML: *footer,
 		ShowDocs:   *showDocs,
+		Prefix:     *prefix,
 	}, *perMinuteLimit, maxCharLimit).Router())
 	if os.Getenv("LP_BEHIND_PROXY") != "" {
 		h = gorilla.ProxyIPHeadersHandler(h)

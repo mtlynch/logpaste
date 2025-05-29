@@ -3,7 +3,8 @@
 // Make ESLint happy.
 /* global Prism, logpaste */
 
-const baseUrl = document.location.origin;
+const baseUrl = document.location.href;
+const currentUrl = document.location.pathname;
 
 const curlCmd = document.getElementById("curl-cmd");
 if (curlCmd) {
@@ -30,11 +31,11 @@ const jsExample = document.getElementById("js-example");
 if (jsExample) {
   jsExample.innerHTML = Prism.highlight(
     `
-<script src="${baseUrl}/js/logpaste.js"></script>
+<script src="${baseUrl}js/logpaste.js"></script>
 <script>
 const text = "some text I want to upload";
 
-logpaste.uploadText(text).then((id) => {
+logpaste.uploadText(text,${baseUrl}).then((id) => {
   console.log(\`uploaded to ${baseUrl}/\${id}\`);
 });
 </script>
@@ -57,7 +58,7 @@ function displayResult(resultId) {
   resultDiv.appendChild(header);
 
   const anchor = document.createElement("a");
-  anchor.href = `/${resultId}`;
+  anchor.href = `${currentUrl}${resultId}`;
   anchor.innerText = resultUrl;
   resultDiv.appendChild(anchor);
 
@@ -87,7 +88,7 @@ function displayError(error) {
 document.getElementById("upload").addEventListener("click", () => {
   const textToUpload = document.getElementById("upload-textarea").value;
   logpaste
-    .uploadText(textToUpload)
+    .uploadText(textToUpload,baseUrl)
     .then((id) => {
       displayResult(id);
     })
