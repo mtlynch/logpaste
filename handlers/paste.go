@@ -201,5 +201,5 @@ func baseURLFromRequest(r *http.Request) string {
 	} else {
 		scheme = "http"
 	}
-	return fmt.Sprintf("%s://%s", scheme, r.Host)
+	return fmt.Sprintf("%s://%s%s", scheme, r.Host, os.Getenv("LP_PREFIX"))
 }

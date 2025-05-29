@@ -2,7 +2,7 @@
 
 (function () {
   function uploadText(text, baseUrl = "") {
-    return fetch(baseUrl + "/", {
+    return fetch(baseUrl, {
       method: "PUT",
       body: text,
     })
