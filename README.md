@@ -92,14 +92,15 @@ docker run \
 
 ### Command-line flags
 
-| Flag              | Meaning                                            | Default Value                                          |
-| ----------------- | -------------------------------------------------- | ------------------------------------------------------ |
-| `-title`          | Title to display on homepage                       | `"LogPaste"`                                           |
-| `-subtitle`       | Subtitle to display on homepage                    | `"A minimalist, open-source debug log upload service"` |
-| `-footer`         | Footer to display on homepage (may include HTML)   |                                                        |
-| `-showdocs`       | Whether to display usage documentation on homepage | `true`                                                 |
-| `-perminutelimit` | Number of pastes to allow per IP per minute        | `0` (no limit)                                         |
-| `-maxsize`        | Max file size users can upload                     | `2` (2 MiB)                                            |
+| Flag              | Meaning                                             | Default Value                                          |
+| ----------------- | --------------------------------------------------- | ------------------------------------------------------ |
+| `-title`          | Title to display on homepage                        | `"LogPaste"`                                           |
+| `-subtitle`       | Subtitle to display on homepage                     | `"A minimalist, open-source debug log upload service"` |
+| `-footer`         | Footer to display on homepage (may include HTML)    |                                                        |
+| `-showdocs`       | Whether to display usage documentation on homepage  | `true`                                                 |
+| `-perminutelimit` | Number of pastes to allow per IP per minute         | `0` (no limit)                                         |
+| `-maxsize`        | Max file size users can upload                      | `2` (2 MiB)                                            |
+| `-prefix`         | Set prefix path for homepage(i.e. `ex.com/prefix/`) | `` (empty string)                                      |
 
 ### Docker environment variables
 
@@ -113,6 +114,7 @@ You can adjust behavior of the Docker container by passing these parameters with
 | `LITESTREAM_REGION`            | AWS region where your S3 bucket is located                                                        |
 | `LITESTREAM_ACCESS_KEY_ID`     | AWS access key ID for an IAM role with access to the bucket where you want to replicate data.     |
 | `LITESTREAM_SECRET_ACCESS_KEY` | AWS secret access key for an IAM role with access to the bucket where you want to replicate data. |
+| `LP_PREFIX`                    | Set prefix path for main functionality (i.e. via curl you'll get `https://ex.com/prefix/id`       |
 
 ### Docker build args
 
