@@ -4,6 +4,8 @@ fly.toml
 fly.alias
 node_modules
 .direnv/
+e2e-results/
+playwright-report/
 
 # .env files contain secrets, so they should never be checked in to source
 # control.

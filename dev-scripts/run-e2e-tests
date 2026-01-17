@@ -19,6 +19,6 @@ set -u
 cd e2e
 COMPOSE_DOCKER_CLI_BUILD=1 DOCKER_BUILDKIT=1 \
   docker-compose up \
-    --exit-code-from cypress \
+    --exit-code-from playwright \
     --abort-on-container-exit \
     ${EXTRA_FLAGS}
