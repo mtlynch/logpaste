@@ -19,7 +19,11 @@ services:
   playwright:
     image: "mcr.microsoft.com/playwright:v1.57.0"
     command:
-      ["npx", "playwright", "test", "--config", "/app/playwright.config.js"]
+      [
+        "bash",
+        "-lc",
+        "npm ci && npx playwright test --config /app/playwright.config.js",
+      ]
     depends_on:
       - logpaste
     environment:
