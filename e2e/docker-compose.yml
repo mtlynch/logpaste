@@ -16,13 +16,18 @@ services:
       - ./:/app/e2e
     depends_on:
       - test_sftp
-  cypress:
-    image: "mtlynch/cypress:8.1.0-chrome91"
-    command: ["--browser", "chrome"]
+  playwright:
+    image: "mcr.microsoft.com/playwright:v1.57.0"
+    command:
+      [
+        "bash",
+        "-lc",
+        "npm ci && npx playwright test --config /app/playwright.config.js",
+      ]
     depends_on:
       - logpaste
     environment:
-      - CYPRESS_baseUrl=http://logpaste:3333
-    working_dir: /e2e
+      - PLAYWRIGHT_BASE_URL=http://logpaste:3333
+    working_dir: /app
     volumes:
-      - ./:/e2e
+      - ../:/app
