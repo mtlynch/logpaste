@@ -14,7 +14,7 @@ COPY ./store /app/store
 
 RUN TARGETPLATFORM="${TARGETPLATFORM}" ./dev-scripts/build-backend "prod"
 
-FROM litestream/litestream:0.3.13 AS litestream
+FROM litestream/litestream:0.3.9 AS litestream
 
 FROM alpine:3.15
 
