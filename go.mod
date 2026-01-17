@@ -1,6 +1,6 @@
 module github.com/mtlynch/logpaste
 
-go 1.21
+go 1.25.4
 
 require (
 	github.com/gorilla/mux v1.8.0
