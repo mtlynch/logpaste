@@ -4,8 +4,8 @@
   inputs = {
     flake-utils.url = "github:numtide/flake-utils";
 
-    # 1.21.1 release
-    go-nixpkgs.url = "github:NixOS/nixpkgs/78058d810644f5ed276804ce7ea9e82d92bee293";
+    # 1.25.4 release
+    go-nixpkgs.url = "github:NixOS/nixpkgs/f665af0cdb70ed27e1bd8f9fdfecaf451260fc55";
 
     # 3.44.2 release
     sqlite-nixpkgs.url = "github:NixOS/nixpkgs/5ad9903c16126a7d949101687af0aa589b1d7d3d";
@@ -39,7 +39,7 @@
   } @ inputs:
     flake-utils.lib.eachDefaultSystem (system: let
       gopkg = go-nixpkgs.legacyPackages.${system};
-      go = gopkg.go_1_21;
+      go = gopkg.go_1_25;
       sqlite = sqlite-nixpkgs.legacyPackages.${system}.sqlite;
       nodejs = nodejs-nixpkgs.legacyPackages.${system}.nodejs_20;
       shellcheck = shellcheck-nixpkgs.legacyPackages.${system}.shellcheck;

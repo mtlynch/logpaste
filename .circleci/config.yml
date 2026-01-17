@@ -5,7 +5,7 @@ executors:
       - image: cimg/base:2024.02
   go:
     docker:
-      - image: cimg/go:1.21.1
+      - image: cimg/go:1.25.4
   node:
     docker:
       - image: cimg/node:20.6.1
