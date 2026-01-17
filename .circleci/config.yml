@@ -114,7 +114,8 @@ jobs:
               sh -s -- --non-interactive latest
       - run:
           name: Print flyctl version
-          command: "${HOME}/.fly/bin/flyctl" version
+          command: |
+            "${HOME}/.fly/bin/flyctl" version
       - run:
           name: Create fly.io config file
           command: dev-scripts/make-fly-config "${APP_NAME}"
