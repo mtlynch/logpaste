@@ -19,6 +19,9 @@
     # 1.2.1 release
     sqlfluff-nixpkgs.url = "github:NixOS/nixpkgs/7cf5ccf1cdb2ba5f08f0ac29fc3d04b0b59a07e4";
 
+    # 1.57.0
+    playwright-nixpkgs.url = "github:NixOS/nixpkgs/5f02c91314c8ba4afe83b256b023756412218535";
+
     # 0.1.147 release
     flyctl-nixpkgs.url = "github:NixOS/nixpkgs/0a254180b4cad6be45aa46dce896bdb8db5d2930";
 
@@ -34,6 +37,7 @@
     nodejs-nixpkgs,
     shellcheck-nixpkgs,
     sqlfluff-nixpkgs,
+    playwright-nixpkgs,
     flyctl-nixpkgs,
     litestream-nixpkgs,
   } @ inputs:
@@ -44,6 +48,7 @@
       nodejs = nodejs-nixpkgs.legacyPackages.${system}.nodejs_20;
       shellcheck = shellcheck-nixpkgs.legacyPackages.${system}.shellcheck;
       sqlfluff = sqlfluff-nixpkgs.legacyPackages.${system}.sqlfluff;
+      playwright = playwright-nixpkgs.legacyPackages.${system}.playwright-driver.browsers;
       flyctl = flyctl-nixpkgs.legacyPackages.${system}.flyctl;
       litestream = litestream-nixpkgs.legacyPackages.${system}.litestream;
     in {
@@ -62,12 +67,16 @@
           nodejs
           shellcheck
           sqlfluff
+          playwright
           flyctl
           litestream
         ];
 
         shellHook = ''
           export GOROOT="${go}/share/go"
+
+          export PLAYWRIGHT_BROWSERS_PATH=${playwright}
+          export PLAYWRIGHT_SKIP_VALIDATE_HOST_REQUIREMENTS=true
 
           echo "shellcheck" "$(shellcheck --version | grep '^version:')"
           sqlfluff --version
