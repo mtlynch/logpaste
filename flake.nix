@@ -52,7 +52,6 @@
           gopkg.gotools
           gopkg.gopls
           gopkg.go-outline
-          gopkg.gocode
           gopkg.gopkgs
           gopkg.gocode-gomod
           gopkg.godef
@@ -67,7 +66,9 @@
         ];
 
         shellHook = ''
-          export GOROOT="${go}/share/go"
+          # Avoid sharing GOPATH with other projects.
+          PROJECT_NAME="$(basename "$PWD")"
+          export GOPATH="$HOME/.local/share/go-workspaces/$PROJECT_NAME"
 
           echo "shellcheck" "$(shellcheck --version | grep '^version:')"
           sqlfluff --version
