@@ -129,7 +129,7 @@ jobs:
           name: Deploy logpaste to fly.io
           command: |
             "${HOME}/.fly/bin/flyctl" deploy \
-              --access-token "${FLY_ACCESS_TOKEN}"
+              --access-token "${FLY_API_TOKEN}"
   build_docker_images:
     executor: base
     environment:
