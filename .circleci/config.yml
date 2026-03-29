@@ -51,6 +51,9 @@ jobs:
       - checkout
       - attach_workspace:
           at: ./
+      - restore_cache:
+          keys:
+            - go-mod-v1-{{ checksum "go.sum" }}
       - run:
           name: Test go packages
           command: dev-scripts/run-go-tests --full
@@ -59,18 +62,29 @@ jobs:
       - run:
           name: Verify golang formatting
           command: dev-scripts/check-go-formatting
+      - save_cache:
+          key: go-mod-v1-{{ checksum "go.sum" }}
+          paths:
+            - ~/go/pkg/mod
   build_backend:
     executor: go
     steps:
       - checkout
       - attach_workspace:
           at: ./
+      - restore_cache:
+          keys:
+            - go-mod-v1-{{ checksum "go.sum" }}
       - run:
           name: Compile production backend
           command: dev-scripts/build-backend
       - run:
           name: Compile dev backend
           command: dev-scripts/build-backend dev
+      - save_cache:
+          key: go-mod-v1-{{ checksum "go.sum" }}
+          paths:
+            - ~/go/pkg/mod
   check_frontend:
     executor: node
     steps:
