@@ -1,45 +1,42 @@
 package handlers
 
 import (
-	"log"
+	"embed"
+	"io/fs"
 	"net/http"
-	"os"
-	"path"
-	"strconv"
-	"time"
 )
 
-// serveStaticResource serves any static file under the ./static directory.
-func serveStaticResource() http.HandlerFunc {
-	const staticRootDir = "./static"
-	fs := http.FileServer(http.Dir(staticRootDir))
+//go:embed static/*
+var staticFiles embed.FS
 
-	return func(w http.ResponseWriter, r *http.Request) {
-		// Set cache headers
-		if mt, ok := lastModTime(path.Join(staticRootDir, r.URL.Path)); ok {
-			etag := "\"" + strconv.FormatInt(mt.UnixMilli(), 10) + "\""
-			w.Header().Set("Etag", etag)
-			w.Header().Set("Cache-Control", "max-age=3600")
-		}
+// CachingFileServer wraps an http.Handler to add caching headers
+func CachingFileServer(h http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		// Add cache control headers
+		w.Header().Set("Cache-Control", "public, max-age=604800") // 1 week
 
-		fs.ServeHTTP(w, r)
-	}
+		// Let the original handler serve the file
+		// The FileServer will handle Last-Modified and If-Modified-Since automatically
+		h.ServeHTTP(w, r)
+	})
 }
 
-func lastModTime(path string) (time.Time, bool) {
-	file, err := os.Open(path)
+// GetStaticFilesHandler returns an http.Handler that serves static files from the embedded filesystem
+func GetStaticFilesHandler() http.Handler {
+	// Get the static subdirectory as a filesystem
+	staticFS, err := fs.Sub(staticFiles, "static")
 	if err != nil {
-		return time.Time{}, false
+		panic(err)
 	}
-	defer func() {
-		if err := file.Close(); err != nil {
-			log.Printf("failed to close file handle for %s: %v", path, err)
-		}
-	}()
 
-	stat, err := file.Stat()
-	if err != nil {
-		return time.Time{}, false
-	}
-	return stat.ModTime(), true
+	// Create a file server for the static files
+	fileServer := http.FileServer(http.FS(staticFS))
+
+	// Strip the /static/ prefix from the request path before passing to the file server
+	// This is necessary because the URL path includes /static/ but our embedded filesystem
+	// already has the files under the "static" directory
+	handler := http.StripPrefix("/static/", fileServer)
+
+	// Wrap the handler with our caching middleware
+	return CachingFileServer(handler)
 }

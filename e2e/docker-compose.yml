@@ -1,14 +1,14 @@
 version: "3.2"
 services:
   test_sftp:
-    image: emberstack/sftp:build-5.0.3
+    image: emberstack/sftp:build-5.1.66-amd64
     volumes:
       - ./sftp.json:/app/config/sftp.json:ro
   logpaste:
     build:
       context: ../
     entrypoint: /app/e2e/wait-for-sftp.bash
-    command: ["test_sftp", "22", "--", "/app/docker_entrypoint"]
+    command: ["test_sftp", "22", "--", "/app/docker-entrypoint"]
     environment:
       - PORT=3333
       - DB_REPLICA_URL="sftp://dummyuser:dummypass@test_sftp"
@@ -16,13 +16,18 @@ services:
       - ./:/app/e2e
     depends_on:
       - test_sftp
-  cypress:
-    image: "mtlynch/cypress:8.1.0-chrome91"
-    command: ["--browser", "chrome"]
+  playwright:
+    image: "mcr.microsoft.com/playwright:v1.57.0"
+    command:
+      [
+        "bash",
+        "-lc",
+        "npm ci && npx playwright test --config /app/playwright.config.js",
+      ]
     depends_on:
       - logpaste
     environment:
-      - CYPRESS_baseUrl=http://logpaste:3333
-    working_dir: /e2e
+      - PLAYWRIGHT_BASE_URL=http://logpaste:3333
+    working_dir: /app
     volumes:
-      - ./:/e2e
+      - ../:/app

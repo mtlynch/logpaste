@@ -1,3 +1,9 @@
+@import url(light.css) (prefers-color-scheme: light);
+@import url(../third-party/prism/light.css) (prefers-color-scheme: light);
+
+@import url(dark.css) (prefers-color-scheme: dark);
+@import url(../third-party/prism/dark.css) (prefers-color-scheme: dark);
+
 body {
   font-family: "Trebuchet MS", Tahoma, Georgia, Garamond;
 }

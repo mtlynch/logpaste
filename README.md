@@ -76,24 +76,16 @@ Some notes:
 LogPaste offers some options to customize the text for your site. Here's an example that uses a custom title, subtitle, and footer:
 
 ```bash
-SITE_TITLE="My Cool Log Pasting Service"
-SITE_SUBTITLE="Upload all your logs for FooBar here"
-SITE_FOOTER="<h2>Notice</h2><p>Only cool users can share logs here.</p>"
-SITE_DARK_MODE="true"
-SITE_SHOW_DOCUMENTATION="false" # Hide usage information from homepage
-PER_MINUTE_LIMIT="5" # Allow only 5 pastes per minute per IP
-
 docker run \
   -e "PORT=3001" \
-  -e "SITE_TITLE=${SITE_TITLE}" \
-  -e "SITE_SUBTITLE=${SITE_SUBTITLE}" \
-  -e "SITE_FOOTER=${SITE_FOOTER}" \
-  -e "SITE_DARK_MODE=${SITE_DARK_MODE}" \
-  -e "SITE_SHOW_DOCUMENTATION=${SITE_SHOW_DOCUMENTATION}" \
-  -e "PER_MINUTE_LIMIT=${PER_MINUTE_LIMIT}" \
   -p 3001:3001/tcp \
   --name logpaste \
-  mtlynch/logpaste
+  mtlynch/logpaste \
+  -title 'My Cool Log Pasting Service' \
+  -subtitle 'Upload all your logs for FooBar here' \
+  -footer '<h2>Notice</h2><p>Only cool users can share logs here.</p>' \
+  -showdocs=false \
+  -perminutelimit 5
 ```
 
 ## Parameters
@@ -105,9 +97,9 @@ docker run \
 | `-title`          | Title to display on homepage                       | `"LogPaste"`                                           |
 | `-subtitle`       | Subtitle to display on homepage                    | `"A minimalist, open-source debug log upload service"` |
 | `-footer`         | Footer to display on homepage (may include HTML)   |                                                        |
-| `-darkmode`       | Whether to use dark mode theme on homepage         | `false`                                                |
 | `-showdocs`       | Whether to display usage documentation on homepage | `true`                                                 |
 | `-perminutelimit` | Number of pastes to allow per IP per minute        | `0` (no limit)                                         |
+| `-maxsize`        | Max file size users can upload                     | `2` (2 MiB)                                            |
 
 ### Docker environment variables
 
@@ -116,13 +108,7 @@ You can adjust behavior of the Docker container by passing these parameters with
 | Environment Variable           | Meaning                                                                                           |
 | ------------------------------ | ------------------------------------------------------------------------------------------------- |
 | `PORT`                         | TCP port on which to listen for HTTP connections (defaults to 3001)                               |
-| `PS_BEHIND_PROXY`              | Set to `y` if running behind an HTTP proxy to improve logging                                     |
-| `SITE_TITLE`                   | Value to set the `-title` command-line flag                                                       |
-| `SITE_SUBTITLE`                | Value to set the `-subtitle` command-line flag                                                    |
-| `SITE_FOOTER`                  | Value to set the `-footer` command-line flag                                                      |
-| `SITE_DARK_MODE`               | Value to set the `-darkmode` command-line flag                                                    |
-| `SITE_SHOW_DOCUMENTATION`      | Value to set the `-showdocs` command-line flag                                                    |
-| `PER_MINUTE_LIMIT`             | Value to set the `-perminutelimit` command-line flag                                              |
+| `LP_BEHIND_PROXY`              | Set to `y` if running behind an HTTP proxy to improve logging                                     |
 | `DB_REPLICA_URL`               | S3 URL where you want to replicate the LogPaste datastore (e.g., `s3://mybucket.mydomain.com/db`) |
 | `LITESTREAM_REGION`            | AWS region where your S3 bucket is located                                                        |
 | `LITESTREAM_ACCESS_KEY_ID`     | AWS access key ID for an IAM role with access to the bucket where you want to replicate data.     |

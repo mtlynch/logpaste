@@ -1,0 +1,60 @@
+#!/usr/bin/env bash
+
+# Exit build script on first failure.
+set -e
+
+# Exit on unset variable.
+set -u
+
+is_litestream_enabled() {
+  set +ux
+
+  local IS_ENABLED='false'
+
+  if [[ -n "${DB_REPLICA_URL}" ]]; then
+    IS_ENABLED='true';
+  fi
+
+  set -ux
+
+  echo "${IS_ENABLED}"
+}
+
+IS_LITESTREAM_ENABLED="$(is_litestream_enabled)"
+readonly IS_LITESTREAM_ENABLED
+
+# Echo commands to stdout.
+set -x
+
+
+# Ensure that arguments stay quoted.
+LP_LAUNCH_CMD="/app/logpaste"
+for arg in "$@"; do
+  LP_LAUNCH_CMD="${LP_LAUNCH_CMD} $(printf '%q' "$arg")"
+done
+
+if [[ "${IS_LITESTREAM_ENABLED}" == 'true' ]]; then
+  /app/litestream version
+  echo "DB_REPLICA_URL=${DB_REPLICA_URL}"
+
+  readonly DB_PATH='/app/data/store.db'
+  # We need to export DB_PATH because litestream.yml references it.
+  export DB_PATH
+
+  if [[ -f "$DB_PATH" ]]; then
+    echo "Existing database is $(stat -c %s "${DB_PATH}") bytes"
+  else
+    echo "No existing database found"
+    # Restore database from remote storage.
+    /app/litestream restore -if-replica-exists -v "${DB_PATH}"
+  fi
+
+  # Let Litestream start LogPaste as a child process
+  /app/litestream replicate \
+    -exec "${LP_LAUNCH_CMD}"
+else
+  echo "Starting without litestream"
+
+  # Start server.
+  eval "exec ${LP_LAUNCH_CMD}"
+fi

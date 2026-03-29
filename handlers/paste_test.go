@@ -3,7 +3,7 @@ package handlers
 import (
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"net/http/httptest"
 	"strings"
@@ -13,12 +13,18 @@ import (
 	"github.com/mtlynch/logpaste/store/test_sqlite"
 )
 
+const MaxPasteCharacters = 2 * 1024 * 1024
+
 func TestPasteGet(t *testing.T) {
 	ds := test_sqlite.New()
+	if err := ds.InsertEntry("12345678", "dummy entry"); err != nil {
+		t.Fatal(err)
+	}
 	router := mux.NewRouter()
 	s := defaultServer{
-		store:  &ds,
-		router: router,
+		store:        ds,
+		router:       router,
+		maxCharLimit: MaxPasteCharacters,
 	}
 	s.routes()
 
@@ -56,7 +62,7 @@ func TestPasteGet(t *testing.T) {
 			if w.Code != http.StatusOK {
 				return
 			}
-			bodyBytes, err := ioutil.ReadAll(w.Body)
+			bodyBytes, err := io.ReadAll(w.Body)
 			if err != nil {
 				t.Fatalf("failed to read HTTP response body: %v", err)
 			}
@@ -103,12 +109,11 @@ func TestPastePut(t *testing.T) {
 			ds := test_sqlite.New()
 			router := mux.NewRouter()
 			s := defaultServer{
-				store:  &ds,
-				router: router,
+				store:        ds,
+				router:       router,
+				maxCharLimit: MaxPasteCharacters,
 			}
 			s.routes()
-
-			ds.Reset()
 
 			req, err := http.NewRequest("PUT", "/", strings.NewReader(tt.body))
 			if err != nil {
@@ -219,8 +224,9 @@ some data in a file
 			ds := test_sqlite.New()
 			router := mux.NewRouter()
 			s := defaultServer{
-				store:  &ds,
-				router: router,
+				store:        ds,
+				router:       router,
+				maxCharLimit: MaxPasteCharacters,
 			}
 			s.routes()
 
@@ -241,10 +247,18 @@ some data in a file
 				return
 			}
 
-			for _, contents := range ds.entries {
-				if got, want := contents, tt.contentsExpected; got != want {
-					t.Fatalf("contents=%s, want=%s", got, want)
-				}
+			bodyBytes, err := io.ReadAll(w.Body)
+			if err != nil {
+				t.Fatalf("failed to read response body: %v", err)
+			}
+			responseURL := strings.TrimSpace(string(bodyBytes))
+			id := responseURL[strings.LastIndex(responseURL, "/")+1:]
+			storedContents, err := ds.GetEntry(id)
+			if err != nil {
+				t.Fatalf("entry not found: %v", err)
+			}
+			if got, want := storedContents, tt.contentsExpected; got != want {
+				t.Fatalf("contents=%s, want=%s", got, want)
 			}
 		})
 	}

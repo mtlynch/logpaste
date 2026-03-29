@@ -1,22 +1,20 @@
 package random
 
 import (
-	"log"
-	"math/rand"
-	"time"
+	"crypto/rand"
+	"math/big"
 )
 
 var characters = []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789")
 
-func init() {
-	log.Printf("initialize random seed")
-	rand.Seed(time.Now().UTC().UnixNano())
-}
-
 func String(n int) string {
 	b := make([]rune, n)
 	for i := range b {
-		b[i] = characters[rand.Intn(len(characters))]
+		n, err := rand.Int(rand.Reader, big.NewInt(int64(len(characters))))
+		if err != nil {
+			panic(err)
+		}
+		b[i] = characters[n.Int64()]
 	}
 	return string(b)
 }

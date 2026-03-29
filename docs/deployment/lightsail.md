@@ -1,7 +1,5 @@
 ## Deploy LogPaste to Amazon LightSail
 
-**Warning**: These instructions assume an already initialized datastore on your S3 bucket. Once LogPaste 0.1.2 is released, this assumption won't be necessary.
-
 Amazon LightSail is an attractive option for launching LogPaste to production for two main reasons:
 
 - You can deploy entirely from Amazon's AWS dashboard, so you don't need to install any software.
@@ -53,7 +51,7 @@ Enter the following information for your custom deployment:
 | Key                            | Value                                               |
 | ------------------------------ | --------------------------------------------------- |
 | `PORT`                         | 3001                                                |
-| `PS_BEHIND_PROXY`              | "y"                                                 |
+| `LP_BEHIND_PROXY`              | "y"                                                 |
 | `DB_REPLICA_URL`               | The S3 URL of your S3 bucket                        |
 | `LITESTREAM_REGION`            | The region of your S3 bucket                        |
 | `LITESTREAM_ACCESS_KEY_ID`     | The AWS access key ID from your IAM credentials     |

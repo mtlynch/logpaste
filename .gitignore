@@ -1,6 +1,20 @@
 client-secret.json
-.*.env
 data/
 fly.toml
 fly.alias
 node_modules
+.direnv/
+e2e-results/
+playwright-report/
+
+# .env files contain secrets, so they should never be checked in to source
+# control.
+.env.*
+# .env.example is an exception as it only contains dummy secrets.
+!.env.example
+
+# Compiled binaries
+bin/
+
+# Folders for sharing data with AI agents.
+/reference

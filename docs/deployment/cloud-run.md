@@ -88,7 +88,7 @@ MAX_INSTANCES="1"
 gcloud beta run deploy \
   "${GCR_SERVICE_NAME}" \
   --image "${LOGPASTE_GCR_URL}" \
-  --set-env-vars "DB_REPLICA_URL=gcs://${GCS_BUCKET}/db PS_BEHIND_PROXY=y" \
+  --set-env-vars "DB_REPLICA_URL=gcs://${GCS_BUCKET}/db LP_BEHIND_PROXY=y" \
   --allow-unauthenticated \
   --region "${GCP_REGION}" \
   --execution-environment gen2 \
