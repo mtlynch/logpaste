@@ -86,9 +86,6 @@ jobs:
           command: npm run lint
   e2e:
     machine:
-      # Choose an explicit machine image so that we get the latest version of
-      # docker-compose.
-      image: ubuntu-2204:2023.10.1
       docker_layer_caching: true
     steps:
       - checkout
