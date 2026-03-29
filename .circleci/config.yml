@@ -42,7 +42,7 @@ jobs:
           name: Lint SQL files
           command: |
             sqlfluff lint \
-              --disable_progress_bar \
+              --disable-progress-bar \
               --dialect sqlite \
               store/sqlite/migrations
   test:
