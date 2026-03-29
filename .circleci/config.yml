@@ -40,11 +40,7 @@ jobs:
       - checkout
       - run:
           name: Lint SQL files
-          command: |
-            sqlfluff lint \
-              --disable-progress-bar \
-              --dialect sqlite \
-              store/sqlite/migrations
+          command: ./dev-scripts/lint-sql
   test:
     executor: go
     steps:
