@@ -15,3 +15,6 @@ playwright-report/
 
 # Compiled binaries
 bin/
+
+# Folders for sharing data with AI agents.
+/reference
