@@ -137,6 +137,91 @@ jobs:
           command: |
             "${HOME}/.fly/bin/flyctl" deploy \
               --access-token "${FLY_API_TOKEN}"
+  package_release:
+    executor: base
+    steps:
+      - checkout
+      - setup_remote_docker:
+          version: docker24
+          docker_layer_caching: true
+      - run:
+          name: Enable multiarch builds with QEMU
+          command: |
+            docker run \
+              --rm \
+              --privileged \
+              multiarch/qemu-user-static \
+              --reset \
+              -p yes
+      - run:
+          name: Create multiarch build context
+          command: docker context create builder
+      - run:
+          name: Create multiplatform builder
+          command: |
+            docker buildx create builder \
+              --name builder \
+              --driver docker-container \
+              --use
+      - run:
+          name: Ensure builder has booted
+          command: docker buildx inspect --bootstrap
+      - run:
+          name: Build binaries
+          command: |
+            set -eux
+            if [[ "${CIRCLE_TAG-''}" =~ ^[0-9]+(\.[0-9]+){2}.* ]]; then
+              readonly BUILD_TARGETS='linux/arm/v7,linux/arm64,linux/amd64'
+            else
+              readonly BUILD_TARGETS='linux/amd64'
+            fi
+            docker buildx build \
+              --platform "${BUILD_TARGETS}" \
+              --target=artifact \
+              --output "type=local,dest=$(pwd)/bin/" \
+              .
+      - store_artifacts:
+          path: bin
+      - run:
+          name: Package binaries for distribution
+          command: |
+            set -eux
+            VERSION=''
+            if [[ "${CIRCLE_TAG-''}" =~ ^[0-9]+(\.[0-9]+){2}.* ]]; then
+              VERSION="${CIRCLE_TAG}"
+            fi
+            readonly VERSION
+
+            if [[ -n "${VERSION}" ]]; then
+              ./dev-scripts/package-binaries "${VERSION}"
+            else
+              echo 'Skipping packaging step'
+              circleci-agent step halt
+            fi
+      - persist_to_workspace:
+          root: ./
+          paths:
+            - ./dist
+  publish_release:
+    executor: base
+    steps:
+      - attach_workspace:
+          at: ./
+      - run:
+          name: Install GitHub CLI
+          command: |
+            curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | \
+              sudo dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg
+            sudo chmod go+r /usr/share/keyrings/githubcli-archive-keyring.gpg
+            echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | \
+              sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null
+            sudo apt update
+            sudo apt install gh
+      - run:
+          name: Upload binaries to GitHub release
+          command: |
+            gh release upload "${CIRCLE_TAG}" ./dist/* \
+              --repo "${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}"
   build_docker_images:
     executor: base
     environment:
@@ -214,6 +299,25 @@ workflows:
           filters:
             tags:
               only: /.*/
+      - package_release:
+          filters:
+            tags:
+              only: /.*/
+      - publish_release:
+          requires:
+            - check_whitespace
+            - check_bash
+            - lint_sql
+            - test
+            - build_backend
+            - e2e
+            - check_frontend
+            - package_release
+          filters:
+            tags:
+              only: /[0-9]+(\.[0-9]+){2}/
+            branches:
+              ignore: /.*/
       - build_docker_images:
           requires:
             - check_whitespace

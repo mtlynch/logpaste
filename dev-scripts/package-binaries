@@ -1,0 +1,32 @@
+#!/usr/bin/env bash
+
+# Exit build script on first failure.
+set -e
+
+# Echo commands to stdout.
+set -x
+
+# Exit on unset variable.
+set -u
+
+VERSION="$1"
+
+readonly PLATFORMS=(
+  linux_amd64
+  linux_arm64
+  linux_arm_v7
+)
+
+mkdir --parents dist
+
+for PLATFORM in "${PLATFORMS[@]}"; do
+  BINARY="bin/${PLATFORM}/logpaste"
+  if [[ -f "${BINARY}" ]]; then
+    tar \
+      --create \
+      --gzip \
+      --file "dist/logpaste-${VERSION}-${PLATFORM}.tar.gz" \
+      --directory "bin/${PLATFORM}" \
+      logpaste
+  fi
+done
