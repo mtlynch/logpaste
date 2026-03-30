@@ -1,5 +1,7 @@
 FROM golang:1.25.4 as backend_builder
 
+ARG TARGETPLATFORM
+
 WORKDIR /app
 
 COPY go.* ./
