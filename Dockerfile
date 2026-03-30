@@ -14,6 +14,9 @@ COPY ./store /app/store
 
 RUN TARGETPLATFORM="${TARGETPLATFORM}" ./dev-scripts/build-backend "prod"
 
+FROM scratch AS artifact
+COPY --from=backend_builder /app/bin/logpaste ./
+
 FROM litestream/litestream:0.3.9 AS litestream
 
 FROM alpine:3.15
