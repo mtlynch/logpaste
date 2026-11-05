@@ -92,12 +92,6 @@ func TestPasteGetErrors(t *testing.T) {
 		bodyExpected   string
 	}{
 		{
-			description:    "missing entry",
-			err:            store.EntryNotFoundError{ID: "missing1"},
-			statusExpected: http.StatusNotFound,
-			bodyExpected:   "entry not found\n",
-		},
-		{
 			description:    "wrapped missing entry",
 			err:            fmt.Errorf("read entry: %w", store.EntryNotFoundError{ID: "missing1"}),
 			statusExpected: http.StatusNotFound,

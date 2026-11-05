@@ -43,20 +43,14 @@ fi
 
 go vet ./...
 
-# Install the pinned tools with the current Go toolchain. Go's build cache makes
-# repeated installs inexpensive without reusing stale binaries.
-STATICCHECK_PATH="$(go env GOPATH)/bin/staticcheck"
-readonly STATICCHECK_PATH
+# Run pinned tool versions without leaving installed binaries that can go stale.
+# Use external linking with the Nix development shell's static stdenv.
 readonly STATICCHECK_VERSION='v0.8.2'
-go install \
+go run \
   -ldflags=-linkmode=external \
-  "honnef.co/go/tools/cmd/staticcheck@${STATICCHECK_VERSION}"
-"${STATICCHECK_PATH}" ./...
+  "honnef.co/go/tools/cmd/staticcheck@${STATICCHECK_VERSION}" ./...
 
-ERRCHECK_PATH="$(go env GOPATH)/bin/errcheck"
-readonly ERRCHECK_PATH
 readonly ERRCHECK_VERSION='v1.30.0'
-go install \
+go run \
   -ldflags=-linkmode=external \
-  "github.com/kisielk/errcheck@${ERRCHECK_VERSION}"
-"${ERRCHECK_PATH}" -ignoretests ./...
+  "github.com/kisielk/errcheck@${ERRCHECK_VERSION}" -ignoretests ./...

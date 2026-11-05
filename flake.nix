@@ -4,7 +4,8 @@
   inputs = {
     flake-utils.url = "github:numtide/flake-utils";
 
-    # 1.27.3 release
+    # 1.27.3 release. Stay on the stable branch: nixpkgs unstable dropped
+    # x86_64-darwin in 26.11, which breaks Intel macOS.
     go-nixpkgs.url = "github:NixOS/nixpkgs/f49e816f5626998d0b70d713bd2cdc70d2207c56";
 
     # 3.44.2 release
