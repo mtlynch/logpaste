@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io"
 	"log"
@@ -26,7 +27,7 @@ func (s defaultServer) pasteGet() http.HandlerFunc {
 		w.Header().Set("Content-Type", "text/plain; charset=UTF-8")
 		contents, err := s.store.GetEntry(id)
 		if err != nil {
-			if _, ok := err.(store.EntryNotFoundError); ok {
+			if _, ok := errors.AsType[store.EntryNotFoundError](err); ok {
 				http.Error(w, "entry not found", http.StatusNotFound)
 				return
 			}

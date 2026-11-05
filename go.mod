@@ -1,6 +1,6 @@
 module github.com/mtlynch/logpaste
 
-go 1.25.4
+go 1.27.3
 
 require (
 	codeberg.org/mtlynch/go-evolutionary-migrate v0.0.1
