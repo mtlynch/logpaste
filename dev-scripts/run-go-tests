@@ -43,8 +43,6 @@ fi
 
 go vet ./...
 
-# Run pinned tool versions without leaving installed binaries that can go stale.
-# Use external linking with the Nix development shell's static stdenv.
 readonly STATICCHECK_VERSION='v0.8.2'
 go run \
   -ldflags=-linkmode=external \
