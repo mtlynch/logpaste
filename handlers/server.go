@@ -1,7 +1,7 @@
 package handlers
 
 import (
-	"github.com/gorilla/mux"
+	"net/http"
 
 	"github.com/mtlynch/logpaste/limit"
 	"github.com/mtlynch/logpaste/store"
@@ -9,12 +9,12 @@ import (
 )
 
 type Server interface {
-	Router() *mux.Router
+	Router() http.Handler
 }
 
 func New(sp SiteProperties, perMinuteLimit int, maxCharLimit int64) Server {
 	s := defaultServer{
-		router:        mux.NewRouter(),
+		router:        http.NewServeMux(),
 		store:         sqlite.New("data/store.db"),
 		siteProps:     sp,
 		ipRateLimiter: limit.New(perMinuteLimit),
@@ -32,7 +32,7 @@ type SiteProperties struct {
 }
 
 type defaultServer struct {
-	router        *mux.Router
+	router        *http.ServeMux
 	store         store.Store
 	siteProps     SiteProperties
 	ipRateLimiter limit.IPRateLimiter
@@ -40,6 +40,6 @@ type defaultServer struct {
 }
 
 // Router returns the underlying router interface for the server.
-func (s defaultServer) Router() *mux.Router {
+func (s defaultServer) Router() http.Handler {
 	return s.router
 }

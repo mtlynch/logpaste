@@ -11,11 +11,11 @@ func notFound() http.HandlerFunc {
 }
 
 func (s *defaultServer) routes() {
-	s.router.HandleFunc("/favicon.ico", notFound()).Methods(http.MethodGet)
-	s.router.PathPrefix("/static/").Handler(GetStaticFilesHandler()).Methods(http.MethodGet)
-	s.router.PathPrefix("/{id}").HandlerFunc(s.pasteGet()).Methods(http.MethodGet)
-	s.router.PathPrefix("/").HandlerFunc(s.pasteOptions()).Methods(http.MethodOptions)
-	s.router.PathPrefix("/").Handler(s.ipRateLimiter.Limit(s.pastePut())).Methods(http.MethodPut)
-	s.router.PathPrefix("/").Handler(s.ipRateLimiter.Limit(s.pastePost())).Methods(http.MethodPost)
-	s.router.PathPrefix("/").HandlerFunc(s.serveIndexPage()).Methods(http.MethodGet)
+	s.router.HandleFunc("GET /favicon.ico", notFound())
+	s.router.Handle("GET /static/", GetStaticFilesHandler())
+	s.router.HandleFunc("GET /{id}", s.pasteGet())
+	s.router.HandleFunc("OPTIONS /{$}", s.pasteOptions())
+	s.router.Handle("PUT /{$}", s.ipRateLimiter.Limit(s.pastePut()))
+	s.router.Handle("POST /{$}", s.ipRateLimiter.Limit(s.pastePost()))
+	s.router.HandleFunc("GET /{$}", s.serveIndexPage())
 }
