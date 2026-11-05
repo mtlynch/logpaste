@@ -7,8 +7,6 @@ import (
 	"net/http"
 	"os"
 
-	gorilla "github.com/mtlynch/gorilla-handlers"
-
 	"github.com/mtlynch/logpaste/handlers"
 )
 
@@ -31,7 +29,7 @@ func main() {
 	const charactersPerMiB = 1024 * 1024
 	maxCharLimit := *maxPasteMiB * charactersPerMiB
 
-	h := gorilla.LoggingHandler(os.Stdout, handlers.New(handlers.SiteProperties{
+	h := handlers.LoggingHandler(os.Stdout, handlers.New(handlers.SiteProperties{
 		Title:      *title,
 		Subtitle:   *subtitle,
 		FooterHTML: *footer,
