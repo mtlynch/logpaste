@@ -10,7 +10,6 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/gorilla/mux"
 	"github.com/mtlynch/logpaste/store"
 	"github.com/mtlynch/logpaste/store/test_sqlite"
 )
@@ -22,7 +21,7 @@ func TestPasteGet(t *testing.T) {
 	if err := ds.InsertEntry("12345678", "dummy entry"); err != nil {
 		t.Fatal(err)
 	}
-	router := mux.NewRouter()
+	router := http.NewServeMux()
 	s := defaultServer{
 		store:        ds,
 		router:       router,
@@ -107,7 +106,7 @@ func TestPasteGetErrors(t *testing.T) {
 		t.Run(tt.description, func(t *testing.T) {
 			s := defaultServer{
 				store:  getErrorStore{err: tt.err},
-				router: mux.NewRouter(),
+				router: http.NewServeMux(),
 			}
 			s.routes()
 
@@ -157,7 +156,7 @@ func TestPastePut(t *testing.T) {
 	} {
 		t.Run(tt.description, func(t *testing.T) {
 			ds := test_sqlite.New()
-			router := mux.NewRouter()
+			router := http.NewServeMux()
 			s := defaultServer{
 				store:        ds,
 				router:       router,
@@ -272,7 +271,7 @@ some data in a file
 	} {
 		t.Run(tt.description, func(t *testing.T) {
 			ds := test_sqlite.New()
-			router := mux.NewRouter()
+			router := http.NewServeMux()
 			s := defaultServer{
 				store:        ds,
 				router:       router,

@@ -11,8 +11,6 @@ import (
 	"os"
 	"strings"
 
-	"github.com/gorilla/mux"
-
 	"github.com/mtlynch/logpaste/random"
 	"github.com/mtlynch/logpaste/store"
 )
@@ -23,7 +21,7 @@ type PastePutResponse struct {
 
 func (s defaultServer) pasteGet() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		id := mux.Vars(r)["id"]
+		id := r.PathValue("id")
 		w.Header().Set("Content-Type", "text/plain; charset=UTF-8")
 		contents, err := s.store.GetEntry(id)
 		if err != nil {
