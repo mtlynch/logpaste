@@ -38,7 +38,7 @@ func main() {
 		ShowDocs:   *showDocs,
 	}, *perMinuteLimit, maxCharLimit).Router())
 	if os.Getenv("LP_BEHIND_PROXY") != "" {
-		h = gorilla.ProxyIPHeadersHandler(h)
+		h = handlers.ProxyIPHeadersHandler(h)
 	}
 	http.Handle("/", h)
 

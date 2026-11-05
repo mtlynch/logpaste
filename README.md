@@ -105,14 +105,14 @@ docker run \
 
 You can adjust behavior of the Docker container by passing these parameters with `docker run -e`:
 
-| Environment Variable           | Meaning                                                                                           |
-| ------------------------------ | ------------------------------------------------------------------------------------------------- |
-| `PORT`                         | TCP port on which to listen for HTTP connections (defaults to 3001)                               |
-| `LP_BEHIND_PROXY`              | Set to `y` if running behind an HTTP proxy to improve logging                                     |
-| `DB_REPLICA_URL`               | S3 URL where you want to replicate the LogPaste datastore (e.g., `s3://mybucket.mydomain.com/db`) |
-| `LITESTREAM_REGION`            | AWS region where your S3 bucket is located                                                        |
-| `LITESTREAM_ACCESS_KEY_ID`     | AWS access key ID for an IAM role with access to the bucket where you want to replicate data.     |
-| `LITESTREAM_SECRET_ACCESS_KEY` | AWS secret access key for an IAM role with access to the bucket where you want to replicate data. |
+| Environment Variable           | Meaning                                                                                                            |
+| ------------------------------ | ------------------------------------------------------------------------------------------------------------------ |
+| `PORT`                         | TCP port on which to listen for HTTP connections (defaults to 3001)                                                |
+| `LP_BEHIND_PROXY`              | Set to `y` behind a trusted HTTP proxy to use forwarded client IPs for rate limiting and generate HTTPS paste URLs |
+| `DB_REPLICA_URL`               | S3 URL where you want to replicate the LogPaste datastore (e.g., `s3://mybucket.mydomain.com/db`)                  |
+| `LITESTREAM_REGION`            | AWS region where your S3 bucket is located                                                                         |
+| `LITESTREAM_ACCESS_KEY_ID`     | AWS access key ID for an IAM role with access to the bucket where you want to replicate data.                      |
+| `LITESTREAM_SECRET_ACCESS_KEY` | AWS secret access key for an IAM role with access to the bucket where you want to replicate data.                  |
 
 ### Docker build args
 
