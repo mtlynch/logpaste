@@ -2,8 +2,8 @@ package limit
 
 import (
 	"log"
-	"net"
 	"net/http"
+	"net/netip"
 	"sync"
 	"time"
 
@@ -51,14 +51,20 @@ func (iprl IPRateLimiter) Limit(next http.Handler) http.Handler {
 		}
 
 		// Get the IP address for the current user.
-		ip, _, err := net.SplitHostPort(r.RemoteAddr)
+		addrPort, err := netip.ParseAddrPort(r.RemoteAddr)
+		var addr netip.Addr
+		if err == nil {
+			addr = addrPort.Addr()
+		} else {
+			addr, err = netip.ParseAddr(r.RemoteAddr)
+		}
 		if err != nil {
 			log.Printf("Error retrieving user IP: %v", err)
 			http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
 			return
 		}
 
-		limiter := iprl.getRateLimiter(ip)
+		limiter := iprl.getRateLimiter(addr.Unmap().String())
 		if !limiter.Allow() {
 			http.Error(w, "Too many requests. Wait a minute and try again", http.StatusTooManyRequests)
 			return
