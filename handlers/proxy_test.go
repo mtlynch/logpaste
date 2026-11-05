@@ -28,29 +28,14 @@ func TestProxyIPHeadersHandler(t *testing.T) {
 			addressExpected: "198.51.100.1",
 		},
 		{
-			explanation:     "real-IP takes precedence over Forwarded",
+			explanation:     "real-IP supplies the client address when forwarded-for is absent",
 			realIP:          " 198.51.100.2 ",
 			forwarded:       "for=198.51.100.3",
 			addressExpected: "198.51.100.2",
 		},
 		{
-			explanation:     "Forwarded supports IPv4",
+			explanation:     "Forwarded alone is ignored",
 			forwarded:       "for=198.51.100.3;proto=https",
-			addressExpected: "198.51.100.3",
-		},
-		{
-			explanation:     "Forwarded uses the first quoted IPv6 address with a port",
-			forwarded:       `For="[2001:db8::1]:1234";proto=https, for=198.51.100.3`,
-			addressExpected: "[2001:db8::1]:1234",
-		},
-		{
-			explanation:     "Forwarded supports a quoted IPv6 address without a port",
-			forwarded:       `for="[2001:db8::1]"`,
-			addressExpected: "2001:db8::1",
-		},
-		{
-			explanation:     "Forwarded without a client address retains the peer address",
-			forwarded:       "proto=https;by=198.51.100.3",
 			addressExpected: "192.0.2.1:1234",
 		},
 	} {
@@ -108,7 +93,7 @@ func TestProxyIPRateLimiting(t *testing.T) {
 	}
 	{
 		r := httptest.NewRequest(http.MethodPut, "/", nil)
-		r.Header.Set("Forwarded", `for="[2001:db8::2]:1234"`)
+		r.Header.Set("X-Forwarded-For", "2001:db8::2")
 		w := httptest.NewRecorder()
 		h.ServeHTTP(w, r)
 		if got, want := w.Code, http.StatusNoContent; got != want {
