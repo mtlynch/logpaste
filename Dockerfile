@@ -1,4 +1,4 @@
-FROM golang:1.25.4 as backend_builder
+FROM golang:1.27.3 AS backend_builder
 
 ARG TARGETPLATFORM
 

@@ -43,24 +43,20 @@ fi
 
 go vet ./...
 
-# Install staticcheck if it's not present.
+# Install the pinned tools with the current Go toolchain. Go's build cache makes
+# repeated installs inexpensive without reusing stale binaries.
 STATICCHECK_PATH="$(go env GOPATH)/bin/staticcheck"
 readonly STATICCHECK_PATH
-readonly STATICCHECK_VERSION="v0.6.1"
-if [[ ! -f "${STATICCHECK_PATH}" ]]; then
-    go install \
-      -ldflags=-linkmode=external \
-      "honnef.co/go/tools/cmd/staticcheck@${STATICCHECK_VERSION}"
-fi
+readonly STATICCHECK_VERSION='v0.8.2'
+go install \
+  -ldflags=-linkmode=external \
+  "honnef.co/go/tools/cmd/staticcheck@${STATICCHECK_VERSION}"
 "${STATICCHECK_PATH}" ./...
 
-# Install errcheck if it's not present.
 ERRCHECK_PATH="$(go env GOPATH)/bin/errcheck"
 readonly ERRCHECK_PATH
-readonly ERRCHECK_VERSION="v1.9.0"
-if [[ ! -f "${ERRCHECK_PATH}" ]]; then
-    go install \
-      -ldflags=-linkmode=external \
-      "github.com/kisielk/errcheck@${ERRCHECK_VERSION}"
-fi
+readonly ERRCHECK_VERSION='v1.30.0'
+go install \
+  -ldflags=-linkmode=external \
+  "github.com/kisielk/errcheck@${ERRCHECK_VERSION}"
 "${ERRCHECK_PATH}" -ignoretests ./...

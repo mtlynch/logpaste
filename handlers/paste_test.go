@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io"
 	"net/http"
@@ -10,6 +11,7 @@ import (
 	"testing"
 
 	"github.com/gorilla/mux"
+	"github.com/mtlynch/logpaste/store"
 	"github.com/mtlynch/logpaste/store/test_sqlite"
 )
 
@@ -68,6 +70,60 @@ func TestPasteGet(t *testing.T) {
 			}
 			if got, want := string(bodyBytes), tt.contentExpected; got != want {
 				t.Errorf("body=%s, want=%s", got, want)
+			}
+		})
+	}
+}
+
+type getErrorStore struct {
+	store.Store
+	err error
+}
+
+func (s getErrorStore) GetEntry(string) (string, error) {
+	return "", s.err
+}
+
+func TestPasteGetErrors(t *testing.T) {
+	for _, tt := range []struct {
+		description    string
+		err            error
+		statusExpected int
+		bodyExpected   string
+	}{
+		{
+			description:    "missing entry",
+			err:            store.EntryNotFoundError{ID: "missing1"},
+			statusExpected: http.StatusNotFound,
+			bodyExpected:   "entry not found\n",
+		},
+		{
+			description:    "wrapped missing entry",
+			err:            fmt.Errorf("read entry: %w", store.EntryNotFoundError{ID: "missing1"}),
+			statusExpected: http.StatusNotFound,
+			bodyExpected:   "entry not found\n",
+		},
+		{
+			description:    "unexpected storage error",
+			err:            errors.New("database unavailable"),
+			statusExpected: http.StatusInternalServerError,
+			bodyExpected:   "failed to retrieve entry\n",
+		},
+	} {
+		t.Run(tt.description, func(t *testing.T) {
+			s := defaultServer{
+				store:  getErrorStore{err: tt.err},
+				router: mux.NewRouter(),
+			}
+			s.routes()
+
+			w := httptest.NewRecorder()
+			s.router.ServeHTTP(w, httptest.NewRequest(http.MethodGet, "/missing1", nil))
+			if got, want := w.Code, tt.statusExpected; got != want {
+				t.Fatalf("status=%d, want=%d", got, want)
+			}
+			if got, want := w.Body.String(), tt.bodyExpected; got != want {
+				t.Errorf("body=%q, want=%q", got, want)
 			}
 		})
 	}
@@ -252,7 +308,10 @@ some data in a file
 				t.Fatalf("failed to read response body: %v", err)
 			}
 			responseURL := strings.TrimSpace(string(bodyBytes))
-			id := responseURL[strings.LastIndex(responseURL, "/")+1:]
+			_, id, ok := strings.CutLast(responseURL, "/")
+			if !ok {
+				t.Fatalf("response URL has no path: %q", responseURL)
+			}
 			storedContents, err := ds.GetEntry(id)
 			if err != nil {
 				t.Fatalf("entry not found: %v", err)

@@ -4,8 +4,8 @@
   inputs = {
     flake-utils.url = "github:numtide/flake-utils";
 
-    # 1.25.4 release
-    go-nixpkgs.url = "github:NixOS/nixpkgs/f665af0cdb70ed27e1bd8f9fdfecaf451260fc55";
+    # 1.27.3 release
+    go-nixpkgs.url = "github:NixOS/nixpkgs/f49e816f5626998d0b70d713bd2cdc70d2207c56";
 
     # 3.44.2 release
     sqlite-nixpkgs.url = "github:NixOS/nixpkgs/5ad9903c16126a7d949101687af0aa589b1d7d3d";
@@ -43,7 +43,7 @@
   } @ inputs:
     flake-utils.lib.eachDefaultSystem (system: let
       gopkg = go-nixpkgs.legacyPackages.${system};
-      go = gopkg.go_1_25;
+      go = gopkg.go_1_27;
       sqlite = sqlite-nixpkgs.legacyPackages.${system}.sqlite;
       nodejs = nodejs-nixpkgs.legacyPackages.${system}.nodejs_20;
       shellcheck = shellcheck-nixpkgs.legacyPackages.${system}.shellcheck;
@@ -52,7 +52,7 @@
       flyctl = flyctl-nixpkgs.legacyPackages.${system}.flyctl;
       litestream = litestream-nixpkgs.legacyPackages.${system}.litestream;
     in {
-      devShells.default = gopkg.mkShell.override { stdenv = gopkg.pkgsStatic.stdenv; } {
+      devShells.default = gopkg.mkShell.override {stdenv = gopkg.pkgsStatic.stdenv;} {
         packages = [
           gopkg.gotools
           gopkg.gopls
