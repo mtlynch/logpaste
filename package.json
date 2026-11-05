@@ -16,7 +16,6 @@
   "bugs": {
     "url": "https://github.com/mtlynch/logpaste/issues"
   },
-  "homepage": "https://logpaste.com",
   "devDependencies": {
     "@playwright/test": "^1.57.0",
     "eslint": "^8.22.0",

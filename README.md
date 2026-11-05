@@ -18,10 +18,6 @@ A minimalist web service for uploading and sharing log files.
   - Syncs persistent data to any S3-compatible cloud storage provider
 - Customizable UI without changing source code
 
-## Demo
-
-- <http://logpaste.com>
-
 ## Run LogPaste
 
 ### From source
